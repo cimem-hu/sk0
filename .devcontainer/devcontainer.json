@@ -21,14 +21,10 @@
     "vscode": {
       "extensions": [
         "angular.ng-template",
-        "cyrilletuzi.angular-schematics",
-        "kamikillerto.vscode-colorize",
-        "wallabyjs.console-ninja",
         "usernamehw.errorlens",
         "dbaeumer.vscode-eslint",
         "mariusalchimavicius.json-to-ts",
         "yoavbls.pretty-ts-errors",
-        "usernamehw.errorlens",
         "esbenp.prettier-vscode",
         "orta.vscode-jest",
         "humao.rest-client",
