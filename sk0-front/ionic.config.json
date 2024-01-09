@@ -1,0 +1,7 @@
+{
+  "name": "sk0-front",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
