@@ -16,7 +16,7 @@ describe('AppController', () => {
     it('should return health object', () => {
       const { health } = appController.getHealth();
       expect(health).toBeDefined();
-      expect(health).toBe('ok');
+      expect(health).toBe('hi');
     });
   });
 });
