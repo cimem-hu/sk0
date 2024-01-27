@@ -30,7 +30,7 @@
         "esbenp.prettier-vscode",
         "orta.vscode-jest",
         "humao.rest-client",
-        "alexcvzz.vscode-sqlite"
+        "qwtel.sqlite-viewer"
       ]
     }
   }
