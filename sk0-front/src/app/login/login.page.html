@@ -17,14 +17,24 @@
           formControlName="email"
           type="email"
           label="Email cím"
+          labelPlacement="floating"
+          [clearInput]="true"
+          fill="solid"
+          errorText="Helytelen email cím"
         ></ion-input>
+        <!-- TOFIX: style. double lines at the bottom -->
       </ion-item>
       <ion-item>
         <ion-input
           formControlName="password"
           type="password"
           label="Jelszó"
+          labelPlacement="floating"
+          [clearInput]="true"
+          fill="solid"
+          errorText="Helytelen jelszó"
         ></ion-input>
+        <!-- TOFIX: style. double lines at the bottom -->
       </ion-item>
       <ion-button expand="block" type="submit" [disabled]="loginForm.invalid">
         Bejelentkezés
