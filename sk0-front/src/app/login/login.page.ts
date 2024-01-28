@@ -8,6 +8,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { LoginService } from './login.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -27,9 +29,21 @@ export class LoginPage {
       Validators.minLength(6),
     ]),
   });
-  constructor() {}
+  constructor(
+    private loginService: LoginService,
+    private alertController: AlertController
+  ) {}
 
-  loginSubmit() {
-    // TODO: create service file where HTTP req is made, inject service to this comp
+  async loginSubmit() {
+    const response = this.loginService.loginrequest(this.loginForm);
+    this.loginForm.reset();
+    if (!response) {
+      let alert = await this.alertController.create({
+        message: 'Nem megfelelő email cím vagy jelszó',
+        buttons: ['OK'],
+      });
+      await alert.present();
+    }
+    // TODO: alert msg on successful login as well
   }
 }
