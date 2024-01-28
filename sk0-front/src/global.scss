@@ -24,23 +24,3 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
-
-.flex-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-}
-.top-center {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-direction: column;
-    padding: 0 8px;
-}
-
-ion-card {
-    width: 100vw;
-    max-width: 350px;
-    padding: 16px;
-}
