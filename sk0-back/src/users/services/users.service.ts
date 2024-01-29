@@ -15,6 +15,11 @@ export class UsersService {
 
   async create(user: CreateUserDto): Promise<User> {
     const createdUser = this.repo.create({ ...user });
+    const userByEmail = await this.findOneByEmail(user.email);
+    if (userByEmail) {
+      throw new ConflictException();
+    }
+
     return this.repo.save(createdUser);
   }
 

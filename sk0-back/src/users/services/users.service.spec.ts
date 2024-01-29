@@ -50,6 +50,14 @@ describe('UsersService', () => {
       expect(mockRepo.create).toHaveBeenCalledWith(mockData);
       expect(mockRepo.save).toHaveBeenCalledWith(mockResult);
     });
+
+    it('should throw ConflictException when user already exists', async () => {
+      mockRepo.create = jest.fn().mockReturnValue(mockResult);
+      usersService.findOneByEmail = jest.fn().mockResolvedValue(mockResult);
+      await expect(usersService.create(mockData)).rejects.toThrow(
+        ConflictException,
+      );
+    });
   });
 
   describe('findOneById', () => {
