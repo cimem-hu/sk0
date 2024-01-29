@@ -13,22 +13,20 @@ import { CreateUserDto } from '../dtos/create-user.dto';
 export class UsersService {
   constructor(@Inject(USER_REPOSITORY) private repo: Repository<User>) {}
 
-  create(user: CreateUserDto): Promise<User> {
+  async create(user: CreateUserDto): Promise<User> {
     const createdUser = this.repo.create({ ...user });
     return this.repo.save(createdUser);
   }
 
   async findOneById(id: number): Promise<User> {
-    const user = (await this.repo.findOne({ where: { id } })) as User;
-    return user;
+    return this.repo.findOne({ where: { id } });
   }
 
   async findOneByEmail(email: string): Promise<User> {
-    const user = (await this.repo.findOne({ where: { email } })) as User;
-    return user;
+    return this.repo.findOne({ where: { email } });
   }
 
-  findAll(): Promise<User[]> {
+  async findAll(): Promise<User[]> {
     return this.repo.find();
   }
 

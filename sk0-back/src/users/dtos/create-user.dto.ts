@@ -3,6 +3,7 @@ import {
   IsString,
   IsStrongPassword,
   IsStrongPasswordOptions,
+  MinLength,
 } from 'class-validator';
 
 const passwordRules: IsStrongPasswordOptions = {
@@ -21,5 +22,6 @@ export class CreateUserDto {
   password: string;
 
   @IsString()
+  @MinLength(3)
   name: string;
 }
