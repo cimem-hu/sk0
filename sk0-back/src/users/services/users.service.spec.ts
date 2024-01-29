@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { NotFoundException, ConflictException } from '@nestjs/common';
 
 describe('UsersService', () => {
-  let service: UsersService;
+  let usersService: UsersService;
   const mockRepo: Partial<Repository<User>> = {
     create: jest.fn(),
     save: jest.fn(),
@@ -34,18 +34,18 @@ describe('UsersService', () => {
       ],
     }).compile();
 
-    service = module.get<UsersService>(UsersService);
+    usersService = module.get<UsersService>(UsersService);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(usersService).toBeDefined();
   });
 
   describe('create', () => {
     it('should create a user', async () => {
       mockRepo.create = jest.fn().mockReturnValue(mockResult);
       mockRepo.save = jest.fn().mockResolvedValue(mockResult);
-      const result = await service.create(mockData);
+      const result = await usersService.create(mockData);
       expect(result).toStrictEqual(mockResult);
       expect(mockRepo.create).toHaveBeenCalledWith(mockData);
       expect(mockRepo.save).toHaveBeenCalledWith(mockResult);
@@ -55,7 +55,7 @@ describe('UsersService', () => {
   describe('findOneById', () => {
     it('should find a user by id', async () => {
       mockRepo.findOne = jest.fn().mockResolvedValue(mockResult);
-      const result = await service.findOneById(1);
+      const result = await usersService.findOneById(1);
       expect(result).toStrictEqual(mockResult);
       expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
     });
@@ -64,7 +64,7 @@ describe('UsersService', () => {
   describe('findOneByEmail', () => {
     it('should find a user by email', async () => {
       mockRepo.findOne = jest.fn().mockResolvedValue(mockResult);
-      const result = await service.findOneByEmail(mockData.email);
+      const result = await usersService.findOneByEmail(mockData.email);
       expect(result).toStrictEqual(mockResult);
       expect(mockRepo.findOne).toHaveBeenCalledWith({
         where: { email: mockData.email },
@@ -75,7 +75,7 @@ describe('UsersService', () => {
   describe('findAll', () => {
     it('should find all users', async () => {
       mockRepo.find = jest.fn().mockResolvedValue([mockResult]);
-      const result = await service.findAll();
+      const result = await usersService.findAll();
       expect(result).toStrictEqual([mockResult]);
       expect(mockRepo.find).toHaveBeenCalled();
     });
@@ -86,7 +86,7 @@ describe('UsersService', () => {
       const mockUpdatedUser = { ...mockResult, email: 'aaa@bc.de' };
       mockRepo.findOne = jest.fn().mockResolvedValue(mockResult);
       mockRepo.save = jest.fn().mockResolvedValue(mockResult);
-      const result = await service.update(1, { email: 'aaa@bc.de' });
+      const result = await usersService.update(1, { email: 'aaa@bc.de' });
       expect(result).toStrictEqual(mockUpdatedUser);
       expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
       expect(mockRepo.save).toHaveBeenCalledWith(mockUpdatedUser);
@@ -94,16 +94,16 @@ describe('UsersService', () => {
 
     it('should throw NotFoundException when user does not exist', async () => {
       mockRepo.findOne = jest.fn().mockResolvedValue(null);
-      await expect(service.update(1, { email: 'aaa@bc.de' })).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        usersService.update(1, { email: 'aaa@bc.de' }),
+      ).rejects.toThrow(NotFoundException);
       expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
     });
 
     it('should throw ConflictException when user wants to update with existing email', async () => {
       mockRepo.findOne = jest.fn().mockResolvedValue(mockResult);
       await expect(
-        service.update(2, { email: mockData.email }),
+        usersService.update(2, { email: mockData.email }),
       ).rejects.toThrow(ConflictException);
     });
   });
@@ -112,7 +112,7 @@ describe('UsersService', () => {
     it('should remove a user', async () => {
       mockRepo.findOne = jest.fn().mockResolvedValue(mockResult);
       mockRepo.remove = jest.fn().mockResolvedValue(mockResult);
-      const result = await service.remove(1);
+      const result = await usersService.remove(1);
       expect(result).toStrictEqual(mockResult);
       expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
       expect(mockRepo.remove).toHaveBeenCalledWith(mockResult);
