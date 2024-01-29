@@ -54,6 +54,6 @@ export class RegisterPage {
   }
 
   login() {
-    // Végrehajtja a bejelentkezést és átirányít a felhasználó fiókjába
+    // Átirányít a felhasználó fiókjába
   }
 }
