@@ -23,10 +23,10 @@ describe('LoginService', () => {
   });
 
   it('loginrequest should return false', () => {
-    expect(service.loginrequest(falseFormData)).toBeFalsy();
+    expect(service.loginRequest(falseFormData)).toBeFalsy();
   });
 
   it('loginrequest should return true', () => {
-    expect(service.loginrequest(trueFormData)).toBeTruthy();
+    expect(service.loginRequest(trueFormData)).toBeTruthy();
   });
 });
