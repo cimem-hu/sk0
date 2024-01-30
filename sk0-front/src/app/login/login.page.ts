@@ -28,20 +28,18 @@ export class LoginPage {
     private alertController: AlertController
   ) {}
 
-  async loginSubmit() {
-    const response = this.loginService.loginrequest(this.loginForm);
+ async loginSubmit() {
+    const response = await this.loginService.loginrequest(this.loginForm);
+
+    const alert = await this.alertController.create({
+      message: response
+        ? 'Sikeres bejelentkezés'
+        : 'Nem megfelelő email cím vagy jelszó',
+      buttons: [response ? '' : 'OK'],
+    });
+
+    await alert.present();
+
     this.loginForm.reset();
-    if (!response) {
-      let alert = await this.alertController.create({
-        message: 'Nem megfelelő email cím vagy jelszó',
-        buttons: ['OK'],
-      });
-      alert.present();
-    } else {
-      let alert = await this.alertController.create({
-        message: 'Sikeres bejelentkezés',
-      });
-      alert.present();
-    }
   }
 }
