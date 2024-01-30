@@ -20,14 +20,8 @@ import { AlertController } from '@ionic/angular';
 })
 export class LoginPage {
   loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.pattern(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/ //min 6 chars, lower-uppercase letters + number
-      ),
-      Validators.minLength(6),
-    ]),
+    email: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required]),
   });
   constructor(
     private loginService: LoginService,
