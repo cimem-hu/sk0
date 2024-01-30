@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UsersService } from '../services/users.service';
+import { User } from '../user.entity';
 
 @Controller('users')
 export class UsersController {
@@ -21,15 +22,12 @@ export class UsersController {
 
   @Post('register')
   @UsePipes(ValidationPipe)
-  async createUser(@Body() createUserDto: CreateUserDto) {
-    const existingUser = await this.usersService.findOneByEmail(
-      createUserDto.email,
-    );
-    if (existingUser) {
-      throw new ConflictException('Email already exists');
-    } else {
-      await this.usersService.create(createUserDto);
-      return { message: 'User created successfully' };
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
+    try {
+      const createdUser = await this.usersService.create(createUserDto);
+      return createdUser;
+    } catch (error) {
+      throw new ConflictException('User with this email already exists');
     }
   }
 }

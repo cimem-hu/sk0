@@ -14,6 +14,7 @@ describe('UsersController', () => {
       update: jest.fn(),
       remove: jest.fn(),
     };
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
       providers: [{ provide: UsersService, useValue: mockUsersService }],
