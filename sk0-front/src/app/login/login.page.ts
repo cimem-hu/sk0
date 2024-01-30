@@ -25,10 +25,10 @@ export class LoginPage {
   });
   constructor(
     private loginService: LoginService,
-    private alertController: AlertController
+    private alertController: AlertController,
   ) {}
 
- async loginSubmit() {
+  async loginSubmit() {
     const response = await this.loginService.loginRequest(this.loginForm);
 
     const alert = await this.alertController.create({
