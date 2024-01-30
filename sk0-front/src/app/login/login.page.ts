@@ -29,7 +29,7 @@ export class LoginPage {
   ) {}
 
  async loginSubmit() {
-    const response = await this.loginService.loginrequest(this.loginForm);
+    const response = await this.loginService.loginRequest(this.loginForm);
 
     const alert = await this.alertController.create({
       message: response
