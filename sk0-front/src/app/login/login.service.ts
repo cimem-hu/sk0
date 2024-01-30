@@ -18,7 +18,7 @@ export class LoginService {
 
   constructor() {}
 
-  loginrequest(formData: FormGroup): boolean {
+  loginRequest(formData: FormGroup): boolean {
     const email: string = formData.get('email')?.value;
     const password: string = formData.get('password')?.value;
     return this.users[email] === password;
