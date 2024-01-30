@@ -24,7 +24,7 @@ export class LoginPage {
     password: new FormControl('', [
       Validators.required,
       Validators.pattern(
-        /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/ //at least one cap letter, one number, one spec char
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/ //min 6 chars, lower-uppercase letters + number
       ),
       Validators.minLength(6),
     ]),
@@ -42,8 +42,12 @@ export class LoginPage {
         message: 'Nem megfelelő email cím vagy jelszó',
         buttons: ['OK'],
       });
-      await alert.present();
+      alert.present();
+    } else {
+      let alert = await this.alertController.create({
+        message: 'Sikeres bejelentkezés',
+      });
+      alert.present();
     }
-    // TODO: alert msg on successful login as well
   }
 }

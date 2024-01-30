@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+
+//Interface temporary until backend connection
 interface Users {
   [key: string]: string;
 }
@@ -15,10 +17,10 @@ export class LoginService {
   };
 
   constructor() {}
+
   loginrequest(formData: FormGroup): boolean {
     const email: string = formData.get('email')?.value;
     const password: string = formData.get('password')?.value;
     return this.users[email] === password;
-    // TODO: find a way to import HTTPClient and mock HTTP response
   }
 }
