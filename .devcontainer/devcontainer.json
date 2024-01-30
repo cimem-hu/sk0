@@ -9,6 +9,7 @@
     "ghcr.io/devcontainers-contrib/features/ionic-cli:2": {},
     "ghcr.io/devcontainers-contrib/features/nestjs-cli:2": {},
     "ghcr.io/devcontainers-contrib/features/gh-cli:1": {},
+    "ghcr.io/warrenbuckley/codespace-features/sqlite:1": {}
   },
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
@@ -29,10 +30,10 @@
         "esbenp.prettier-vscode",
         "orta.vscode-jest",
         "humao.rest-client",
-        "alexcvzz.vscode-sqlite",
-      ],
-    },
-  },
+        "qwtel.sqlite-viewer"
+      ]
+    }
+  }
 
   // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
   // "remoteUser": "root"
