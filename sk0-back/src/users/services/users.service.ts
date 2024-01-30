@@ -1,26 +1,56 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { User } from '../user.entity';
+import { USER_REPOSITORY } from '../../constants';
 import { CreateUserDto } from '../dtos/create-user.dto';
-import { User } from '../types/user';
 
 @Injectable()
 export class UsersService {
-  private users: User[] = [
-    {
-      name: 'testuser',
-      email: 'testuser@example.com',
-      password: 'password1234',
-    },
-  ];
+  constructor(@Inject(USER_REPOSITORY) private repo: Repository<User>) {}
 
-  createUser(userDto: CreateUserDto) {
-    this.users.push(userDto);
+  async create(user: CreateUserDto): Promise<User> {
+    const createdUser = this.repo.create({ ...user });
+    const userByEmail = await this.findOneByEmail(user.email);
+    if (userByEmail) {
+      throw new ConflictException();
+    }
+
+    return this.repo.save(createdUser);
   }
 
-  getUsers() {
-    return this.users;
+  async findOneById(id: number): Promise<User> {
+    return this.repo.findOne({ where: { id } });
   }
 
-  getByEmail(email: string): User | null {
-    return this.users.find((user) => user.email === email);
+  async findOneByEmail(email: string): Promise<User> {
+    return this.repo.findOne({ where: { email } });
+  }
+
+  async findAll(): Promise<User[]> {
+    return this.repo.find();
+  }
+
+  async update(id: number, attributes: Partial<User>): Promise<User> {
+    const user = await this.findOneById(id);
+    if (!user) {
+      throw new NotFoundException();
+    }
+    Object.assign(user, attributes);
+    const userByEmail = await this.findOneByEmail(user.email);
+    if (userByEmail && userByEmail.id !== id) {
+      throw new ConflictException();
+    }
+
+    return this.repo.save(user);
+  }
+
+  async remove(id: number): Promise<User> {
+    const user = await this.findOneById(id);
+    return this.repo.remove(user);
   }
 }

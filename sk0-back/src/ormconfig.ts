@@ -18,8 +18,7 @@ switch (NODE_ENV) {
       type: 'sqlite',
       database: 'dev.sqlite',
       entities: ['dist/**/*.entity.js'],
-      synchronize: false,
-      migrations: [__dirname + '/migrations/*.{ts,js}'],
+      synchronize: true,
     };
     break;
   case 'production':

@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Component } from '@angular/core';
+
 import { IonicModule } from '@ionic/angular';
 
 @Component({
@@ -8,13 +7,9 @@ import { IonicModule } from '@ionic/angular';
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule],
 })
-export class HomePage implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+export class HomePage {
+  userName: string = 'Vendég';
+  constructor() {}
 }
