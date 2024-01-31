@@ -1,57 +1,49 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from '../services/users.service';
-import { LoginUserDto } from '../dtos/login-user.dto';
-import { NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { UnauthorizedException } from '@nestjs/common';
 
 describe('UsersController', () => {
-    let controller: UsersController;
-    let usersService: UsersService;
+  let controller: UsersController;
+  let service: UsersService;
 
-    beforeEach(async () => {
-        const mockUsersService = {
-            findOneByEmail: jest.fn(),
-        };
+  beforeEach(async () => {
+    const mockUsersService = {
+      validateUser: jest.fn(),
+    };
 
-        const module: TestingModule = await Test.createTestingModule({
-            controllers: [UsersController],
-            providers: [{ provide: UsersService, useValue: mockUsersService }],
-        }).compile();
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [UsersController],
+      providers: [
+        {
+          provide: UsersService,
+          useValue: mockUsersService,
+        },
+      ],
+    }).compile();
 
-        controller = module.get<UsersController>(UsersController);
-        usersService = module.get<UsersService>(UsersService);
+    controller = module.get<UsersController>(UsersController);
+    service = module.get<UsersService>(UsersService);
+    (service.validateUser as jest.Mock).mockResolvedValue(true);
+  });
+
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
+  });
+
+  describe('loginUser', () => {
+    it('should return a success message for valid credentials', async () => {
+      const loginUserDto = { email: 'test@example.com', password: 'password123' };
+      (service.validateUser as jest.Mock).mockResolvedValue(true);
+
+      await expect(controller.loginUser(loginUserDto)).resolves.toEqual({ message: 'Login successful' });
     });
 
-    it('should be defined', () => {
-        expect(controller).toBeDefined();
+    it('should throw an UnauthorizedException for invalid credentials', async () => {
+      const loginUserDto = { email: 'test@example.com', password: 'wrongpassword' };
+      (service.validateUser as jest.Mock).mockResolvedValue(false);
+
+      await expect(controller.loginUser(loginUserDto)).rejects.toThrow(UnauthorizedException);
     });
-
-    describe('loginUser', () => {
-        it('should return success message for valid credentials', async () => {
-            const userDto: LoginUserDto = { email: 'test@example.com', password: 'password123' };
-            const expectedUser = { ...userDto, id: 1 };
-
-            (usersService.findOneByEmail as jest.Mock).mockResolvedValue(expectedUser);
-
-            const result = await controller.loginUser(userDto);
-            expect(result).toEqual({ message: 'Login successful' });
-        });
-
-        it('should throw NotFoundException for non-existing user', async () => {
-            const userDto: LoginUserDto = { email: 'nonexistent@example.com', password: 'password123' };
-
-            (usersService.findOneByEmail as jest.Mock).mockResolvedValue(null);
-
-            await expect(controller.loginUser(userDto)).rejects.toThrow(NotFoundException);
-        });
-
-        it('should throw UnauthorizedException for invalid password', async () => {
-            const userDto: LoginUserDto = { email: 'test@example.com', password: 'wrongPassword' };
-            const expectedUser = { email: 'test@example.com', password: 'password123', id: 1 };
-
-            (usersService.findOneByEmail as jest.Mock).mockResolvedValue(expectedUser);
-
-            await expect(controller.loginUser(userDto)).rejects.toThrow(UnauthorizedException);
-        });
-    });
+  });
 });

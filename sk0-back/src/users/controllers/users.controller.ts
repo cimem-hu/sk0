@@ -4,7 +4,6 @@ import {
   Body,
   UsePipes,
   ValidationPipe,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
@@ -18,15 +17,9 @@ export class UsersController {
   @UsePipes(ValidationPipe)
   async loginUser(@Body() loginUserDto: LoginUserDto) {
     
-    const existingUser = await this.usersService.findOneByEmail(
-        loginUserDto.email,
-    );
+    const existingUser = await this.usersService.validateUser(loginUserDto.email, loginUserDto.password);
 
-    if (!existingUser) {
-      throw new NotFoundException('User not found!');
-    }
-
-    if (existingUser.password === loginUserDto.password) {
+    if (existingUser) {
       return { message: 'Login successful' };
     } else {
       throw new UnauthorizedException('Invalid credentials');

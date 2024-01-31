@@ -3,6 +3,7 @@ import {
   Inject,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from '../user.entity';
@@ -52,5 +53,20 @@ export class UsersService {
   async remove(id: number): Promise<User> {
     const user = await this.findOneById(id);
     return this.repo.remove(user);
+  }
+
+  async validateUser(email: string, pass: string): Promise<User> {
+    const user = await this.findOneByEmail(email);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    // Password decryption goes here in the future
+    const isPasswordMatching = pass === user.password;
+    if (!isPasswordMatching) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    return user;
   }
 }
