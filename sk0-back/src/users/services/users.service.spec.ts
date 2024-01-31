@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { User } from '../user.entity';
 import { Repository } from 'typeorm';
-import { NotFoundException, ConflictException, UnauthorizedException } from '@nestjs/common';
+import { NotFoundException, ConflictException, } from '@nestjs/common';
 
 describe('UsersService', () => {
   let usersService: UsersService;
@@ -124,27 +124,6 @@ describe('UsersService', () => {
       expect(result).toStrictEqual(mockResult);
       expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
       expect(mockRepo.remove).toHaveBeenCalledWith(mockResult);
-    });
-  });
-
-  describe('validateUser', () => {
-    it('should return the user if email and password match', async () => {
-      mockRepo.findOne = jest.fn().mockResolvedValue(mockResult);
-      const result = await usersService.validateUser(mockData.email, mockData.password);
-      expect(result).toStrictEqual(mockResult);
-      expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { email: mockData.email } });
-    });
-
-    it('should throw an UnauthorizedException if the password does not match', async () => {
-      mockRepo.findOne = jest.fn().mockResolvedValue(mockResult);
-      await expect(usersService.validateUser(mockData.email, 'wrongpassword')).rejects.toThrow(UnauthorizedException);
-      expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { email: mockData.email } });
-    });
-
-    it('should throw a NotFoundException if the user does not exist', async () => {
-      mockRepo.findOne = jest.fn().mockResolvedValue(null);
-      await expect(usersService.validateUser('nonexistent@example.com', mockData.password)).rejects.toThrow(NotFoundException);
-      expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { email: 'nonexistent@example.com' } });
     });
   });
 });

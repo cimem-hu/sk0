@@ -1,14 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
-import { UsersService } from '../services/users.service';
 import { UnauthorizedException } from '@nestjs/common';
+import { AuthService } from '../services/auth.service';
 
 describe('UsersController', () => {
   let controller: UsersController;
-  let service: UsersService;
+  let service: AuthService;
 
   beforeEach(async () => {
-    const mockUsersService = {
+    const mockAuthService = {
       validateUser: jest.fn(),
     };
 
@@ -16,14 +16,14 @@ describe('UsersController', () => {
       controllers: [UsersController],
       providers: [
         {
-          provide: UsersService,
-          useValue: mockUsersService,
+          provide: AuthService,
+          useValue: mockAuthService,
         },
       ],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
-    service = module.get<UsersService>(UsersService);
+    service = module.get<AuthService>(AuthService);
     (service.validateUser as jest.Mock).mockResolvedValue(true);
   });
 
