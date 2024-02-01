@@ -1,0 +1,63 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Bejelentkezés</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Bejelentkezés</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-grid>
+    <ion-row>
+      <form
+        [formGroup]="loginForm"
+        (ngSubmit)="loginSubmit()"
+        class="ion-align-items-center"
+        style="margin: 0 auto"
+      >
+        <ion-input
+          class="ion-margin-top"
+          formControlName="email"
+          type="email"
+          label="Email cím"
+          labelPlacement="floating"
+          [clearInput]="true"
+          fill="solid"
+          errorText="Adja meg az email címét"
+        ></ion-input>
+        <ion-input
+          class="ion-margin-top"
+          formControlName="password"
+          type="password"
+          label="Jelszó"
+          labelPlacement="floating"
+          [clearInput]="true"
+          fill="solid"
+          errorText="Adja meg a jelszavát"
+        ></ion-input>
+        <ion-button
+          expand="block"
+          type="submit"
+          [disabled]="loginForm.invalid"
+          class="ion-margin-top"
+          size="large"
+        >
+          Bejelentkezés
+        </ion-button>
+      </form>
+    </ion-row>
+    <ion-row class="ion-justify-content-center">
+      <ion-button
+        size="large"
+        expand="block"
+        color="secondary"
+        class="ion-margin-top"
+        href="/register"
+        >Nincs még fiókja?</ion-button
+      >
+    </ion-row>
+  </ion-grid>
+</ion-content>
