@@ -16,24 +16,21 @@ export class RegisterPage {
   email: string = '';
   password: string = '';
 
-  constructor(public alertController: AlertController) {}
+  constructor(private alertController: AlertController) {}
 
-  async register() {
+  async onRegister() {
     if (!this.name || !this.email || !this.password) {
-      this.errorAlert('Minden mező kitöltése kötelező.');
-      return;
+      return this.errorAlert('Minden mező kitöltése kötelező.');
     }
 
     const emailValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailValid.test(this.email)) {
-      this.errorAlert('Érvénytelen email cím.');
-      return;
+      return this.errorAlert('Érvénytelen email cím.');
     }
 
     const passwordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
     if (!passwordValid.test(this.password)) {
-      this.errorAlert('A jelszó nem elég erős. Legalább 6 karakter hosszú legyen, tartalmazzon kis- és nagybetűket és számjegyeket is.');
-      return;
+      return this.errorAlert('A jelszó nem elég erős. Legalább 6 karakter hosszú legyen, tartalmazzon kis- és nagybetűket és számjegyeket is.');
     }
 
     // Ellenőrizze, hogy az email már regisztrált-e az adatbázisban
@@ -44,7 +41,7 @@ export class RegisterPage {
     this.login();
   }
 
-  async errorAlert(message: string) {
+  private async errorAlert(message: string) {
     const alert = await this.alertController.create({
       header: 'Hiba',
       message: message,
