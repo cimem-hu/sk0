@@ -16,6 +16,9 @@ export class RegisterPage {
   email: string = '';
   password: string = '';
 
+  private readonly emailValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  private readonly passwordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+
   constructor(private alertController: AlertController) {}
 
   async onRegister() {
@@ -23,13 +26,11 @@ export class RegisterPage {
       return this.errorAlert('Minden mező kitöltése kötelező.');
     }
 
-    const emailValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailValid.test(this.email)) {
+    if (!this.emailValid.test(this.email)) {
       return this.errorAlert('Érvénytelen email cím.');
     }
 
-    const passwordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
-    if (!passwordValid.test(this.password)) {
+    if (!this.passwordValid.test(this.password)) {
       return this.errorAlert('A jelszó nem elég erős. Legalább 6 karakter hosszú legyen, tartalmazzon kis- és nagybetűket és számjegyeket is.');
     }
 
