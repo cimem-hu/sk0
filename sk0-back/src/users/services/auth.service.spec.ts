@@ -52,7 +52,9 @@ describe('AuthService', () => {
 
       jest.spyOn(usersService, 'findOneByEmail').mockResolvedValue(null);
 
-      await expect(authService.loginUser(loginUserDto)).rejects.toThrow(NotFoundException);
+      await expect(authService.loginUser(loginUserDto)).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('should throw UnauthorizedException when invalid credentials are provided', async () => {
@@ -69,7 +71,29 @@ describe('AuthService', () => {
 
       jest.spyOn(usersService, 'findOneByEmail').mockResolvedValue(user);
 
-      await expect(authService.loginUser(loginUserDto)).rejects.toThrow(UnauthorizedException);
+      await expect(authService.loginUser(loginUserDto)).rejects.toThrow(
+        UnauthorizedException,
+      );
+    });
+
+    describe('AuthService', () => {
+      let service: AuthService;
+      let mockUsersService: Partial<UsersService>;
+
+      beforeEach(async () => {
+        mockUsersService = {
+          create: jest.fn(),
+        };
+        const module: TestingModule = await Test.createTestingModule({
+          providers: [{ provide: AuthService, useValue: mockUsersService }],
+        }).compile();
+
+        service = module.get<AuthService>(AuthService);
+      });
+
+      it('should be defined', () => {
+        expect(service).toBeDefined();
+      });
     });
   });
 });
