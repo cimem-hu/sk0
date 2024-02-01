@@ -4,16 +4,20 @@ import {
   Body,
   UsePipes,
   ValidationPipe,
-  ConflictException,
+  //ConflictException,
   Get,
 } from '@nestjs/common';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UsersService } from '../services/users.service';
 import { User } from '../user.entity';
+import { AuthService } from '../services/auth.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private authService: AuthService,
+  ) {}
 
   @Get('')
   getUsers() {
@@ -23,11 +27,6 @@ export class UsersController {
   @Post('register')
   @UsePipes(ValidationPipe)
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
-    try {
-      const createdUser = await this.usersService.create(createUserDto);
-      return createdUser;
-    } catch (error) {
-      throw new ConflictException('User with this email already exists');
-    }
+    return this.authService.createUser(createUserDto);
   }
 }
