@@ -1,0 +1,28 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Regisztráció</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-content-center">
+  <ion-card>
+    <ion-card-header>
+      <ion-title>Regisztráció</ion-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Név</ion-label>
+        <ion-input [(ngModel)]="name" name="name" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input [(ngModel)]="email" name="email" type="email" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Jelszó</ion-label>
+        <ion-input [(ngModel)]="password" name="password" type="password" required></ion-input>
+      </ion-item>
+    </ion-card-content>
+    <ion-button (click)="onRegister()" color="primary" expand="block">Regisztráció</ion-button>
+  </ion-card>
+</ion-content>
