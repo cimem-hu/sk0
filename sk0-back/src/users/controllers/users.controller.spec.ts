@@ -1,14 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { AuthService } from '../services/auth.service';
-import { LoginUserDto } from '../dtos/login-user.dto';
-import {
-  NotFoundException,
-  UnauthorizedException,
-  ConflictException,
-} from '@nestjs/common';
 import { UsersService } from '../services/users.service';
+import { NotFoundException, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { CreateUserDto } from '../dtos/create-user.dto';
+import { LoginUserDto } from '../dtos/login-user.dto';
 import { User } from '../user.entity';
 
 describe('UsersController', () => {
@@ -31,7 +27,6 @@ describe('UsersController', () => {
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
-    mockAuthService = module.get<AuthService>(AuthService);
   });
 
   it('should be defined', () => {
@@ -54,26 +49,18 @@ describe('UsersController', () => {
     };
 
     it('should create a new user successfully', async () => {
-      jest
-        .spyOn(mockAuthService, 'createUser')
-        .mockResolvedValue(createdUserMock);
+      (mockAuthService.createUser as jest.Mock).mockResolvedValue(createdUserMock);
 
       const result = await controller.createUser(createUserDto);
 
-      expect(result.email).toEqual(createdUserMock.email);
-      expect(mockAuthService.createUser).toHaveBeenCalledTimes(1);
+      expect(result).toEqual(createdUserMock);
       expect(mockAuthService.createUser).toHaveBeenCalledWith(createUserDto);
     });
 
-    it('should throw ConflictException', async () => {
-      jest
-        .spyOn(mockAuthService, 'createUser')
-        .mockRejectedValue(new ConflictException());
+    it('should throw ConflictException on duplicate user', async () => {
+      (mockAuthService.createUser as jest.Mock).mockRejectedValue(new ConflictException());
 
-      await expect(controller.createUser(createUserDto)).rejects.toThrow(
-        ConflictException,
-      );
-      expect(mockAuthService.createUser).toHaveBeenCalledWith(createUserDto);
+      await expect(controller.createUser(createUserDto)).rejects.toThrow(ConflictException);
     });
   });
 
@@ -84,18 +71,19 @@ describe('UsersController', () => {
         email: 'test@example.com',
         password: 'password',
       };
-      const user = {
+      const expectedUser: User = {
         id: 1,
-        email: loginUserDto.email,
+        email: 'test@example.com',
         password: 'password',
         name: 'John Doe',
       };
 
-      jest.spyOn(mockAuthService, 'loginUser').mockResolvedValue(user);
+      (mockAuthService.loginUser as jest.Mock).mockResolvedValue(expectedUser);
 
       const result = await controller.loginUser(loginUserDto);
 
-      expect(result).toEqual(user);
+      expect(result).toEqual(expectedUser);
+      expect(mockAuthService.loginUser).toHaveBeenCalledWith(loginUserDto);
     });
 
     it('should throw NotFoundException when user is not found', async () => {
@@ -104,13 +92,9 @@ describe('UsersController', () => {
         password: 'password',
       };
 
-      jest
-        .spyOn(mockAuthService, 'loginUser')
-        .mockRejectedValue(new NotFoundException('User not found'));
+      (mockAuthService.loginUser as jest.Mock).mockRejectedValue(new NotFoundException('User not found'));
 
-      await expect(controller.loginUser(loginUserDto)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(controller.loginUser(loginUserDto)).rejects.toThrow(NotFoundException);
     });
 
     it('should throw UnauthorizedException when invalid credentials are provided', async () => {
@@ -119,13 +103,9 @@ describe('UsersController', () => {
         password: 'wrongpassword',
       };
 
-      jest
-        .spyOn(mockAuthService, 'loginUser')
-        .mockRejectedValue(new UnauthorizedException('Invalid credentials'));
+      (mockAuthService.loginUser as jest.Mock).mockRejectedValue(new UnauthorizedException('Invalid credentials'));
 
-      await expect(controller.loginUser(loginUserDto)).rejects.toThrow(
-        UnauthorizedException,
-      );
+      await expect(controller.loginUser(loginUserDto)).rejects.toThrow(UnauthorizedException);
     });
   });
 });

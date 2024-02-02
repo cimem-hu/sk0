@@ -31,17 +31,17 @@ describe('AuthService', () => {
         email: 'test@example.com',
         password: 'password',
       };
-      const user = {
+      const expectedUser = {
         id: 1,
-        email: loginUserDto.email,
+        email: 'test@example.com',
         password: 'password',
         name: 'John Doe',
       };
 
-      jest.spyOn(usersService, 'findOneByEmail').mockResolvedValue(user);
+      (usersService.findOneByEmail as jest.Mock).mockResolvedValue(expectedUser);
 
       const result = await authService.loginUser(loginUserDto);
-      expect(result).toEqual(user);
+      expect(result).toEqual(expectedUser);
     });
 
     it('should throw NotFoundException when user is not found', async () => {
@@ -50,11 +50,9 @@ describe('AuthService', () => {
         password: 'password',
       };
 
-      jest.spyOn(usersService, 'findOneByEmail').mockResolvedValue(null);
+      (usersService.findOneByEmail as jest.Mock).mockResolvedValue(null);
 
-      await expect(authService.loginUser(loginUserDto)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(authService.loginUser(loginUserDto)).rejects.toThrow(NotFoundException);
     });
 
     it('should throw UnauthorizedException when invalid credentials are provided', async () => {
@@ -62,38 +60,16 @@ describe('AuthService', () => {
         email: 'test@example.com',
         password: 'wrongpassword',
       };
-      const user = {
+      const userWithDifferentPassword = {
         id: 1,
-        email: loginUserDto.email,
+        email: 'test@example.com',
         password: 'password',
         name: 'John Doe',
       };
 
-      jest.spyOn(usersService, 'findOneByEmail').mockResolvedValue(user);
+      (usersService.findOneByEmail as jest.Mock).mockResolvedValue(userWithDifferentPassword);
 
-      await expect(authService.loginUser(loginUserDto)).rejects.toThrow(
-        UnauthorizedException,
-      );
-    });
-
-    describe('AuthService', () => {
-      let service: AuthService;
-      let mockUsersService: Partial<UsersService>;
-
-      beforeEach(async () => {
-        mockUsersService = {
-          create: jest.fn(),
-        };
-        const module: TestingModule = await Test.createTestingModule({
-          providers: [{ provide: AuthService, useValue: mockUsersService }],
-        }).compile();
-
-        service = module.get<AuthService>(AuthService);
-      });
-
-      it('should be defined', () => {
-        expect(service).toBeDefined();
-      });
+      await expect(authService.loginUser(loginUserDto)).rejects.toThrow(UnauthorizedException);
     });
   });
 });
