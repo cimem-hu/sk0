@@ -1,23 +1,75 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { UsersService } from './users.service';
+import { LoginUserDto } from '../dtos/login-user.dto';
+import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 describe('AuthService', () => {
-  let service: AuthService;
-  let mockUsersService: Partial<UsersService>;
+  let authService: AuthService;
+  let usersService: UsersService;
 
   beforeEach(async () => {
-    mockUsersService = {
-      create: jest.fn(),
-    };
     const module: TestingModule = await Test.createTestingModule({
-      providers: [{ provide: AuthService, useValue: mockUsersService }],
+      providers: [
+        AuthService,
+        {
+          provide: UsersService,
+          useValue: {
+            findOneByEmail: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
-    service = module.get<AuthService>(AuthService);
+    authService = module.get<AuthService>(AuthService);
+    usersService = module.get<UsersService>(UsersService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  describe('loginUser', () => {
+    it('should return a user when valid credentials are provided', async () => {
+      const loginUserDto: LoginUserDto = {
+        email: 'test@example.com',
+        password: 'password',
+      };
+      const expectedUser = {
+        id: 1,
+        email: 'test@example.com',
+        password: 'password',
+        name: 'John Doe',
+      };
+
+      (usersService.findOneByEmail as jest.Mock).mockResolvedValue(expectedUser);
+
+      const result = await authService.loginUser(loginUserDto);
+      expect(result).toEqual(expectedUser);
+    });
+
+    it('should throw NotFoundException when user is not found', async () => {
+      const loginUserDto: LoginUserDto = {
+        email: 'nonexistent@example.com',
+        password: 'password',
+      };
+
+      (usersService.findOneByEmail as jest.Mock).mockResolvedValue(null);
+
+      await expect(authService.loginUser(loginUserDto)).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw UnauthorizedException when invalid credentials are provided', async () => {
+      const loginUserDto: LoginUserDto = {
+        email: 'test@example.com',
+        password: 'wrongpassword',
+      };
+      const userWithDifferentPassword = {
+        id: 1,
+        email: 'test@example.com',
+        password: 'password',
+        name: 'John Doe',
+      };
+
+      (usersService.findOneByEmail as jest.Mock).mockResolvedValue(userWithDifferentPassword);
+
+      await expect(authService.loginUser(loginUserDto)).rejects.toThrow(UnauthorizedException);
+    });
   });
 });
