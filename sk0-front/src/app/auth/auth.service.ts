@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 //Interface temporary until backend connection
@@ -22,7 +21,7 @@ export class AuthService {
     'seconduser@gmail.com': 'Aaaa111!',
   };
 
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
   login(email: string, password: string): void {
     // TODO: Connect FE with BE
