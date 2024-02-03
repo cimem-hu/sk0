@@ -56,4 +56,8 @@ export class LoginPage {
 
     this.navCtrl.navigateForward('/home');
   }
+
+  ionViewDidLeave() {
+    this.loginForm.reset();
+  }
 }

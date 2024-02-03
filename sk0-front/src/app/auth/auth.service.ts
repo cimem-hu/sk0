@@ -1,5 +1,5 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 
 //Interface temporary until backend connection
 interface Users {
@@ -22,17 +22,27 @@ export class AuthService {
     'seconduser@gmail.com': 'Aaaa111!',
   };
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   login(email: string, password: string): void {
     // TODO: Connect FE with BE
+
     if (this.mockUsers[email] !== password) {
       return;
     }
     this._isUserLoggedIn = true;
   }
 
-  register(): void {
+  register(registerUserData: {
+    name: string;
+    email: string;
+    password: string;
+  }): void {
     // TODO: Connect FE with BE
+    const { name, email, password } = registerUserData;
+    this.mockUsers[email] = password;
+    console.log(this.mockUsers);
+
+    this.login(email, password);
   }
 }
