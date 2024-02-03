@@ -1,0 +1,55 @@
+<ion-content [fullscreen]="true" scrollY="false" color="primary">
+  <ion-grid>
+    <ion-row style="height: 100dvh" class="ion-align-items-center">
+      <ion-col size="12" class="ion-text-center">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Bejelentkezés</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <form [formGroup]="loginForm">
+              <ion-item class="ion-no-padding">
+                <ion-input
+                  class="ion-margin-top"
+                  formControlName="email"
+                  type="email"
+                  label="Email cím"
+                  labelPlacement="floating"
+                  [clearInput]="true"
+                  fill="solid"
+                ></ion-input>
+              </ion-item>
+              <ion-item class="ion-no-padding">
+                <ion-input
+                  class="ion-margin-top"
+                  formControlName="password"
+                  type="password"
+                  label="Jelszó"
+                  labelPlacement="floating"
+                  [clearInput]="true"
+                  fill="solid"
+                ></ion-input>
+              </ion-item>
+              <ion-button
+                expand="block"
+                type="submit"
+                class="ion-margin-top"
+                [disabled]="loginForm.invalid"
+                (click)="onLogin()"
+              >
+                Bejelentkezés
+              </ion-button>
+            </form>
+            <ion-button
+              color="primary"
+              fill="clear"
+              size="small"
+              [routerLink]="['/register']"
+              >Nincs még fiókja?</ion-button
+            >
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
