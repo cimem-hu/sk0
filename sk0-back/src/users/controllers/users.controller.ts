@@ -4,13 +4,13 @@ import {
   Body,
   UsePipes,
   ValidationPipe,
-  //ConflictException,
   Get,
 } from '@nestjs/common';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UsersService } from '../services/users.service';
 import { User } from '../user.entity';
 import { AuthService } from '../services/auth.service';
+import { LoginUserDto } from '../dtos/login-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -28,5 +28,11 @@ export class UsersController {
   @UsePipes(ValidationPipe)
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.authService.createUser(createUserDto);
+  }
+  
+  @Post('login')
+  @UsePipes(ValidationPipe)
+  async loginUser(@Body() loginUserDto: LoginUserDto) {
+    return this.authService.loginUser(loginUserDto);
   }
 }
