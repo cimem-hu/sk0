@@ -27,7 +27,7 @@ import { RouterModule } from '@angular/router';
 })
 export class LoginPage {
   loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
   });
 
@@ -47,7 +47,7 @@ export class LoginPage {
       buttons: ['OK'],
     });
 
-    this.authService.login(email, password);
+    this.authService.login({ email, password });
 
     if (!this.authService.isUserLoggedIn) {
       await alert.present();

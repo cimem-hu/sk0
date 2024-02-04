@@ -23,9 +23,9 @@ export class AuthService {
 
   constructor() {}
 
-  login(email: string, password: string): void {
+  login(loginFormData: { email: string; password: string }): void {
     // TODO: Connect FE with BE
-
+    const { email, password } = loginFormData;
     if (this.mockUsers[email] !== password) {
       return;
     }
@@ -42,6 +42,6 @@ export class AuthService {
     this.mockUsers[email] = password;
     console.log(this.mockUsers);
 
-    this.login(email, password);
+    this.login({ email, password });
   }
 }
