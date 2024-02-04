@@ -38,7 +38,6 @@ export class RegisterPage {
     ]),
   });
   constructor(
-    private alertController: AlertController,
     private navCtrl: NavController,
     private authService: AuthService
   ) {}
@@ -48,23 +47,13 @@ export class RegisterPage {
     const password = this.registerForm.get('password')!.value as string;
     const name = this.registerForm.get('name')!.value as string;
 
-    this.authService.register({ email, password, name });
+    await this.authService.register({ email, password, name });
 
     if (!this.authService.isUserLoggedIn) {
-      // TODO: manage error alerts
       return;
     }
 
     this.navCtrl.navigateForward('/home');
-  }
-
-  private async errorAlert(message: string) {
-    const alert = await this.alertController.create({
-      header: 'Hiba!',
-      message: message,
-      buttons: ['OK'],
-    });
-    await alert.present();
   }
 
   onRouteToLogin(): void {

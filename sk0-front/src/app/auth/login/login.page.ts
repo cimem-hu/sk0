@@ -9,7 +9,6 @@ import {
 } from '@angular/forms';
 import { IonicModule, NavController } from '@ionic/angular';
 import { AuthService } from '../auth.service';
-import { AlertController } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -27,13 +26,12 @@ import { RouterModule } from '@angular/router';
 })
 export class LoginPage {
   loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required]),
+    email: new FormControl('', []),
+    password: new FormControl('', []),
   });
 
   constructor(
     private authService: AuthService,
-    private alertController: AlertController,
     private navCtrl: NavController
   ) {}
 
@@ -41,16 +39,9 @@ export class LoginPage {
     const email = this.loginForm.get('email')!.value as string;
     const password = this.loginForm.get('password')!.value as string;
 
-    const alert = await this.alertController.create({
-      header: 'Hiba!',
-      message: 'Nem megfelelő email cím vagy jelszó',
-      buttons: ['OK'],
-    });
-
     this.authService.login({ email, password });
 
     if (!this.authService.isUserLoggedIn) {
-      await alert.present();
       return;
     }
 

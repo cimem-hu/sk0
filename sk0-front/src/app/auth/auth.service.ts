@@ -1,47 +1,108 @@
 import { Injectable } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 
-//Interface temporary until backend connection
-interface Users {
-  [key: string]: string;
-}
+type User = {
+  name: string;
+  email: string;
+  password: string;
+};
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private _isUserLoggedIn = false;
+  private _userName = 'Vendég';
+  private errorMessage: string | null = null;
+
+  // TODO: Connect FE with BE and remove mockUsers below
+  private mockUsers: User[];
 
   get isUserLoggedIn() {
     return this._isUserLoggedIn;
   }
 
-  mockUsers: Users = {
-    'teszt@gmail.com': 'ABCDe111!',
-    'firstuser@gmail.com': 'Abcd1234!',
-    'seconduser@gmail.com': 'Aaaa111!',
-  };
+  get userName() {
+    return this._userName;
+  }
 
-  constructor() {}
+  constructor(private alertController: AlertController) {
+    // TODO: Connect FE with BE and remove mockUsers below
 
-  login(loginFormData: { email: string; password: string }): void {
-    // TODO: Connect FE with BE
+    this.mockUsers = [
+      {
+        name: 'First User',
+        email: 'teszt@gmail.com',
+        password: 'Abcd1234!',
+      },
+      {
+        name: 'Second User',
+        email: 'seconduser@gmail.com',
+        password: 'Aaaa111!',
+      },
+    ];
+  }
+
+  async login(loginFormData: { email: string; password: string }) {
     const { email, password } = loginFormData;
-    if (this.mockUsers[email] !== password) {
+    // TODO: Connect FE with BE and remove mockUsers and refactor code below
+    try {
+      const foundUser = this.mockUsers.find((user) => {
+        return user.email === email;
+      });
+      if (!foundUser) {
+        throw new Error('Nem megfelelő email cím vagy jelszó');
+      }
+      if (foundUser.password !== password) {
+        throw new Error('Nem megfelelő email cím vagy jelszó');
+      }
+    } catch (error) {
+      this.errorMessage = (error as Error).message;
+      await this.showError();
       return;
     }
+    this._userName = this.mockUsers.find((user) => user.email === email)!.name;
     this._isUserLoggedIn = true;
   }
 
-  register(registerUserData: {
+  async register(registerFormData: {
     name: string;
     email: string;
     password: string;
-  }): void {
-    // TODO: Connect FE with BE
-    const { name, email, password } = registerUserData;
-    this.mockUsers[email] = password;
-    console.log(this.mockUsers);
+  }) {
+    const { email, password } = registerFormData;
+    // TODO: Connect FE with BE and remove mockUsers and refactor code below
+    const foundUser = this.mockUsers.find((user) => {
+      return user.email === email;
+    });
+    try {
+      if (foundUser !== undefined) {
+        throw new Error('A felhasználó már létezik.');
+      }
+      if (password.length < 6) {
+        throw new Error('A jelszó túl gyenge.');
+      }
+    } catch (error) {
+      this.errorMessage = (error as Error).message;
+      await this.showError();
+      return;
+    }
+    this.mockUsers.push(registerFormData as User);
 
     this.login({ email, password });
+  }
+
+  async logout() {
+    this._isUserLoggedIn = false;
+    this._userName = '';
+  }
+
+  private async showError() {
+    const alert = await this.alertController.create({
+      header: 'Hiba',
+      message: this.errorMessage as string,
+      buttons: ['OK'],
+    });
+    await alert.present();
   }
 }
