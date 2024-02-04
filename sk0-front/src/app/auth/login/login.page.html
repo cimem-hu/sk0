@@ -19,7 +19,13 @@
           </ion-card-header>
           <ion-card-content>
             <form [formGroup]="loginForm">
-              <ion-item class="ion-no-padding">
+              <ion-item>
+                <ion-icon
+                  slot="start"
+                  name="mail-outline"
+                  aria-hidden="true"
+                  class="ion-padding-top"
+                ></ion-icon>
                 <ion-input
                   class="ion-margin-top ion-no-padding"
                   formControlName="email"
@@ -27,9 +33,16 @@
                   label="Email cím"
                   labelPlacement="floating"
                   [clearInput]="true"
-                ></ion-input>
+                >
+                </ion-input>
               </ion-item>
-              <ion-item class="ion-no-padding">
+              <ion-item>
+                <ion-icon
+                  slot="start"
+                  name="lock-closed-outline"
+                  aria-hidden="true"
+                  class="ion-padding-top"
+                ></ion-icon>
                 <ion-input
                   class="ion-margin-top"
                   formControlName="password"
