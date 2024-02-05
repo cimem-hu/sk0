@@ -9,11 +9,12 @@
     "ghcr.io/devcontainers-contrib/features/ionic-cli:2": {},
     "ghcr.io/devcontainers-contrib/features/nestjs-cli:2": {},
     "ghcr.io/devcontainers-contrib/features/gh-cli:1": {},
-    "ghcr.io/warrenbuckley/codespace-features/sqlite:1": {}
+    "ghcr.io/warrenbuckley/codespace-features/sqlite:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  "forwardPorts": [8100, 3000],
+  "forwardPorts": [8100, 3000, 80, 5432],
 
   // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": "npm install --prefix ./sk0-front && npm install --prefix ./sk0-back",

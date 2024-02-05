@@ -1,57 +1,66 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { IonicModule, NavController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
+import { RouterModule } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+  ],
 })
 export class RegisterPage {
-  name: string = '';
-  email: string = '';
-  password: string = '';
+  private readonly strongPasswordValidator =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
 
-  private readonly emailValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  private readonly passwordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
-
-  constructor(private alertController: AlertController) {}
+  registerForm = new FormGroup({
+    name: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.pattern(this.strongPasswordValidator),
+    ]),
+  });
+  constructor(
+    private navCtrl: NavController,
+    private authService: AuthService
+  ) {}
 
   async onRegister() {
-    if (!this.name || !this.email || !this.password) {
-      return this.errorAlert('Minden mező kitöltése kötelező.');
+    const email = this.registerForm.get('email')?.value;
+    const password = this.registerForm.get('password')?.value;
+    const name = this.registerForm.get('name')?.value;
+
+    if (!email || !password || !name) {
+      return;
     }
 
-    if (!this.emailValid.test(this.email)) {
-      return this.errorAlert('Érvénytelen email cím.');
+    await this.authService.register({ email, password, name });
+
+    if (!this.authService.isUserLoggedIn) {
+      return;
     }
 
-    if (!this.passwordValid.test(this.password)) {
-      return this.errorAlert('A jelszó nem elég erős. Legalább 6 karakter hosszú legyen, tartalmazzon kis- és nagybetűket és számjegyeket is.');
-    }
-
-    // Ellenőrizze, hogy az email már regisztrált-e az adatbázisban
-
-    // Hozza létre az adatbázisban a felhasználót
-
-    // Sikeres regisztráció esetén bejelentkezés
-    this.login();
+    this.navCtrl.navigateForward('/home');
   }
 
-  private async errorAlert(message: string) {
-    const alert = await this.alertController.create({
-      header: 'Hiba',
-      message: message,
-      buttons: ['OK']
-    });
-    await alert.present();
-  }
-
-  login() {
-    // Átirányít a felhasználó fiókjába
+  onRouteToLogin(): void {
+    this.navCtrl.navigateBack('/login');
   }
 }

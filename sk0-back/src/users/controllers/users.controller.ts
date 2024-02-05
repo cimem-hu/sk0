@@ -5,6 +5,7 @@ import {
   UsePipes,
   ValidationPipe,
   Get,
+  HttpCode,
 } from '@nestjs/common';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UsersService } from '../services/users.service';
@@ -29,7 +30,8 @@ export class UsersController {
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.authService.createUser(createUserDto);
   }
-  
+
+  @HttpCode(200)
   @Post('login')
   @UsePipes(ValidationPipe)
   async loginUser(@Body() loginUserDto: LoginUserDto) {
