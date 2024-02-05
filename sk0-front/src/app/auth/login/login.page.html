@@ -1,14 +1,31 @@
 <ion-content [fullscreen]="true" scrollY="false" color="primary">
   <ion-grid>
     <ion-row style="height: 100dvh" class="ion-align-items-center">
-      <ion-col size="12" class="ion-text-center">
+      <ion-col
+        size="12"
+        sizeSm="10"
+        offsetSm="1"
+        sizeMd="8"
+        offsetMd="2"
+        sizeLg="6"
+        offsetLg="3"
+        sizeXl="4"
+        offsetXl="4"
+        class="ion-text-center"
+      >
         <ion-card>
           <ion-card-header>
             <ion-card-title>Bejelentkezés</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <form [formGroup]="loginForm">
-              <ion-item class="ion-no-padding">
+              <ion-item>
+                <ion-icon
+                  slot="start"
+                  name="mail-outline"
+                  aria-hidden="true"
+                  class="ion-padding-top"
+                ></ion-icon>
                 <ion-input
                   class="ion-margin-top ion-no-padding"
                   formControlName="email"
@@ -16,9 +33,16 @@
                   label="Email cím"
                   labelPlacement="floating"
                   [clearInput]="true"
-                ></ion-input>
+                >
+                </ion-input>
               </ion-item>
-              <ion-item class="ion-no-padding">
+              <ion-item>
+                <ion-icon
+                  slot="start"
+                  name="lock-closed-outline"
+                  aria-hidden="true"
+                  class="ion-padding-top"
+                ></ion-icon>
                 <ion-input
                   class="ion-margin-top"
                   formControlName="password"
