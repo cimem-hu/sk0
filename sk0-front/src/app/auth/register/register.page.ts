@@ -43,9 +43,9 @@ export class RegisterPage {
   ) {}
 
   async onRegister() {
-    const email = this.registerForm.get('email')!.value as string;
-    const password = this.registerForm.get('password')!.value as string;
-    const name = this.registerForm.get('name')!.value as string;
+    const email = this.registerForm.get('email')?.value as string;
+    const password = this.registerForm.get('password')?.value as string;
+    const name = this.registerForm.get('name')?.value as string;
 
     await this.authService.register({ email, password, name });
 

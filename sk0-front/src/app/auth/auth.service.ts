@@ -13,7 +13,6 @@ type User = {
 export class AuthService {
   private _isUserLoggedIn = false;
   private _userName = 'Vendég';
-  private errorMessage: string | null = null;
 
   // TODO: Connect FE with BE and remove mockUsers below
   private mockUsers: User[];
@@ -57,9 +56,8 @@ export class AuthService {
         throw new Error('Nem megfelelő email cím vagy jelszó');
       }
     } catch (error) {
-      this.errorMessage = (error as Error).message;
-      await this.showError();
-      return;
+      const errorMessage = (error as Error).message;
+      return this.showError(errorMessage);
     }
     this._userName = this.mockUsers.find((user) => user.email === email)!.name;
     this._isUserLoggedIn = true;
@@ -83,9 +81,8 @@ export class AuthService {
         throw new Error('A jelszó túl gyenge.');
       }
     } catch (error) {
-      this.errorMessage = (error as Error).message;
-      await this.showError();
-      return;
+      const errorMessage = (error as Error).message;
+      return this.showError(errorMessage);
     }
     this.mockUsers.push(registerFormData as User);
 
@@ -97,10 +94,10 @@ export class AuthService {
     this._userName = '';
   }
 
-  private async showError() {
+  private async showError(errorMessage: string) {
     const alert = await this.alertController.create({
       header: 'Hiba',
-      message: this.errorMessage as string,
+      message: errorMessage,
       buttons: ['OK'],
     });
     await alert.present();

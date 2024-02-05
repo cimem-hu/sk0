@@ -39,8 +39,9 @@ export class LoginPage {
     const email = this.loginForm.get('email')!.value as string;
     const password = this.loginForm.get('password')!.value as string;
 
-    this.authService.login({ email, password });
+    await this.authService.login({ email, password });
 
+    // TODO: implement authguard
     if (!this.authService.isUserLoggedIn) {
       return;
     }
