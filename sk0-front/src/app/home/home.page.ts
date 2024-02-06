@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { IonicModule, NavController } from '@ionic/angular';
 import { AuthService } from '../auth/auth.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -9,6 +10,7 @@ import { AuthService } from '../auth/auth.service';
   styleUrls: ['./home.page.scss'],
   standalone: true,
   imports: [IonicModule],
+  providers: [HttpClientModule]
 })
 export class HomePage implements OnInit {
   userName?: string;

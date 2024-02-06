@@ -11,6 +11,7 @@ import { IonicModule, NavController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -24,6 +25,7 @@ import { AuthService } from '../auth.service';
     ReactiveFormsModule,
     RouterModule,
   ],
+  providers: [HttpClientModule]
 })
 export class RegisterPage {
   private readonly strongPasswordValidator =
