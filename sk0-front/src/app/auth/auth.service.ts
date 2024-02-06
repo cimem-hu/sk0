@@ -131,7 +131,6 @@ export class AuthService {
 
   private async showSuccessMessage(message: string) {
     const alert = await this.alertController.create({
-      header: 'Siker',
       message: message,
       buttons: ['OK'],
     });
