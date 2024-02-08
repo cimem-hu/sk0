@@ -102,4 +102,7 @@ export class AuthService {
     });
     await alert.present();
   }
+  getIsUserLoggedIn(): boolean {
+    return this._isUserLoggedIn;
+  }
 }
