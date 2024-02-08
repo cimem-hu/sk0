@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { BehaviorSubject } from 'rxjs';
+import { NavController } from '@ionic/angular';
 
 interface LoginResponse {
     name: string;
@@ -9,15 +11,11 @@ interface LoginResponse {
     id: number;
 }
 
-interface ResponseData {
-  success: boolean;
-}
-
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private _isUserLoggedIn = false;
+  private _isUserLoggedIn = new BehaviorSubject<boolean> (false);
   private _userName = 'Vendég';
 
   get isUserLoggedIn() {
@@ -28,16 +26,17 @@ export class AuthService {
     return this._userName;
   }
 
-  constructor(private alertController: AlertController, private http: HttpClient) {}
+  constructor(private alertController: AlertController, private http: HttpClient, private navCtrl: NavController) {}
 
   async login(loginFormData: { email: string; password: string }) {
     const { email, password } = loginFormData;
   
     this.http.post<LoginResponse>(`${environment.baseUrl}/users/login`, { email, password }).subscribe({
-      next: (user: LoginResponse) => {
+      next: async (user: LoginResponse) => {
         this._userName = user.name;
-        this._isUserLoggedIn = true;
-        this.showSuccessMessage('Sikeres bejelentkezés');
+        this._isUserLoggedIn.next(true);
+        await this.showSuccessMessage('Sikeres bejelentkezés');
+        this.navCtrl.navigateForward('/home');
       },
       error: (response: HttpErrorResponse) => {
         let errorMessage: string;
@@ -75,15 +74,11 @@ export class AuthService {
   }) {
     const { name, email, password } = registerFormData;
   
-    this.http.post<ResponseData>(`${environment.baseUrl}/users/register`, { name, email, password }).subscribe({
-      next: (response: ResponseData) => {
-        if (response && response.success) {
-          this._userName = name;
-          this._isUserLoggedIn = true;
-          this.showSuccessMessage('Sikeres regisztráció');
-        } else {
-          this.showError('Sikertelen regisztráció');
-        }
+    this.http.post(`${environment.baseUrl}/users/register`, { name, email, password }).subscribe({
+      next: async () => {
+        this._userName = name;
+        await this.showSuccessMessage('Sikeres regisztráció');
+        this.navCtrl.navigateForward('/login');
       },
       error: (response: HttpErrorResponse) => {
         let errorMessage: string;
@@ -101,6 +96,9 @@ export class AuthService {
           case 404:
             errorMessage = 'Az oldal nem található';
             break;
+          case 409:
+            errorMessage = 'Már van felhasználó ezzel az e-mail címmel.';
+            break;
           case 500:
             errorMessage = 'Belső szerverhiba';
             break;
@@ -114,9 +112,10 @@ export class AuthService {
     });
   }
   
+  
 
   async logout() {
-    this._isUserLoggedIn = false;
+    this._isUserLoggedIn.next(false);
     this._userName = '';
   }
 

@@ -55,11 +55,9 @@ export class RegisterPage {
 
     await this.authService.register({ email, password, name });
 
-    if (!this.authService.isUserLoggedIn) {
+    if (!this.authService.isUserLoggedIn.value) {
       return;
     }
-
-    this.navCtrl.navigateForward('/home');
   }
 
   onRouteToLogin(): void {
