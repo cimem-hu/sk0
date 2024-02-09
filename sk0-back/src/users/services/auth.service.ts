@@ -7,16 +7,17 @@ import { UsersService } from './users.service';
 import { LoginUserDto } from '../dtos/login-user.dto';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { User } from '../user.entity';
+import { PasswordService } from './password.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService, private readonly passwordService: PasswordService,) {}
 
   async createUser(newUser: CreateUserDto): Promise<User> {
-    // TODO: password hashing Bcrypt
-    // Object.assign(newUser, hashedPassword)
+    const hashedPassword = await this.passwordService.hashPassword(newUser.password);
+    const userToCreate = { ...newUser, password: hashedPassword };
 
-    const createdUser = await this.usersService.create(newUser);
+    const createdUser = await this.usersService.create(userToCreate);
     return createdUser;
   }
 
@@ -28,8 +29,7 @@ export class AuthService {
       throw new NotFoundException();
     }
 
-    // TODO: Password compare logic goes here in the future
-    const isPasswordMatching = password === foundUser.password;
+    const isPasswordMatching = await this.passwordService.comparePasswords(password, foundUser.password);
 
     if (!isPasswordMatching) {
       throw new UnauthorizedException();
