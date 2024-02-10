@@ -6,12 +6,14 @@ import {
   ValidationPipe,
   Get,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UsersService } from '../services/users.service';
 import { User } from '../user.entity';
 import { AuthService } from '../services/auth.service';
 import { LoginUserDto } from '../dtos/login-user.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
@@ -20,7 +22,8 @@ export class UsersController {
     private authService: AuthService,
   ) {}
 
-  @Get('')
+  @UseGuards(AuthGuard('jwt'))
+  @Get('protected')
   getUsers() {
     return this.usersService.findAll();
   }

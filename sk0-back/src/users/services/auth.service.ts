@@ -17,11 +17,11 @@ export class AuthService {
   ) {}
 
   async generateJwtToken(user: User): Promise<string> {
-    const payload = { 
+    const payload = {
       email: user.email,
-      sub: user.id
+      sub: user.id,
       // Role comes here when we have them
-      };
+    };
     return this.jwtService.sign(payload);
   }
 
@@ -47,8 +47,8 @@ export class AuthService {
     if (!isPasswordMatching) {
       throw new UnauthorizedException();
     }
-    
+
     const accessToken = await this.generateJwtToken(foundUser);
-    return {accessToken};
+    return { accessToken };
   }
 }

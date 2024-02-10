@@ -7,8 +7,7 @@ import { UsersService } from 'src/users/services/users.service';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   userService: UsersService;
-  constructor(
-  ) {
+  constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: process.env.JWT_SECRET,
