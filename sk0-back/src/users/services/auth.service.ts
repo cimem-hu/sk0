@@ -7,10 +7,23 @@ import { UsersService } from './users.service';
 import { LoginUserDto } from '../dtos/login-user.dto';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { User } from '../user.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+  ) {}
+
+  async generateJwtToken(user: User): Promise<string> {
+    const payload = { 
+      email: user.email,
+      sub: user.id
+      // Role comes here when we have them
+      };
+    return this.jwtService.sign(payload);
+  }
 
   async createUser(newUser: CreateUserDto): Promise<User> {
     // TODO: password hashing Bcrypt
@@ -20,7 +33,7 @@ export class AuthService {
     return createdUser;
   }
 
-  async loginUser(loginUser: LoginUserDto) {
+  async loginUser(loginUser: LoginUserDto): Promise<{ accessToken: string }> {
     const { email, password } = loginUser;
     const foundUser = await this.usersService.findOneByEmail(email);
 
@@ -34,7 +47,8 @@ export class AuthService {
     if (!isPasswordMatching) {
       throw new UnauthorizedException();
     }
-
-    return foundUser;
+    
+    const accessToken = await this.generateJwtToken(foundUser);
+    return {accessToken};
   }
 }
