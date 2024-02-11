@@ -26,6 +26,15 @@ export class AuthService {
     return this._userName;
   }
 
+  private errorMessages = new Map<number, string>([
+    [400, 'Érvénytelen kérés'],
+    [401, 'Nem megfelelő email cím vagy jelszó'],
+    [403, 'Hozzáférés megtagadva'],
+    [404, 'Az oldal nem található'],
+    [409, 'Már van felhasználó ezzel az e-mail címmel.'],
+    [500, 'Belső szerverhiba'],
+  ]);
+
   constructor(private alertController: AlertController, private http: HttpClient, private navCtrl: NavController) {}
 
   async login(loginFormData: { email: string; password: string }) {
@@ -39,29 +48,7 @@ export class AuthService {
         this.navCtrl.navigateForward('/home');
       },
       error: (response: HttpErrorResponse) => {
-        let errorMessage: string;
-  
-        switch (response.status) {
-          case 400:
-            errorMessage = 'Érvénytelen kérés';
-            break;
-          case 401:
-            errorMessage = 'Nem megfelelő email cím vagy jelszó';
-            break;
-          case 403:
-            errorMessage = 'Hozzáférés megtagadva';
-            break;
-          case 404:
-            errorMessage = 'Az oldal nem található';
-            break;
-          case 500:
-            errorMessage = 'Belső szerverhiba';
-            break;
-          default:
-            errorMessage = 'Ismeretlen hiba történt';
-            break;
-        }
-  
+        const errorMessage = this.errorMessages.get(response.status) || 'Ismeretlen hiba történt';
         this.showError(errorMessage);
       }
     });
@@ -81,32 +68,7 @@ export class AuthService {
         this.navCtrl.navigateForward('/login');
       },
       error: (response: HttpErrorResponse) => {
-        let errorMessage: string;
-  
-        switch (response.status) {
-          case 400:
-            errorMessage = 'Érvénytelen kérés';
-            break;
-          case 401:
-            errorMessage = 'Nem megfelelő email cím vagy jelszó';
-            break;
-          case 403:
-            errorMessage = 'Hozzáférés megtagadva';
-            break;
-          case 404:
-            errorMessage = 'Az oldal nem található';
-            break;
-          case 409:
-            errorMessage = 'Már van felhasználó ezzel az e-mail címmel.';
-            break;
-          case 500:
-            errorMessage = 'Belső szerverhiba';
-            break;
-          default:
-            errorMessage = 'Ismeretlen hiba történt';
-            break;
-        }
-  
+        const errorMessage = this.errorMessages.get(response.status) || 'Ismeretlen hiba történt';
         this.showError(errorMessage);
       }
     });
