@@ -6,9 +6,9 @@ import { BehaviorSubject } from 'rxjs';
 import { NavController } from '@ionic/angular';
 
 interface LoginResponse {
-    name: string;
-    email: string;
-    id: number;
+  name: string;
+  email: string;
+  id: number;
 }
 
 @Injectable({
@@ -35,7 +35,7 @@ export class AuthService {
       next: async (user: LoginResponse) => {
         this._userName = user.name;
         this._isUserLoggedIn.next(true);
-        await this.showSuccessMessage('Sikeres bejelentkezés');
+        await this.showSuccess('Sikeres bejelentkezés');
         this.navCtrl.navigateForward('/home');
       },
       error: (response: HttpErrorResponse) => {
@@ -77,7 +77,7 @@ export class AuthService {
     this.http.post(`${environment.baseUrl}/users/register`, { name, email, password }).subscribe({
       next: async () => {
         this._userName = name;
-        await this.showSuccessMessage('Sikeres regisztráció');
+        await this.showSuccess('Sikeres regisztráció');
         this.navCtrl.navigateForward('/login');
       },
       error: (response: HttpErrorResponse) => {
@@ -128,7 +128,7 @@ export class AuthService {
     await alert.present();
   }
 
-  private async showSuccessMessage(message: string) {
+  private async showSuccess(message: string) {
     const alert = await this.alertController.create({
       message: message,
       buttons: ['OK'],
