@@ -48,7 +48,7 @@ beforeEach(async () => {
       mockUsersService.findOneByEmail = jest
         .fn()
         .mockResolvedValue(expectedUser);
-      mockPasswordService.comparePasswords = jest.fn().mockResolvedValue(true);
+      mockPasswordService.compare = jest.fn().mockResolvedValue(true);
 
       const result = await authService.loginUser(loginUserDto);
       expect(result).toEqual(expectedUser);
@@ -83,7 +83,7 @@ beforeEach(async () => {
       mockUsersService.findOneByEmail = jest
         .fn()
         .mockResolvedValue(userInDbWithDifferentPassword);
-      mockPasswordService.comparePasswords = jest.fn().mockResolvedValue(false);
+      mockPasswordService.compare = jest.fn().mockResolvedValue(false);
 
       await expect(authService.loginUser(loginUserDto)).rejects.toThrow(
         UnauthorizedException,
@@ -107,7 +107,7 @@ beforeEach(async () => {
       };
 
       mockUsersService.create = jest.fn().mockResolvedValue(expectedUser);
-      mockPasswordService.hashPassword = jest.fn().mockResolvedValue('hashedPassword');
+      mockPasswordService.hash = jest.fn().mockResolvedValue('hashedPassword');
 
       const result = await authService.createUser(newUser);
       expect(result).toStrictEqual(expectedUser);
