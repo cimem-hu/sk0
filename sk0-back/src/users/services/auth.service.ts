@@ -14,7 +14,7 @@ export class AuthService {
   constructor(private readonly usersService: UsersService, private readonly passwordService: PasswordService,) {}
 
   async createUser(newUser: CreateUserDto): Promise<User> {
-    const hashedPassword = await this.passwordService.hashPassword(newUser.password);
+    const hashedPassword = await this.passwordService.hash(newUser.password);
     const userToCreate = { ...newUser, password: hashedPassword };
 
     const createdUser = await this.usersService.create(userToCreate);
@@ -29,7 +29,7 @@ export class AuthService {
       throw new NotFoundException();
     }
 
-    const isPasswordMatching = await this.passwordService.comparePasswords(password, foundUser.password);
+    const isPasswordMatching = await this.passwordService.compare(password, foundUser.password);
 
     if (!isPasswordMatching) {
       throw new UnauthorizedException();
