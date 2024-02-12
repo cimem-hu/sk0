@@ -5,31 +5,44 @@ import { LoginUserDto } from '../dtos/login-user.dto';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PasswordService } from './password.service';
+import { Repository } from 'typeorm';
+import { User } from '../user.entity';
 
 describe('AuthService', () => {
   let authService: AuthService;
   let mockUsersService: UsersService;
   let mockPasswordService: PasswordService;
+  const userRepositoryMock: Partial<Repository<User>> = {
+    create: jest.fn(),
+    save: jest.fn(),
+    findOne: jest.fn(),
+    find: jest.fn(),
+    remove: jest.fn(),
+  };
 
-beforeEach(async () => {
-  const module: TestingModule = await Test.createTestingModule({
-    providers: [
-      AuthService,
-      UsersService,
-      {
-        provide: PasswordService,
-        useValue: {
-          hashPassword: jest.fn(),
-          comparePasswords: jest.fn(),
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        AuthService,
+        UsersService,
+        {
+          provide: PasswordService,
+          useValue: {
+            hashPassword: jest.fn(),
+            comparePasswords: jest.fn(),
+          },
         },
-      },
-    ],
-  }).compile();
+        {
+          provide: "UserRepository",
+          useValue: userRepositoryMock
+        },
+      ],
+    }).compile();
 
-  authService = module.get<AuthService>(AuthService);
-  mockUsersService = module.get<UsersService>(UsersService);
-  mockPasswordService = module.get<PasswordService>(PasswordService);
-});
+    authService = module.get<AuthService>(AuthService);
+    mockUsersService = module.get<UsersService>(UsersService);
+    mockPasswordService = module.get<PasswordService>(PasswordService);
+  });
 
 
   describe('loginUser', () => {
