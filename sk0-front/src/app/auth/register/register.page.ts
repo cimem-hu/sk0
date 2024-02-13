@@ -11,6 +11,7 @@ import { IonicModule, NavController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -24,6 +25,7 @@ import { AuthService } from '../auth.service';
     ReactiveFormsModule,
     RouterModule,
   ],
+  providers: [HttpClientModule]
 })
 export class RegisterPage {
   private readonly strongPasswordValidator =
@@ -53,11 +55,9 @@ export class RegisterPage {
 
     await this.authService.register({ email, password, name });
 
-    if (!this.authService.isUserLoggedIn) {
+    if (!this.authService.isUserLoggedIn.value) {
       return;
     }
-
-    this.navCtrl.navigateForward('/home');
   }
 
   onRouteToLogin(): void {
