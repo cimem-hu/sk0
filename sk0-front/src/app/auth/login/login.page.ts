@@ -40,10 +40,9 @@ export class LoginPage {
 
     await this.authService.login({ email, password });
 
-    // TODO: implement authguard
-    if (!this.authService.isUserLoggedIn.value) {
-      return;
-    }
+    // if (!this.authService.isUserLoggedIn.value) {
+    //   return;
+    // }
 
     this.navCtrl.navigateForward('/home');
   }

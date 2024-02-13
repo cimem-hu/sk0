@@ -15,7 +15,7 @@ interface LoginResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  private _isUserLoggedIn = new BehaviorSubject<boolean> (false);
+  private _isUserLoggedIn = new BehaviorSubject<boolean>(false);
   private _userName = 'Vendég';
 
   get isUserLoggedIn() {
@@ -35,23 +35,34 @@ export class AuthService {
     [500, 'Belső szerverhiba'],
   ]);
 
-  constructor(private alertController: AlertController, private http: HttpClient, private navCtrl: NavController) {}
+  constructor(
+    private alertController: AlertController,
+    private http: HttpClient,
+    private navCtrl: NavController
+  ) {}
 
   async login(loginFormData: { email: string; password: string }) {
     const { email, password } = loginFormData;
-  
-    this.http.post<LoginResponse>(`${environment.baseUrl}/users/login`, { email, password }).subscribe({
-      next: async (user: LoginResponse) => {
-        this._userName = user.name;
-        this._isUserLoggedIn.next(true);
-        await this.showSuccess('Sikeres bejelentkezés');
-        this.navCtrl.navigateForward('/home');
-      },
-      error: (response: HttpErrorResponse) => {
-        const errorMessage = this.errorMessages.get(response.status) || 'Ismeretlen hiba történt';
-        this.showError(errorMessage);
-      }
-    });
+
+    this.http
+      .post<LoginResponse>(`${environment.baseUrl}/users/login`, {
+        email,
+        password,
+      })
+      .subscribe({
+        next: async (user: LoginResponse) => {
+          this._userName = user.name;
+          this._isUserLoggedIn.next(true);
+          await this.showSuccess('Sikeres bejelentkezés');
+          this.navCtrl.navigateForward('/home');
+        },
+        error: (response: HttpErrorResponse) => {
+          const errorMessage =
+            this.errorMessages.get(response.status) ||
+            'Ismeretlen hiba történt';
+          this.showError(errorMessage);
+        },
+      });
   }
 
   async register(registerFormData: {
@@ -60,21 +71,23 @@ export class AuthService {
     password: string;
   }) {
     const { name, email, password } = registerFormData;
-  
-    this.http.post(`${environment.baseUrl}/users/register`, { name, email, password }).subscribe({
-      next: async () => {
-        this._userName = name;
-        await this.showSuccess('Sikeres regisztráció');
-        this.navCtrl.navigateForward('/login');
-      },
-      error: (response: HttpErrorResponse) => {
-        const errorMessage = this.errorMessages.get(response.status) || 'Ismeretlen hiba történt';
-        this.showError(errorMessage);
-      }
-    });
+
+    this.http
+      .post(`${environment.baseUrl}/users/register`, { name, email, password })
+      .subscribe({
+        next: async () => {
+          this._userName = name;
+          await this.showSuccess('Sikeres regisztráció');
+          this.navCtrl.navigateForward('/login');
+        },
+        error: (response: HttpErrorResponse) => {
+          const errorMessage =
+            this.errorMessages.get(response.status) ||
+            'Ismeretlen hiba történt';
+          this.showError(errorMessage);
+        },
+      });
   }
-  
-  
 
   async logout() {
     this._isUserLoggedIn.next(false);
@@ -90,16 +103,11 @@ export class AuthService {
     await alert.present();
   }
 
-  getIsUserLoggedIn(): boolean {
-    return this._isUserLoggedIn;
-
-
   private async showSuccess(message: string) {
     const alert = await this.alertController.create({
       message: message,
       buttons: ['OK'],
     });
     await alert.present();
-
   }
 }
