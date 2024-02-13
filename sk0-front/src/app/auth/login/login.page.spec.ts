@@ -1,20 +1,27 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginPage } from './login.page';
-import { ActivatedRoute } from '@angular/router'; // Import ActivatedRoute
+import { ActivatedRoute } from '@angular/router'; 
+import { HttpClient, HttpHandler } from '@angular/common/http';
+import { AuthService } from '../auth.service';
+import { Injectable } from '@angular/core';
+
+@Injectable()
+class HttpClientMock extends HttpClient {}
 
 describe('LoginPage', () => {
   let component: LoginPage;
   let fixture: ComponentFixture<LoginPage>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [LoginPage],
       providers: [
-        {
-          provide: ActivatedRoute, // Provide ActivatedRoute
-          useValue: {}, // Use an empty object as a mock
-        },
+        { provide: ActivatedRoute, useValue: {} },
+        { provide: HttpClient, useClass: HttpClientMock },
+        AuthService,
+        { provide: HttpHandler, useValue: {} }
       ],
-    }).compileComponents();
+    });
 
     fixture = TestBed.createComponent(LoginPage);
     component = fixture.componentInstance;
