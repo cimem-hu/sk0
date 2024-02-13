@@ -2,7 +2,7 @@
 GET http://localhost:3000/users
 
 ### List user by id
-GET http://localhost:3000/users/1
+GET http://localhost:3000/users/5
 
 ### Register user
 POST http://localhost:3000/users/register
@@ -22,4 +22,12 @@ Content-Type: application/json
 {
   "email": "ab@cc.de",
   "password": "Password1"
+}
+
+### UPDATE User
+Patch http://localhost:3000/users/1
+Content-Type: application/json
+
+{
+  "name": "Test User 2"
 }

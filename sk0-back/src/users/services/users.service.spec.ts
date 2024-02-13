@@ -1,8 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersService } from './users.service';
+import {
+  UserExistException,
+  UserNotFoundException,
+  UsersService,
+} from './users.service';
 import { User } from '../user.entity';
 import { Repository } from 'typeorm';
-import { NotFoundException, ConflictException, } from '@nestjs/common';
 
 describe('UsersService', () => {
   let usersService: UsersService;
@@ -51,11 +54,11 @@ describe('UsersService', () => {
       expect(mockRepo.save).toHaveBeenCalledWith(mockResult);
     });
 
-    it('should throw ConflictException when user already exists', async () => {
+    it('should throw UserExistException when user already exists', async () => {
       mockRepo.create = jest.fn().mockReturnValue(mockResult);
       usersService.findOneByEmail = jest.fn().mockResolvedValue(mockResult);
       await expect(usersService.create(mockData)).rejects.toThrow(
-        ConflictException,
+        UserExistException,
       );
     });
   });
@@ -100,11 +103,11 @@ describe('UsersService', () => {
       expect(mockRepo.save).toHaveBeenCalledWith(mockUpdatedUser);
     });
 
-    it('should throw NotFoundException when user does not exist', async () => {
+    it('should throw UserNotFoundException when user does not exist', async () => {
       mockRepo.findOne = jest.fn().mockResolvedValue(null);
       await expect(
         usersService.update(1, { email: 'aaa@bc.de' }),
-      ).rejects.toThrow(NotFoundException);
+      ).rejects.toThrow(UserNotFoundException);
       expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
     });
 
@@ -112,7 +115,7 @@ describe('UsersService', () => {
       mockRepo.findOne = jest.fn().mockResolvedValue(mockResult);
       await expect(
         usersService.update(2, { email: mockData.email }),
-      ).rejects.toThrow(ConflictException);
+      ).rejects.toThrow(UserExistException);
     });
   });
 
