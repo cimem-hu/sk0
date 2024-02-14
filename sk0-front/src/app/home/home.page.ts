@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 })
 export class HomePage {
   userName$ = this.authService.userName;
+  logoutLabel = 'Kijelentkezés';
 
   constructor(
     private authService: AuthService,

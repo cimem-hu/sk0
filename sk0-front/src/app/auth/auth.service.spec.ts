@@ -34,7 +34,7 @@ describe('AuthService', () => {
     });
 
     service.userName.subscribe((userName) => {
-      expect(userName).toBe('');
+      expect(userName).toBe(null);
       done();
     });
   });
