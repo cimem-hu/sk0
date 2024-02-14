@@ -24,6 +24,9 @@ describe('AuthService', () => {
   });
 
   it('should set isUserLoggedIn to false and userName to empty string on logout', (done) => {
+    service.isUserLoggedIn.next(true);
+    service.userName.next('testUser');
+
     service.logout();
 
     service.isUserLoggedIn.subscribe((isUserLoggedIn) => {
