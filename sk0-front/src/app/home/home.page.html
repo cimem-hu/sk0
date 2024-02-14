@@ -3,7 +3,7 @@
     <ion-row style="height: 100dvh" class="ion-align-items-center">
       <ion-col size="12" class="ion-text-center">
         <h1 class="ion-no-margin">Üdvözöllek kedves</h1>
-        <h1 class="ion-no-margin">{{userName}}!</h1>
+        <h1 class="ion-no-margin">{{userName$ | async}}!</h1>
         <ion-button class="ion-margin-top" (click)="onLogout()">
           Kijelentkezés
         </ion-button>

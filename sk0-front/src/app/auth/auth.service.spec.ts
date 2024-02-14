@@ -2,9 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
 
-class HttpClientMock extends HttpClient {
-
-}
+class HttpClientMock extends HttpClient {}
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -23,5 +21,18 @@ describe('AuthService', () => {
 
   it('AuthService should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  it('should set isUserLoggedIn to false and userName to empty string on logout', (done) => {
+    service.logout();
+
+    service.isUserLoggedIn.subscribe((isUserLoggedIn) => {
+      expect(isUserLoggedIn).toBe(false);
+    });
+
+    service.userName.subscribe((userName) => {
+      expect(userName).toBe('');
+      done();
+    });
   });
 });
