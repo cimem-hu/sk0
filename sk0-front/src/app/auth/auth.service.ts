@@ -16,7 +16,7 @@ interface LoginResponse {
 })
 export class AuthService {
   private _isUserLoggedIn = new BehaviorSubject<boolean>(false);
-  private _userName = 'Vendég';
+  private _userName = new BehaviorSubject<string | null>(null);
 
   get isUserLoggedIn() {
     return this._isUserLoggedIn;
@@ -51,7 +51,7 @@ export class AuthService {
       })
       .subscribe({
         next: async (user: LoginResponse) => {
-          this._userName = user.name;
+          this._userName.next(user.name);
           this._isUserLoggedIn.next(true);
           await this.showSuccess('Sikeres bejelentkezés');
           this.navCtrl.navigateForward('/home');
@@ -76,7 +76,7 @@ export class AuthService {
       .post(`${environment.baseUrl}/users/register`, { name, email, password })
       .subscribe({
         next: async () => {
-          this._userName = name;
+          this._userName.next(name);
           await this.showSuccess('Sikeres regisztráció');
           this.navCtrl.navigateForward('/login');
         },
@@ -91,7 +91,7 @@ export class AuthService {
 
   async logout() {
     this._isUserLoggedIn.next(false);
-    this._userName = '';
+    this._userName.next(null);
   }
 
   private async showError(errorMessage: string) {
