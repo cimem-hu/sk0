@@ -1,13 +1,11 @@
-import {
-  ConflictException,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from '../user.entity';
 import { USER_REPOSITORY } from '../../constants';
 import { CreateUserDto } from '../dtos/create-user.dto';
+
+export class UserNotFoundException extends Error {}
+export class UserExistException extends Error {}
 
 @Injectable()
 export class UsersService {
@@ -17,7 +15,7 @@ export class UsersService {
     const createdUser = this.repo.create({ ...user });
     const userByEmail = await this.findOneByEmail(user.email);
     if (userByEmail) {
-      throw new ConflictException();
+      throw new UserExistException();
     }
 
     return this.repo.save(createdUser);
@@ -38,12 +36,12 @@ export class UsersService {
   async update(id: number, attributes: Partial<User>): Promise<User> {
     const user = await this.findOneById(id);
     if (!user) {
-      throw new NotFoundException();
+      throw new UserNotFoundException();
     }
     Object.assign(user, attributes);
     const userByEmail = await this.findOneByEmail(user.email);
     if (userByEmail && userByEmail.id !== id) {
-      throw new ConflictException();
+      throw new UserExistException();
     }
 
     return this.repo.save(user);
