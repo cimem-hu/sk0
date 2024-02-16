@@ -7,7 +7,7 @@ import { UsersService } from './users.service';
 import { LoginUserDto } from '../dtos/login-user.dto';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { User } from '../user.entity';
-import { TokenService } from './token.service';
+import { TokenService } from '../../auth/token.service';
 import { PasswordService } from './password.service';
 
 @Injectable()
