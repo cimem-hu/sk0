@@ -15,11 +15,11 @@ import { TokenService } from 'src/users/services/token.service';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
-        signOptions: { expiresIn: '60m' },
+        signOptions: { expiresIn: configService.get<string>('JWT_OPTIONS_EXPIRE') },
       }),
-    }),,
+    }),
   ],
-  providers: [AuthService, JwtStrategy, TokenService], // Ensure that UsersService is injected within JwtStrategy if needed
+  providers: [AuthService, JwtStrategy, TokenService],
   exports: [AuthService, TokenService],
 })
-export class AuthModule {}
+export class TokenModule {}

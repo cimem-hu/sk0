@@ -46,4 +46,14 @@ export class AuthService {
     const accessToken = await this.tokenService.generateToken(foundUser);
     return { ...foundUser, accessToken };
   }
+
+  async validateUser(email: string) {
+    const foundUser = await this.usersService.findOneByEmail(email);
+
+    if (!foundUser) {
+      throw new NotFoundException();
+    }
+
+    return foundUser;
+  }
 }

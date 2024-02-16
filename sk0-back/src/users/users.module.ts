@@ -9,7 +9,7 @@ import { PasswordService } from './services/password.service';
 @Module({
   controllers: [UsersController],
   imports: [
-    DatabaseModule, 
+    DatabaseModule,
   ],
   providers: [...userProviders, UsersService, AuthService, PasswordService],
 })
