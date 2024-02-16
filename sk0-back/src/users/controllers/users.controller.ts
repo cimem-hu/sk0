@@ -7,6 +7,8 @@ import {
   Get,
   HttpCode,
   UseGuards,
+  Param,
+  BadRequestException,
 } from '@nestjs/common';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UsersService } from '../services/users.service';
@@ -26,6 +28,15 @@ export class UsersController {
   @Get('protected')
   getUsers() {
     return this.usersService.findAll();
+  }
+
+  @Get(':id')
+  getUserById(@Param('id') id: string): Promise<User> {
+    const userId = parseInt(id, 10);
+    if (isNaN(userId)) {
+      throw new BadRequestException();
+    }
+    return this.usersService.findOneById(userId);
   }
 
   @Post('register')

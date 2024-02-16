@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  frontend:
+    build: ./sk0-front
+    ports:
+      - "${FRONTEND_PORT}:8080"
+
+  backend:
+    build: ./sk0-back
+    ports:
+      - "${BACKEND_PORT}:3000"
+
+  database:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "${DATABASE_PORT}:5432"

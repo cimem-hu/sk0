@@ -1,21 +1,22 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { BehaviorSubject } from 'rxjs';
+import { NavController } from '@ionic/angular';
 
-type User = {
+interface LoginResponse {
   name: string;
   email: string;
-  password: string;
-};
+  id: number;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private _isUserLoggedIn = false;
+  private _isUserLoggedIn = new BehaviorSubject<boolean>(false);
   private _userName = 'Vendég';
-
-  // TODO: Connect FE with BE and remove mockUsers below
-  private mockUsers: User[];
 
   get isUserLoggedIn() {
     return this._isUserLoggedIn;
@@ -25,42 +26,43 @@ export class AuthService {
     return this._userName;
   }
 
-  constructor(private alertController: AlertController) {
-    // TODO: Connect FE with BE and remove mockUsers below
+  private errorMessages = new Map<number, string>([
+    [400, 'Érvénytelen kérés'],
+    [401, 'Nem megfelelő email cím vagy jelszó'],
+    [403, 'Hozzáférés megtagadva'],
+    [404, 'Az oldal nem található'],
+    [409, 'Már van felhasználó ezzel az e-mail címmel.'],
+    [500, 'Belső szerverhiba'],
+  ]);
 
-    this.mockUsers = [
-      {
-        name: 'First User',
-        email: 'teszt@gmail.com',
-        password: 'Abcd1234!',
-      },
-      {
-        name: 'Second User',
-        email: 'seconduser@gmail.com',
-        password: 'Aaaa111!',
-      },
-    ];
-  }
+  constructor(
+    private alertController: AlertController,
+    private http: HttpClient,
+    private navCtrl: NavController
+  ) {}
 
   async login(loginFormData: { email: string; password: string }) {
     const { email, password } = loginFormData;
-    // TODO: Connect FE with BE and remove mockUsers and refactor code below
-    try {
-      const foundUser = this.mockUsers.find((user) => {
-        return user.email === email;
+
+    this.http
+      .post<LoginResponse>(`${environment.baseUrl}/users/login`, {
+        email,
+        password,
+      })
+      .subscribe({
+        next: async (user: LoginResponse) => {
+          this._userName = user.name;
+          this._isUserLoggedIn.next(true);
+          await this.showSuccess('Sikeres bejelentkezés');
+          this.navCtrl.navigateForward('/home');
+        },
+        error: (response: HttpErrorResponse) => {
+          const errorMessage =
+            this.errorMessages.get(response.status) ||
+            'Ismeretlen hiba történt';
+          this.showError(errorMessage);
+        },
       });
-      if (!foundUser) {
-        throw new Error('Nem megfelelő email cím vagy jelszó');
-      }
-      if (foundUser.password !== password) {
-        throw new Error('Nem megfelelő email cím vagy jelszó');
-      }
-    } catch (error) {
-      const errorMessage = (error as Error).message;
-      return this.showError(errorMessage);
-    }
-    this._userName = this.mockUsers.find((user) => user.email === email)!.name;
-    this._isUserLoggedIn = true;
   }
 
   async register(registerFormData: {
@@ -68,29 +70,27 @@ export class AuthService {
     email: string;
     password: string;
   }) {
-    const { email, password } = registerFormData;
-    // TODO: Connect FE with BE and remove mockUsers and refactor code below
-    const foundUser = this.mockUsers.find((user) => {
-      return user.email === email;
-    });
-    try {
-      if (foundUser !== undefined) {
-        throw new Error('A felhasználó már létezik.');
-      }
-      if (password.length < 6) {
-        throw new Error('A jelszó túl gyenge.');
-      }
-    } catch (error) {
-      const errorMessage = (error as Error).message;
-      return this.showError(errorMessage);
-    }
-    this.mockUsers.push(registerFormData as User);
+    const { name, email, password } = registerFormData;
 
-    this.login({ email, password });
+    this.http
+      .post(`${environment.baseUrl}/users/register`, { name, email, password })
+      .subscribe({
+        next: async () => {
+          this._userName = name;
+          await this.showSuccess('Sikeres regisztráció');
+          this.navCtrl.navigateForward('/login');
+        },
+        error: (response: HttpErrorResponse) => {
+          const errorMessage =
+            this.errorMessages.get(response.status) ||
+            'Ismeretlen hiba történt';
+          this.showError(errorMessage);
+        },
+      });
   }
 
   async logout() {
-    this._isUserLoggedIn = false;
+    this._isUserLoggedIn.next(false);
     this._userName = '';
   }
 
@@ -98,6 +98,14 @@ export class AuthService {
     const alert = await this.alertController.create({
       header: 'Hiba',
       message: errorMessage,
+      buttons: ['OK'],
+    });
+    await alert.present();
+  }
+
+  private async showSuccess(message: string) {
+    const alert = await this.alertController.create({
+      message: message,
       buttons: ['OK'],
     });
     await alert.present();
