@@ -1,14 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormsModule,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
-import { IonicModule, NavController } from '@ionic/angular';
-import { AuthService } from '../auth.service';
+import { IonicModule, ViewDidLeave } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { loginStarted } from '../store/auth.actions';
+import { AppStore } from 'src/app/app.state';
 
 @Component({
   selector: 'app-login',
@@ -23,28 +26,22 @@ import { RouterModule } from '@angular/router';
     RouterModule,
   ],
 })
-export class LoginPage {
+export class LoginPage implements ViewDidLeave {
+  private readonly store: Store = inject(Store<AppStore>);
   loginForm = new FormGroup({
-    email: new FormControl('', []),
-    password: new FormControl('', []),
+    email: new FormControl<string>("", [Validators.email]),
+    password: new FormControl<string>("", [Validators.minLength(6)]),
   });
 
-  constructor(
-    private authService: AuthService,
-    private navCtrl: NavController
-  ) {}
-
   async onLogin() {
-    const email = this.loginForm.get('email')!.value as string;
-    const password = this.loginForm.get('password')!.value as string;
-
-    await this.authService.login({ email, password });
-
-    // if (!this.authService.isUserLoggedIn.value) {
-    //   return;
-    // }
-
-    this.navCtrl.navigateForward('/home');
+    if (this.loginForm.valid) {
+      const { email, password } = this.loginForm.value;
+      if (!email || !password) {
+        //TODO: add alert or make form invalid/dirty or add error
+        return;
+      }
+      this.store.dispatch(loginStarted({ email, password }));
+    }
   }
 
   ionViewDidLeave() {

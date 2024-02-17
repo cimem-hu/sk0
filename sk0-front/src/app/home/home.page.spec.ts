@@ -1,10 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HomePage } from './home.page';
-import { HttpClient } from '@angular/common/http';
-
-class HttpClientMock extends HttpClient {
-
-}
+import { provideStore } from '@ngrx/store';
+import { authStore } from '../auth/store/auth.reducer';
 
 describe('HomePage', () => {
   let component: HomePage;
@@ -13,10 +10,7 @@ describe('HomePage', () => {
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
       providers: [
-        {
-          provide: HttpClient,
-          useValue: HttpClientMock,
-        },
+        provideStore({ auth: authStore }),
       ],
     })
       .createComponent(HomePage);

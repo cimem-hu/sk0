@@ -1,12 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginPage } from './login.page';
-import { ActivatedRoute } from '@angular/router'; 
-import { HttpClient, HttpHandler } from '@angular/common/http';
-import { AuthService } from '../auth.service';
-import { Injectable } from '@angular/core';
+import { provideStore } from '@ngrx/store';
+import { authStore } from '../store/auth.reducer';
+import { RouterModule } from '@angular/router';
 
-@Injectable()
-class HttpClientMock extends HttpClient {}
 
 describe('LoginPage', () => {
   let component: LoginPage;
@@ -14,12 +11,12 @@ describe('LoginPage', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [LoginPage],
+      imports: [
+        LoginPage,
+        RouterModule.forRoot([]),
+      ],
       providers: [
-        { provide: ActivatedRoute, useValue: {} },
-        { provide: HttpClient, useClass: HttpClientMock },
-        AuthService,
-        { provide: HttpHandler, useValue: {} }
+        provideStore({ auth: authStore }),
       ],
     });
 

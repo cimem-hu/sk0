@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
-
-import { IonicModule, NavController } from '@ionic/angular';
-import { AuthService } from '../auth/auth.service';
+import { Component, inject } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import { Store } from '@ngrx/store';
+import { AppState } from '@capacitor/app';
+import { getUserName } from '../auth/store/auth.selectors';
+import { logoutAction } from '../auth/store/auth.actions';
 
 @Component({
   selector: 'app-home',
@@ -12,16 +14,12 @@ import { CommonModule } from '@angular/common';
   imports: [IonicModule, CommonModule],
 })
 export class HomePage {
-  userName$ = this.authService.userName;
+  private readonly store: Store = inject(Store<AppState>);
+
+  userName$ = this.store.select(getUserName);
   logoutLabel = 'Kijelentkezés';
 
-  constructor(
-    private authService: AuthService,
-    private navCtrl: NavController
-  ) {}
-
   onLogout() {
-    this.authService.logout();
-    this.navCtrl.navigateBack('/login');
+    this.store.dispatch(logoutAction());
   }
 }

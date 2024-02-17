@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormControl,
@@ -7,11 +7,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { IonicModule, NavController } from '@ionic/angular';
-import { AlertController } from '@ionic/angular';
+import { IonicModule, NavController, ViewDidLeave } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
-import { AuthService } from '../auth.service';
 import { HttpClientModule } from '@angular/common/http';
+import { Store } from '@ngrx/store';
+import { registerStarted } from '../store/auth.actions';
 
 @Component({
   selector: 'app-register',
@@ -27,37 +27,33 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   providers: [HttpClientModule]
 })
-export class RegisterPage {
+export class RegisterPage implements ViewDidLeave {
+
+  private readonly navCtrl: NavController = inject(NavController);
+  private readonly store: Store = inject(Store);
+
   private readonly strongPasswordValidator =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
 
   registerForm = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.pattern(this.strongPasswordValidator),
-    ]),
+    name: new FormControl('', Validators.required),
+    email: new FormControl('', Validators.email),
+    password: new FormControl('', Validators.pattern(this.strongPasswordValidator)),
   });
-  constructor(
-    private navCtrl: NavController,
-    private authService: AuthService
-  ) {}
 
   async onRegister() {
-    const email = this.registerForm.get('email')?.value;
-    const password = this.registerForm.get('password')?.value;
-    const name = this.registerForm.get('name')?.value;
-
-    if (!email || !password || !name) {
-      return;
+    if (this.registerForm.valid) {
+      const { email, name, password } = this.registerForm.value;
+      if (!email || !password || !name) {
+        //TODO: use error in the form or create alert/tost to inform the user
+        return;
+      }
+      this.store.dispatch(registerStarted({ email, password, name }))
     }
+  }
 
-    await this.authService.register({ email, password, name });
-
-    if (!this.authService.isUserLoggedIn.value) {
-      return;
-    }
+  ionViewDidLeave() {
+    this.registerForm.reset();
   }
 
   onRouteToLogin(): void {
