@@ -13,14 +13,14 @@ describe('AuthService', () => {
   let authService: AuthService;
   let mockUsersService: UsersService;
   let mockPasswordService: PasswordService;
-  const userRepositoryMock: Partial<Repository<User>> = {
+  const mockUserRepository: Partial<Repository<User>> = {
     create: jest.fn(),
     save: jest.fn(),
     findOne: jest.fn(),
     find: jest.fn(),
     remove: jest.fn(),
   };
-  const tokenServiceMock: Partial<TokenService> = {
+  const mockTokenService: Partial<TokenService> = {
     generateToken: jest.fn(),
   }
 
@@ -38,11 +38,11 @@ describe('AuthService', () => {
         },
         {
           provide: TokenService,
-          useValue: tokenServiceMock
+          useValue: mockTokenService
         },
         {
           provide: "UserRepository",
-          useValue: userRepositoryMock
+          useValue: mockUserRepository
         },
       ],
     }).compile();
@@ -50,7 +50,6 @@ describe('AuthService', () => {
     authService = module.get<AuthService>(AuthService);
     mockUsersService = module.get<UsersService>(UsersService);
     mockPasswordService = module.get<PasswordService>(PasswordService);
-    
   });
 
 
@@ -65,7 +64,12 @@ describe('AuthService', () => {
         email: 'test@example.com',
         password: 'password',
         name: 'John Doe',
+        token: 'Token String',
       };
+
+      mockTokenService.generateToken = jest
+        .fn()
+        .mockReturnValue('Token String');
 
       mockUsersService.findOneByEmail = jest
         .fn()
@@ -73,7 +77,8 @@ describe('AuthService', () => {
       mockPasswordService.compare = jest.fn().mockResolvedValue(true);
 
       const result = await authService.loginUser(loginUserDto);
-      expect(result).toEqual(expectedUser);
+      expect(result).toStrictEqual(expectedUser);
+      expect(mockTokenService.generateToken).toHaveBeenCalledWith({email: expectedUser.email, id: expectedUser.id});
     });
 
     it('should throw NotFoundException when user is not found', async () => {

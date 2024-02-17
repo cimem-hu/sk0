@@ -14,12 +14,11 @@ Content-Type: application/json
   "password": "Password1"
 }
 
-
 ### Login user
 POST http://localhost:3000/users/login
 Content-Type: application/json
 
 {
-  "email": "ab@cc.de",
+  "email": "ab@c.de",
   "password": "Password1"
 }

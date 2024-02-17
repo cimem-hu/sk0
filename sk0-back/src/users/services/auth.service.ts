@@ -10,6 +10,14 @@ import { User } from '../user.entity';
 import { TokenService } from '../../auth/token.service';
 import { PasswordService } from './password.service';
 
+export type LoginResult = {
+  id: number;
+  email: string;
+  password: string;
+  name: string;
+  token: string;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -26,7 +34,7 @@ export class AuthService {
     return createdUser;
   }
 
-  async loginUser(loginUser: LoginUserDto): Promise<any> {
+  async loginUser(loginUser: LoginUserDto): Promise<LoginResult> {
     const { email, password } = loginUser;
     const foundUser = await this.usersService.findOneByEmail(email);
 
@@ -43,8 +51,11 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const accessToken = this.tokenService.generateToken(foundUser);
-    return { ...foundUser, accessToken };
+    const token = this.tokenService.generateToken({
+      email: foundUser.email,
+      id: foundUser.id,
+    });
+    return { ...foundUser, token } as LoginResult;
   }
 
   async validateUser(email: string) {

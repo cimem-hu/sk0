@@ -30,6 +30,11 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get()
+  getAllUsers() {
+    return this.usersService.findAll();
+  }
+
   @Get(':id')
   getUserById(@Param('id') id: string): Promise<User> {
     const userId = parseInt(id, 10);

@@ -1,13 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService as NestJwtService } from '@nestjs/jwt';
-import { User } from '../users/user.entity';
+import { JwtService } from '@nestjs/jwt';
+
+export type TokenPayload = {
+  email: string;
+  id: string | number;
+};
 
 @Injectable()
 export class TokenService {
-    constructor(private readonly nestJwtService: NestJwtService) {}
+  constructor(private readonly jwtService: JwtService) {}
 
-    generateToken(user: User): string {
-        const payload = { email: user.email, sub: user.id };
-        return this.nestJwtService.sign(payload);
-    }
+  generateToken(tokenPayload: TokenPayload): string {
+    return this.jwtService.sign(tokenPayload);
+  }
 }
