@@ -7,6 +7,7 @@ import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PasswordService } from './password.service';
 import { Repository } from 'typeorm';
 import { User } from '../user.entity';
+import { TokenService } from '../../auth/token.service';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -19,6 +20,9 @@ describe('AuthService', () => {
     find: jest.fn(),
     remove: jest.fn(),
   };
+  const tokenServiceMock: Partial<TokenService> = {
+    generateToken: jest.fn(),
+  }
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -33,6 +37,10 @@ describe('AuthService', () => {
           },
         },
         {
+          provide: TokenService,
+          useValue: tokenServiceMock
+        },
+        {
           provide: "UserRepository",
           useValue: userRepositoryMock
         },
@@ -42,6 +50,7 @@ describe('AuthService', () => {
     authService = module.get<AuthService>(AuthService);
     mockUsersService = module.get<UsersService>(UsersService);
     mockPasswordService = module.get<PasswordService>(PasswordService);
+    
   });
 
 
@@ -125,6 +134,29 @@ describe('AuthService', () => {
       const result = await authService.createUser(newUser);
       expect(result).toStrictEqual(expectedUser);
       expect(mockUsersService.create).toHaveBeenCalledWith({ ...newUser, password: 'hashedPassword' });
+    });
+  });
+
+  describe('validateUser', () => {
+    it('should return a user with correct email', async () => {
+      const expectedUser = {
+        id: 1,
+        email: 'test@test.com',
+        password: 'Password123',
+        name: 'John Doe',
+      };
+
+      const email = 'test@test.com';
+
+      mockUsersService.create = jest.fn().mockResolvedValue(expectedUser);
+      
+      mockUsersService.findOneByEmail = jest
+        .fn()
+        .mockResolvedValue(expectedUser);
+      mockPasswordService.compare = jest.fn().mockResolvedValue(true);
+
+      const result = await authService.validateUser(email);
+      expect(result).toEqual(expectedUser);
     });
   });
 });

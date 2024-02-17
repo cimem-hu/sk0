@@ -43,7 +43,7 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const accessToken = await this.tokenService.generateToken(foundUser);
+    const accessToken = this.tokenService.generateToken(foundUser);
     return { ...foundUser, accessToken };
   }
 

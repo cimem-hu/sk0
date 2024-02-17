@@ -13,7 +13,6 @@ describe('TokenService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      // TokenService is the service we are testing
       providers: [
         TokenService,
         { provide: JwtService, useValue: mockJwtService },
