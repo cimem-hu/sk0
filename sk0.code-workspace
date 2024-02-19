@@ -1,11 +1,13 @@
 {
   "folders": [
     {
-      "path": "sk0-back",
+      "path": "sk0-back"
     },
     {
-      "path": "sk0-front",
-    },
+      "path": "sk0-front"
+    }
   ],
-  "settings": {},
+  "settings": {
+    "vsicons.presets.nestjs": true
+  }
 }

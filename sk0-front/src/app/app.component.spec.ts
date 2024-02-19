@@ -1,17 +1,19 @@
-import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
-import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { TestBed } from "@angular/core/testing";
+import { provideRouter } from "@angular/router";
+import { AppComponent } from "./app.component";
+import { HttpClientModule } from "@angular/common/http";
+import { provideStore } from "@ngrx/store";
+import { authStore } from "./auth/store/auth.reducer";
 
-describe('AppComponent', () => {
+describe("AppComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent, HttpClientModule],
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), provideStore({ auth: authStore })],
     }).compileComponents();
   });
 
-  it('should create the app', () => {
+  it("should create the app", () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
