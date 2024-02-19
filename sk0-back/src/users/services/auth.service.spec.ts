@@ -7,18 +7,22 @@ import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PasswordService } from './password.service';
 import { Repository } from 'typeorm';
 import { User } from '../user.entity';
+import { TokenService } from '../../auth/token.service';
 
 describe('AuthService', () => {
   let authService: AuthService;
   let mockUsersService: UsersService;
   let mockPasswordService: PasswordService;
-  const userRepositoryMock: Partial<Repository<User>> = {
+  const mockUserRepository: Partial<Repository<User>> = {
     create: jest.fn(),
     save: jest.fn(),
     findOne: jest.fn(),
     find: jest.fn(),
     remove: jest.fn(),
   };
+  const mockTokenService: Partial<TokenService> = {
+    generateToken: jest.fn(),
+  }
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -33,8 +37,12 @@ describe('AuthService', () => {
           },
         },
         {
+          provide: TokenService,
+          useValue: mockTokenService
+        },
+        {
           provide: "UserRepository",
-          useValue: userRepositoryMock
+          useValue: mockUserRepository
         },
       ],
     }).compile();
@@ -56,7 +64,12 @@ describe('AuthService', () => {
         email: 'test@example.com',
         password: 'password',
         name: 'John Doe',
+        token: 'Token String',
       };
+
+      mockTokenService.generateToken = jest
+        .fn()
+        .mockReturnValue('Token String');
 
       mockUsersService.findOneByEmail = jest
         .fn()
@@ -64,7 +77,8 @@ describe('AuthService', () => {
       mockPasswordService.compare = jest.fn().mockResolvedValue(true);
 
       const result = await authService.loginUser(loginUserDto);
-      expect(result).toEqual(expectedUser);
+      expect(result).toStrictEqual(expectedUser);
+      expect(mockTokenService.generateToken).toHaveBeenCalledWith({email: expectedUser.email, id: expectedUser.id});
     });
 
     it('should throw NotFoundException when user is not found', async () => {
@@ -125,6 +139,29 @@ describe('AuthService', () => {
       const result = await authService.createUser(newUser);
       expect(result).toStrictEqual(expectedUser);
       expect(mockUsersService.create).toHaveBeenCalledWith({ ...newUser, password: 'hashedPassword' });
+    });
+  });
+
+  describe('validateUser', () => {
+    it('should return a user with correct email', async () => {
+      const expectedUser = {
+        id: 1,
+        email: 'test@test.com',
+        password: 'Password123',
+        name: 'John Doe',
+      };
+
+      const email = 'test@test.com';
+
+      mockUsersService.create = jest.fn().mockResolvedValue(expectedUser);
+      
+      mockUsersService.findOneByEmail = jest
+        .fn()
+        .mockResolvedValue(expectedUser);
+      mockPasswordService.compare = jest.fn().mockResolvedValue(true);
+
+      const result = await authService.validateUser(email);
+      expect(result).toEqual(expectedUser);
     });
   });
 });
