@@ -9,17 +9,21 @@ export class NotificationService {
 
   async showSuccessfulLogin() {
     const toast = await this.toastController.create({
+      color: 'primary',
       message: 'Sikeres belépés',
+      cssClass: 'successToast',
       duration: 1500,
-      position: 'top',
+      position: 'bottom',
     });
     await toast.present();
   }
   async showSuccessfulRegistration() {
     const toast = await this.toastController.create({
+      color: 'primary',
       message: 'Sikeres regisztráció',
+      cssClass: 'successToast',
       duration: 1500,
-      position: 'top',
+      position: 'bottom',
     });
     await toast.present();
   }
