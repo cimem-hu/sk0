@@ -53,7 +53,6 @@ export class AuthService {
         next: async (user: LoginResponse) => {
           this._userName.next(user.name);
           this._isUserLoggedIn.next(true);
-          await this.showSuccess('Sikeres bejelentkezés');
           this.navCtrl.navigateForward('/home');
         },
         error: (response: HttpErrorResponse) => {
@@ -78,7 +77,7 @@ export class AuthService {
         next: async () => {
           this._userName.next(name);
           await this.showSuccess('Sikeres regisztráció');
-          this.navCtrl.navigateForward('/login');
+          this.navCtrl.navigateBack('/login');
         },
         error: (response: HttpErrorResponse) => {
           const errorMessage =
