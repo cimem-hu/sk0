@@ -17,11 +17,12 @@ describe('PasswordService', () => {
   });
 
   describe('hash', () => {
-    it('should hash a password', async () => {
+    it('should hash a password and not equal to the original password', async () => {
       const password = 'examplePassword';
       const hashedPassword = await service.hash(password);
       expect(hashedPassword).toBeDefined();
       expect(hashedPassword.length).toBeGreaterThan(0);
+      expect(hashedPassword).not.toEqual(password);
     });
   });
 
