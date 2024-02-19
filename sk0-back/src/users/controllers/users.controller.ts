@@ -12,28 +12,28 @@ import {
   Patch,
   ConflictException,
   NotFoundException,
-  InternalServerErrorException,
-} from '@nestjs/common';
-import { CreateUserDto } from '../dtos/create-user.dto';
+  InternalServerErrorException
+} from "@nestjs/common";
+import { CreateUserDto } from "../dtos/create-user.dto";
 import {
   UserExistException,
   UserNotFoundException,
-  UsersService,
-} from '../services/users.service';
-import { User } from '../user.entity';
-import { AuthService } from '../services/auth.service';
-import { LoginUserDto } from '../dtos/login-user.dto';
-import { AuthGuard } from '@nestjs/passport';
+  UsersService
+} from "../services/users.service";
+import { User } from "../user.entity";
+import { AuthService } from "../services/auth.service";
+import { LoginUserDto } from "../dtos/login-user.dto";
+import { AuthGuard } from "@nestjs/passport";
 
-@Controller('users')
+@Controller("users")
 export class UsersController {
   constructor(
     private usersService: UsersService,
-    private authService: AuthService,
+    private authService: AuthService
   ) {}
 
-  @UseGuards(AuthGuard('jwt'))
-  @Get('protected')
+  @UseGuards(AuthGuard("jwt"))
+  @Get("protected")
   getUsers() {
     return this.usersService.findAll();
   }
@@ -43,8 +43,8 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
-  async getUserById(@Param('id') id: string): Promise<User> {
+  @Get(":id")
+  async getUserById(@Param("id") id: string): Promise<User> {
     const userId = parseInt(id, 10);
     if (isNaN(userId)) {
       throw new BadRequestException();
@@ -56,7 +56,7 @@ export class UsersController {
     return response;
   }
 
-  @Post('register')
+  @Post("register")
   @UsePipes(ValidationPipe)
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     try {
@@ -70,16 +70,16 @@ export class UsersController {
   }
 
   @HttpCode(200)
-  @Post('login')
+  @Post("login")
   @UsePipes(ValidationPipe)
   async loginUser(@Body() loginUserDto: LoginUserDto) {
     return this.authService.loginUser(loginUserDto);
   }
 
-  @Patch(':id')
+  @Patch(":id")
   async updateUserbyId(
-    @Param('id') id: string,
-    @Body() userData: Partial<CreateUserDto>,
+    @Param("id") id: string,
+    @Body() userData: Partial<CreateUserDto>
   ): Promise<User> {
     const userId = parseInt(id, 10);
     if (isNaN(userId)) {
