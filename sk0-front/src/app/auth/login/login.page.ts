@@ -1,32 +1,32 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component } from "@angular/core";
+import { CommonModule } from "@angular/common";
 import {
   FormsModule,
   FormControl,
   FormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { IonicModule, NavController } from '@ionic/angular';
-import { AuthService } from '../auth.service';
-import { RouterModule } from '@angular/router';
+  ReactiveFormsModule
+} from "@angular/forms";
+import { IonicModule, NavController } from "@ionic/angular";
+import { AuthService } from "../auth.service";
+import { RouterModule } from "@angular/router";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  selector: "app-login",
+  templateUrl: "./login.page.html",
+  styleUrls: ["./login.page.scss"],
   standalone: true,
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule,
-  ],
+    RouterModule
+  ]
 })
 export class LoginPage {
   loginForm = new FormGroup({
-    email: new FormControl('', []),
-    password: new FormControl('', []),
+    email: new FormControl("", []),
+    password: new FormControl("", [])
   });
 
   constructor(
@@ -35,8 +35,8 @@ export class LoginPage {
   ) {}
 
   async onLogin() {
-    const email = this.loginForm.get('email')!.value as string;
-    const password = this.loginForm.get('password')!.value as string;
+    const email = this.loginForm.get("email")!.value as string;
+    const password = this.loginForm.get("password")!.value as string;
 
     await this.authService.login({ email, password });
 
@@ -44,7 +44,7 @@ export class LoginPage {
     //   return;
     // }
 
-    this.navCtrl.navigateForward('/home');
+    this.navCtrl.navigateForward("/home");
   }
 
   ionViewDidLeave() {

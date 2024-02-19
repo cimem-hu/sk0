@@ -1,14 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { LoginPage } from './login.page';
-import { ActivatedRoute } from '@angular/router'; 
-import { HttpClient, HttpHandler } from '@angular/common/http';
-import { AuthService } from '../auth.service';
-import { Injectable } from '@angular/core';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { LoginPage } from "./login.page";
+import { ActivatedRoute } from "@angular/router";
+import { HttpClient, HttpHandler } from "@angular/common/http";
+import { AuthService } from "../auth.service";
+import { Injectable } from "@angular/core";
 
 @Injectable()
 class HttpClientMock extends HttpClient {}
 
-describe('LoginPage', () => {
+describe("LoginPage", () => {
   let component: LoginPage;
   let fixture: ComponentFixture<LoginPage>;
 
@@ -20,7 +20,7 @@ describe('LoginPage', () => {
         { provide: HttpClient, useClass: HttpClientMock },
         AuthService,
         { provide: HttpHandler, useValue: {} }
-      ],
+      ]
     });
 
     fixture = TestBed.createComponent(LoginPage);
@@ -28,7 +28,7 @@ describe('LoginPage', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
