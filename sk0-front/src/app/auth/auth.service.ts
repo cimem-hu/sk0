@@ -4,7 +4,6 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject } from 'rxjs';
 import { NavController } from '@ionic/angular';
-import { NotificationService } from '../global-services/notification.service';
 
 interface LoginResponse {
   name: string;
@@ -39,8 +38,7 @@ export class AuthService {
   constructor(
     private alertController: AlertController,
     private http: HttpClient,
-    private navCtrl: NavController,
-    private notificationService: NotificationService
+    private navCtrl: NavController
   ) {}
 
   async login(loginFormData: { email: string; password: string }) {
@@ -55,7 +53,7 @@ export class AuthService {
         next: async (user: LoginResponse) => {
           this._userName.next(user.name);
           this._isUserLoggedIn.next(true);
-          this.notificationService.showSuccessfulLogin();
+          await this.showSuccess('Sikeres bejelentkezés');
           this.navCtrl.navigateForward('/home');
         },
         error: (response: HttpErrorResponse) => {
@@ -79,7 +77,7 @@ export class AuthService {
       .subscribe({
         next: async () => {
           this._userName.next(name);
-          this.notificationService.showSuccessfulRegistration();
+          await this.showSuccess('Sikeres regisztráció');
           this.navCtrl.navigateForward('/login');
         },
         error: (response: HttpErrorResponse) => {
@@ -100,6 +98,14 @@ export class AuthService {
     const alert = await this.alertController.create({
       header: 'Hiba',
       message: errorMessage,
+      buttons: ['OK'],
+    });
+    await alert.present();
+  }
+
+  private async showSuccess(message: string) {
+    const alert = await this.alertController.create({
+      message: message,
       buttons: ['OK'],
     });
     await alert.present();

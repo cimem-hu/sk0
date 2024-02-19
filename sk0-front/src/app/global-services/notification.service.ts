@@ -7,22 +7,12 @@ import { ToastController } from '@ionic/angular';
 export class NotificationService {
   constructor(private toastController: ToastController) {}
 
-  async showSuccessfulLogin() {
+  async testMethod() {
+    console.log('not service login called');
     const toast = await this.toastController.create({
       color: 'primary',
-      message: 'Sikeres belépés',
-      cssClass: 'successToast',
-      duration: 1500,
-      position: 'bottom',
-    });
-    await toast.present();
-  }
-  async showSuccessfulRegistration() {
-    const toast = await this.toastController.create({
-      color: 'primary',
-      message: 'Sikeres regisztráció',
-      cssClass: 'successToast',
-      duration: 1500,
+      message: 'Test message',
+      duration: 2000,
       position: 'bottom',
     });
     await toast.present();
