@@ -54,6 +54,7 @@ describe('UsersController', () => {
     expect(controller).toBeDefined();
   });
 
+  // Get user by id
   describe('getUserById', () => {
     const mockId = '1';
 
@@ -67,11 +68,25 @@ describe('UsersController', () => {
     });
 
     it('should throw error with non existing id', async () => {
-      mockUsersService.findOneById = jest
-        .fn()
-        .mockRejectedValue(new NotFoundException());
+      mockUsersService.findOneById = jest.fn().mockResolvedValue(null);
       await expect(controller.getUserById(mockId)).rejects.toThrow(
         NotFoundException,
+      );
+    });
+  });
+
+  describe('patchUserById', () => {
+    const mockId = '1';
+
+    it('should overwrite user with id 1', async () => {
+      const modifyName = { name: 'Csabi' };
+      Object.assign(expectedUser, modifyName);
+      mockUsersService.update = jest.fn().mockResolvedValue(expectedUser);
+      const result = await controller.updateUserbyId(mockId, modifyName);
+      expect(result).toStrictEqual(expectedUser);
+      expect(mockUsersService.update).toHaveBeenCalledWith(
+        parseInt(mockId),
+        modifyName,
       );
     });
   });
