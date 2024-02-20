@@ -44,7 +44,7 @@ export class LoginPage {
     //   return;
     // }
 
-    this.navCtrl.navigateForward('/home');
+    // this.navCtrl.navigateForward('/home');
   }
 
   ionViewDidLeave() {
