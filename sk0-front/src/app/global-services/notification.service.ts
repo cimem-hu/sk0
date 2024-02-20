@@ -7,13 +7,12 @@ import { ToastController } from '@ionic/angular';
 export class NotificationService {
   constructor(private toastController: ToastController) {}
 
-  async testMethod() {
-    console.log('not service login called');
+  async toastMessage(message: string, position?: 'top' | 'middle' | 'bottom') {
     const toast = await this.toastController.create({
       color: 'primary',
-      message: 'Test message',
-      duration: 2000,
-      position: 'bottom',
+      message,
+      duration: 1500,
+      position,
     });
     await toast.present();
   }
