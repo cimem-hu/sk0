@@ -1,14 +1,14 @@
 import {
   Injectable,
   NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { UsersService } from './users.service';
-import { LoginUserDto } from '../dtos/login-user.dto';
-import { CreateUserDto } from '../dtos/create-user.dto';
-import { User } from '../user.entity';
-import { TokenService } from '../../auth/token.service';
-import { PasswordService } from './password.service';
+  UnauthorizedException
+} from "@nestjs/common";
+import { UsersService } from "./users.service";
+import { LoginUserDto } from "../dtos/login-user.dto";
+import { CreateUserDto } from "../dtos/create-user.dto";
+import { User } from "../user.entity";
+import { TokenService } from "../../auth/token.service";
+import { PasswordService } from "./password.service";
 
 export type LoginResult = {
   id: number;
@@ -16,14 +16,14 @@ export type LoginResult = {
   password: string;
   name: string;
   token: string;
-}
+};
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly tokenService: TokenService,
-    private readonly passwordService: PasswordService,
+    private readonly passwordService: PasswordService
   ) {}
 
   async createUser(newUser: CreateUserDto): Promise<User> {
@@ -44,7 +44,7 @@ export class AuthService {
 
     const isPasswordMatching = await this.passwordService.compare(
       password,
-      foundUser.password,
+      foundUser.password
     );
 
     if (!isPasswordMatching) {
@@ -53,7 +53,7 @@ export class AuthService {
 
     const token = this.tokenService.generateToken({
       email: foundUser.email,
-      id: foundUser.id,
+      id: foundUser.id
     });
     return { ...foundUser, token } as LoginResult;
   }

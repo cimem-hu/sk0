@@ -1,8 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { User } from '../user.entity';
-import { USER_REPOSITORY } from '../../constants';
-import { CreateUserDto } from '../dtos/create-user.dto';
+import { Inject, Injectable } from "@nestjs/common";
+import { Repository } from "typeorm";
+import { User } from "../user.entity";
+import { USER_REPOSITORY } from "../../constants";
+import { CreateUserDto } from "../dtos/create-user.dto";
 
 export class UserNotFoundException extends Error {}
 export class UserExistException extends Error {}
