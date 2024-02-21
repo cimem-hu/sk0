@@ -12,14 +12,17 @@ import { CommonModule } from "@angular/common";
 })
 export class AppComponent {
   userName$ = this.authService.userName;
-  
-  constructor(private authService: AuthService, private navCtrl: NavController) {}
+
+  constructor(
+    private authService: AuthService,
+    private navCtrl: NavController
+  ) {}
 
   logout() {
     this.authService.logout();
   }
 
   navigateToUserEdit() {
-    this.navCtrl.navigateForward('/edit');
+    this.navCtrl.navigateForward("/edit");
   }
 }
