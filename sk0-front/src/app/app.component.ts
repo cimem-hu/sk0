@@ -14,4 +14,8 @@ export class AppComponent {
   userName$ = this.authService.userName;
 
   constructor(private authService: AuthService) {}
+
+  logout() {
+    this.authService.logout();
+  }
 }

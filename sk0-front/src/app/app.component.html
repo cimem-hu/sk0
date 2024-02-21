@@ -7,6 +7,20 @@
         </ion-title>
       </ion-toolbar>
     </ion-header>
+    <ion-content class="ion-padding">
+      <ion-list lines="none">
+        <ion-menu-toggle auto-hide="auto-hide">
+          <ion-item>
+            <!--Szerkesztés-->
+          </ion-item>
+          <ion-item>
+            <ion-button (click)="logout()" button-type="string"
+              >Kilépés</ion-button
+            >
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-content>
   </ion-menu>
 
   <div class="ion-page" id="main-content">
