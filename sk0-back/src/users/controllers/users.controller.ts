@@ -62,7 +62,7 @@ export class UsersController {
     try {
       return this.authService.createUser(createUserDto);
     } catch (err) {
-      console.log('hello');
+      console.log("hello");
 
       if (err instanceof UserExistException) {
         throw new ConflictException();
@@ -78,9 +78,8 @@ export class UsersController {
     return this.authService.loginUser(loginUserDto);
   }
 
-  @Patch(':id')
+  @Patch(":id")
   @UsePipes(ValidationPipe)
-
   async updateUserbyId(
     @Param("id") id: string,
     @Body() userData: Partial<CreateUserDto>
