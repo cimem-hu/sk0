@@ -46,8 +46,8 @@ export class ProfilePage {
       .get<LoginResponse>(`${environment.baseUrl}/users/${this.userId$.value}`)
       .subscribe({
         next: async (response) => {
-          this.profileForm.get("name")?.setValue(response.name),
-            this.profileForm.get("email")?.setValue(response.email);
+          this.profileForm.get("name")?.setValue(response.name);
+          this.profileForm.get("email")?.setValue(response.email);
         }
       });
   }
