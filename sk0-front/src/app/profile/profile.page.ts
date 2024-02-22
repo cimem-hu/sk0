@@ -5,13 +5,10 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
 import { IonicModule, NavController } from '@ionic/angular';
-import { AlertController } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 import { AuthService, LoginResponse } from '../auth/auth.service';
-import { HttpClientModule } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
@@ -55,7 +52,7 @@ export class ProfilePage {
       });
   }
 
-  onChange() {
+  onUpdate() {
     const { name, email, password } = this.profileForm.value;
 
     this.http
@@ -67,12 +64,10 @@ export class ProfilePage {
       .subscribe({
         next: () => {
           //TODO: toast user updated
-          console.log('updated');
           this.navCtl.navigateForward('/home');
         },
         error: (err) => {
           //TODO: toast/alert error
-          console.log('error: ' + err);
           return;
         },
       });
