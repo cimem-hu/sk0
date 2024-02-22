@@ -1,4 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test, TestingModule } from "@nestjs/testing";
 import {
   UserExistException,
   UserNotFoundException,
@@ -8,14 +8,15 @@ import { User } from '../user.entity';
 import { Repository } from 'typeorm';
 import { PasswordService } from './password.service';
 
-describe('UsersService', () => {
+
+describe("UsersService", () => {
   let usersService: UsersService;
   const mockRepo: Partial<Repository<User>> = {
     create: jest.fn(),
     save: jest.fn(),
     findOne: jest.fn(),
     find: jest.fn(),
-    remove: jest.fn(),
+    remove: jest.fn()
   };
   const mockPasswordService: PasswordService = {
     hash: jest.fn(),
@@ -23,15 +24,15 @@ describe('UsersService', () => {
   };
 
   const mockData = {
-    name: 'Test User',
-    email: 'a@bc.de',
-    password: 'password',
+    name: "Test User",
+    email: "a@bc.de",
+    password: "password"
   };
   const mockResult = {
     id: 1,
-    name: 'Test User',
-    email: 'a@bc.de',
-    password: 'password',
+    name: "Test User",
+    email: "a@bc.de",
+    password: "password"
   };
 
   beforeEach(async () => {
@@ -46,12 +47,12 @@ describe('UsersService', () => {
     usersService = module.get<UsersService>(UsersService);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(usersService).toBeDefined();
   });
 
-  describe('create', () => {
-    it('should create a user', async () => {
+  describe("create", () => {
+    it("should create a user", async () => {
       mockRepo.create = jest.fn().mockReturnValue(mockResult);
       mockRepo.save = jest.fn().mockResolvedValue(mockResult);
       const result = await usersService.create(mockData);
@@ -60,17 +61,17 @@ describe('UsersService', () => {
       expect(mockRepo.save).toHaveBeenCalledWith(mockResult);
     });
 
-    it('should throw UserExistException when user already exists', async () => {
+    it("should throw UserExistException when user already exists", async () => {
       mockRepo.create = jest.fn().mockReturnValue(mockResult);
       usersService.findOneByEmail = jest.fn().mockResolvedValue(mockResult);
       await expect(usersService.create(mockData)).rejects.toThrow(
-        UserExistException,
+        UserExistException
       );
     });
   });
 
-  describe('findOneById', () => {
-    it('should find a user by id', async () => {
+  describe("findOneById", () => {
+    it("should find a user by id", async () => {
       mockRepo.findOne = jest.fn().mockResolvedValue(mockResult);
       const result = await usersService.findOneById(1);
       expect(result).toStrictEqual(mockResult);
@@ -78,19 +79,19 @@ describe('UsersService', () => {
     });
   });
 
-  describe('findOneByEmail', () => {
-    it('should find a user by email', async () => {
+  describe("findOneByEmail", () => {
+    it("should find a user by email", async () => {
       mockRepo.findOne = jest.fn().mockResolvedValue(mockResult);
       const result = await usersService.findOneByEmail(mockData.email);
       expect(result).toStrictEqual(mockResult);
       expect(mockRepo.findOne).toHaveBeenCalledWith({
-        where: { email: mockData.email },
+        where: { email: mockData.email }
       });
     });
   });
 
-  describe('findAll', () => {
-    it('should find all users', async () => {
+  describe("findAll", () => {
+    it("should find all users", async () => {
       mockRepo.find = jest.fn().mockResolvedValue([mockResult]);
       const result = await usersService.findAll();
       expect(result).toStrictEqual([mockResult]);
@@ -130,21 +131,21 @@ describe('UsersService', () => {
     it('should throw UserNotFoundException when user does not exist', async () => {
       mockRepo.findOne = jest.fn().mockResolvedValue(null);
       await expect(
-        usersService.update(1, { email: 'aaa@bc.de' }),
+        usersService.update(1, { email: "aaa@bc.de" })
       ).rejects.toThrow(UserNotFoundException);
       expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
     });
 
-    it('should throw ConflictException when user wants to update with existing email', async () => {
+    it("should throw ConflictException when user wants to update with existing email", async () => {
       mockRepo.findOne = jest.fn().mockResolvedValue(mockResult);
       await expect(
-        usersService.update(2, { email: mockData.email }),
+        usersService.update(2, { email: mockData.email })
       ).rejects.toThrow(UserExistException);
     });
   });
 
-  describe('remove', () => {
-    it('should remove a user', async () => {
+  describe("remove", () => {
+    it("should remove a user", async () => {
       mockRepo.findOne = jest.fn().mockResolvedValue(mockResult);
       mockRepo.remove = jest.fn().mockResolvedValue(mockResult);
       const result = await usersService.remove(1);

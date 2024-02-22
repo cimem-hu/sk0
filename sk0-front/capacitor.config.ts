@@ -1,12 +1,12 @@
-import { CapacitorConfig } from '@capacitor/cli';
+import { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: 'hu.cimem.sk0-front.app',
-  appName: 'sk0-front',
-  webDir: 'www',
+  appId: "hu.cimem.sk0-front.app",
+  appName: "sk0-front",
+  webDir: "www",
   server: {
-    androidScheme: 'https',
-  },
+    androidScheme: "https"
+  }
 };
 
 export default config;

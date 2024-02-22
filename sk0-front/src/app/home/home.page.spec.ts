@@ -1,12 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HomePage } from './home.page';
-import { HttpClient } from '@angular/common/http';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { HomePage } from "./home.page";
+import { HttpClient } from "@angular/common/http";
 
-class HttpClientMock extends HttpClient {
+class HttpClientMock extends HttpClient {}
 
-}
-
-describe('HomePage', () => {
+describe("HomePage", () => {
   let component: HomePage;
   let fixture: ComponentFixture<HomePage>;
 
@@ -15,16 +13,15 @@ describe('HomePage', () => {
       providers: [
         {
           provide: HttpClient,
-          useValue: HttpClientMock,
-        },
-      ],
-    })
-      .createComponent(HomePage);
+          useValue: HttpClientMock
+        }
+      ]
+    }).createComponent(HomePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
+import { Injectable } from "@nestjs/common";
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class PasswordService {
@@ -8,7 +8,10 @@ export class PasswordService {
     return bcrypt.hash(password, saltRounds);
   }
 
-  async compare(plainTextPassword: string, hashedPassword: string): Promise<boolean> {
+  async compare(
+    plainTextPassword: string,
+    hashedPassword: string
+  ): Promise<boolean> {
     return bcrypt.compare(plainTextPassword, hashedPassword);
   }
 }
