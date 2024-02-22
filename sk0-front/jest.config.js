@@ -3,7 +3,7 @@ module.exports = {
   testPathIgnorePatterns: [
     "<rootDir>/dist/",
     "<rootDir>/node_modules/",
-    "<rootDir>/.angular/",
+    "<rootDir>/.angular/"
   ],
-  setupFilesAfterEnv: ["<rootDir>/setup-jest.ts"],
+  setupFilesAfterEnv: ["<rootDir>/setup-jest.ts"]
 };
