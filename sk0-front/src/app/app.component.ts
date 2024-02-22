@@ -23,6 +23,6 @@ export class AppComponent {
   }
 
   navigateToUserEdit() {
-    this.navCtrl.navigateForward("/edit");
+    this.navCtrl.navigateForward("/profile");
   }
 }
