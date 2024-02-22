@@ -6,6 +6,7 @@ import {
 } from './users.service';
 import { User } from '../user.entity';
 import { Repository } from 'typeorm';
+import { PasswordService } from './password.service';
 
 describe('UsersService', () => {
   let usersService: UsersService;
@@ -32,8 +33,9 @@ describe('UsersService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        UsersService,
         { provide: 'UserRepository', useValue: mockRepo },
+        UsersService,
+        PasswordService,
       ],
     }).compile();
 
