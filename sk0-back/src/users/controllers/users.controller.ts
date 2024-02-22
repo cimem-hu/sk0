@@ -62,8 +62,6 @@ export class UsersController {
     try {
       return this.authService.createUser(createUserDto);
     } catch (err) {
-      console.log("hello");
-
       if (err instanceof UserExistException) {
         throw new ConflictException();
       }
