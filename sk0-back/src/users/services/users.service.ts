@@ -42,7 +42,7 @@ export class UsersService {
     if (!user) {
       throw new UserNotFoundException('Not found', 400);
     }
-    if (attributes.password) {
+    if (attributes.password != '') {
       attributes.password = await this.passwordService.hash(
         attributes.password,
       );
@@ -50,11 +50,8 @@ export class UsersService {
 
     Object.assign(user, attributes);
     const userByEmail = await this.findOneByEmail(user.email);
-    console.log(userByEmail);
 
     if (userByEmail && userByEmail.id !== id) {
-      console.log('hellooo');
-
       throw new UserExistException('Exists', 400);
     }
 

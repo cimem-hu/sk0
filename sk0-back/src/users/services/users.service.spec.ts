@@ -17,6 +17,10 @@ describe('UsersService', () => {
     find: jest.fn(),
     remove: jest.fn(),
   };
+  const mockPasswordService: PasswordService = {
+    hash: jest.fn(),
+    compare: jest.fn(),
+  };
 
   const mockData = {
     name: 'Test User',
@@ -35,7 +39,7 @@ describe('UsersService', () => {
       providers: [
         { provide: 'UserRepository', useValue: mockRepo },
         UsersService,
-        PasswordService,
+        { provide: PasswordService, useValue: mockPasswordService },
       ],
     }).compile();
 
@@ -97,12 +101,30 @@ describe('UsersService', () => {
   describe('update', () => {
     it('should update a user', async () => {
       const mockUpdatedUser = { ...mockResult, email: 'aaa@bc.de' };
+
       mockRepo.findOne = jest.fn().mockResolvedValue(mockResult);
       mockRepo.save = jest.fn().mockResolvedValue(mockResult);
+      mockPasswordService.hash = jest
+        .fn()
+        .mockResolvedValue(mockUpdatedUser.password);
+
       const result = await usersService.update(1, { email: 'aaa@bc.de' });
+
       expect(result).toStrictEqual(mockUpdatedUser);
       expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
       expect(mockRepo.save).toHaveBeenCalledWith(mockUpdatedUser);
+    });
+
+    it('should not update password if password is empty string', async () => {
+      mockRepo.findOne = jest.fn().mockResolvedValue(mockResult);
+      mockRepo.save = jest.fn().mockResolvedValue(mockResult);
+      mockPasswordService.hash = jest.fn().mockResolvedValue('passwordhashed');
+
+      const result = await usersService.update(1, { password: '' });
+
+      expect(result).toStrictEqual(mockResult);
+      expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
+      expect(mockRepo.save).toHaveBeenCalledWith(mockResult);
     });
 
     it('should throw UserNotFoundException when user does not exist', async () => {
