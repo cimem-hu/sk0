@@ -11,6 +11,9 @@ import { RouterModule } from "@angular/router";
 import { AuthService, LoginResponse } from "../auth/auth.service";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../../environments/environment";
+import { NotificationService } from "../global-services/notification.service";
+
+const userUpdated = "Az adatok frissítve";
 
 @Component({
   selector: "app-profile",
@@ -40,7 +43,8 @@ export class ProfilePage {
   constructor(
     private authService: AuthService,
     private http: HttpClient,
-    private navCtl: NavController
+    private navCtl: NavController,
+    private notifyWith: NotificationService
   ) {
     this.http
       .get<LoginResponse>(`${environment.baseUrl}/users/${this.userId$.value}`)
@@ -63,11 +67,11 @@ export class ProfilePage {
       })
       .subscribe({
         next: () => {
-          //TODO: toast user updated
+          this.notifyWith.toastMessage(userUpdated, "top");
           this.navCtl.navigateForward("/home");
         },
-        error: (err) => {
-          //TODO: toast/alert error
+        error: (err: Error) => {
+          this.notifyWith.toastMessage(err.message, "top");
           return;
         }
       });
