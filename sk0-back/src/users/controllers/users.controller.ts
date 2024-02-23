@@ -77,6 +77,7 @@ export class UsersController {
   }
 
   @Patch(":id")
+  @UsePipes(ValidationPipe)
   async updateUserbyId(
     @Param("id") id: string,
     @Body() userData: Partial<CreateUserDto>

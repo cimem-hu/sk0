@@ -5,7 +5,7 @@ import { environment } from "../../environments/environment";
 import { BehaviorSubject } from "rxjs";
 import { NavController } from "@ionic/angular";
 
-interface LoginResponse {
+export interface LoginResponse {
   name: string;
   email: string;
   id: number;
@@ -17,6 +17,7 @@ interface LoginResponse {
 export class AuthService {
   private _isUserLoggedIn = new BehaviorSubject<boolean>(false);
   private _userName = new BehaviorSubject<string | null>(null);
+  private _userId = new BehaviorSubject<number | null>(null);
 
   get isUserLoggedIn() {
     return this._isUserLoggedIn;
@@ -24,6 +25,10 @@ export class AuthService {
 
   get userName() {
     return this._userName;
+  }
+
+  get userId() {
+    return this._userId;
   }
 
   private errorMessages = new Map<number, string>([
@@ -52,6 +57,7 @@ export class AuthService {
       .subscribe({
         next: async (user: LoginResponse) => {
           this._userName.next(user.name);
+          this._userId.next(user.id);
           this._isUserLoggedIn.next(true);
           this.navCtrl.navigateForward("/home");
         },

@@ -39,12 +39,6 @@ export class LoginPage {
     const password = this.loginForm.get("password")!.value as string;
 
     await this.authService.login({ email, password });
-
-    // if (!this.authService.isUserLoggedIn.value) {
-    //   return;
-    // }
-
-    this.navCtrl.navigateForward("/home");
   }
 
   ionViewDidLeave() {
