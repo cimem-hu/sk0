@@ -12,6 +12,8 @@ services:
     build: ./sk0-back
     ports:
       - "${BACKEND_PORT}:3000"
+    env_file:
+      - ./sk0-back/.env.development
     depends_on:
       - database
 
