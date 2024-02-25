@@ -1,9 +1,9 @@
-import { HttpException, Inject, Injectable } from "@nestjs/common";
+import { HttpException, Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { User } from "../user.entity";
-import { USER_REPOSITORY } from "../../constants";
 import { CreateUserDto } from "../dtos/create-user.dto";
 import { PasswordService } from "./password.service";
+import { InjectRepository } from "@nestjs/typeorm";
 
 export class UserNotFoundException extends HttpException {}
 export class UserExistException extends HttpException {}
@@ -11,7 +11,8 @@ export class UserExistException extends HttpException {}
 @Injectable()
 export class UsersService {
   constructor(
-    @Inject(USER_REPOSITORY) private repo: Repository<User>,
+    @InjectRepository(User)
+    private repo: Repository<User>,
     private passwordService: PasswordService
   ) {}
 
