@@ -1,17 +1,10 @@
 import { DataSourceOptions } from "typeorm";
-
-type NodeEnv = "test" | "development" | "production";
-
-export type DbConfigOptions = {
-  NODE_ENV: NodeEnv;
-  DATABASE: string;
-  DATABASE_URL: string;
-};
+import { DbConfigOptions, NodeEnv } from "./config/configuration";
 
 export function dataSourceOptionFactory(
   dbConfig: DbConfigOptions
 ): DataSourceOptions {
-  const dataSourceMap = new Map<string, DataSourceOptions>([
+  const dataSourceMap = new Map<NodeEnv, DataSourceOptions>([
     [
       "test",
       {
@@ -41,6 +34,6 @@ export function dataSourceOptionFactory(
       }
     ]
   ]);
-
-  return dataSourceMap.get(dbConfig.NODE_ENV || "development");
+  console.log("hello");
+  return dataSourceMap.get(dbConfig.NODE_ENV);
 }

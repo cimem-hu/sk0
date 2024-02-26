@@ -2,7 +2,6 @@ version: '3.8'
 
 services:
   frontend:
-    # build: ./sk0-front/Dockerfile.development
     build:
       context: ./sk0-front
       dockerfile: Dockerfile.development
@@ -12,8 +11,20 @@ services:
       - backend
 
   backend:
-    build: ./sk0-back
+    build: 
+      context: ./sk0-back
+      dockerfile: Dockerfile.development
     ports:
       - "${BACKEND_PORT}:3000"
     env_file:
       - ./sk0-back/.env.development
+    develop:
+      watch:
+        - action: sync
+          path: ./sk0-back
+          target: /usr/src/app
+          ignore:
+            - node_modules/
+            - dist/
+        - action: rebuild
+          path: package.json
