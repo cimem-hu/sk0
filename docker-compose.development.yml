@@ -2,9 +2,12 @@ version: '3.8'
 
 services:
   frontend:
-    build: ./sk0-front
+    # build: ./sk0-front/Dockerfile.development
+    build:
+      context: ./sk0-front
+      dockerfile: Dockerfile.development
     ports:
-      - "${FRONTEND_PORT}:80"
+      - "4200:4200"
     depends_on:
       - backend
 
@@ -14,14 +17,3 @@ services:
       - "${BACKEND_PORT}:3000"
     env_file:
       - ./sk0-back/.env.development
-    depends_on:
-      - database
-
-  database:
-    image: postgres:latest
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    ports:
-      - "${DATABASE_PORT}:5432"
