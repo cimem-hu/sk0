@@ -46,16 +46,12 @@ export class RegisterPage {
   ) {}
 
   async onRegister() {
-    if (this.registerForm.invalid) {
-      await this.notificationService.alertError("Kérlek tölts ki minden mezőt!");
-      return;
-    }
-    
     const email = this.registerForm.get("email")?.value;
     const password = this.registerForm.get("password")?.value;
     const name = this.registerForm.get("name")?.value;
 
     if (!email || !password || !name) {
+      await this.notificationService.alertError("Kérlek tölts ki minden mezőt!");
       return;
     }
 
