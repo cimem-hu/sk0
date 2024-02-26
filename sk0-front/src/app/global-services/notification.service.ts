@@ -5,7 +5,7 @@ import { ToastController, AlertController } from "@ionic/angular";
   providedIn: "root"
 })
 export class NotificationService {
-  constructor(private toastController: ToastController) {}
+  constructor(private toastController: ToastController, private alertController: AlertController) {}
 
   async toastMessage(message: string, position?: "top" | "middle" | "bottom") {
     const toast = await this.toastController.create({
@@ -15,5 +15,22 @@ export class NotificationService {
       position
     });
     await toast.present();
+  }
+
+  async alertSuccess(message: string) {
+    const alert = await this.alertController.create({
+      message,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+
+  async alertError(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Hiba',
+      message,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 }
