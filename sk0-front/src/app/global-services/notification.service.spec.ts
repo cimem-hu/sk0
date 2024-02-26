@@ -23,4 +23,20 @@ describe("NotificationService", () => {
     expect(toastSpy).toBeCalled();
     expect(toastSpy).toBeCalledWith(message, position);
   });
+
+  it("should call alertSuccess with specified message", async () => {
+    const message = "Success message";
+    const alertSuccessSpy = jest.spyOn(notificationService, "alertSuccess");
+    notificationService.alertSuccess(message);
+    expect(alertSuccessSpy).toHaveBeenCalled();
+    expect(alertSuccessSpy).toHaveBeenCalledWith(message);
+  });
+
+  it("should call alertError with specified message", async () => {
+    const message = "Error message";
+    const alertErrorSpy = jest.spyOn(notificationService, "alertError");
+    notificationService.alertError(message);
+    expect(alertErrorSpy).toHaveBeenCalled();
+    expect(alertErrorSpy).toHaveBeenCalledWith(message);
+  });
 });
