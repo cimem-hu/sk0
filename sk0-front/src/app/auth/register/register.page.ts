@@ -51,7 +51,9 @@ export class RegisterPage {
     const name = this.registerForm.get("name")?.value;
 
     if (!email || !password || !name) {
-      await this.notificationService.alertError("Kérlek tölts ki minden mezőt!");
+      await this.notificationService.alertError(
+        "Kérlek tölts ki minden mezőt!"
+      );
       return;
     }
 

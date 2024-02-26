@@ -65,7 +65,7 @@ export class AuthService {
           const errorMessage =
             this.errorMessages.get(response.status) ||
             "Ismeretlen hiba történt";
-            this.notificationService.alertError(errorMessage);
+          this.notificationService.alertError(errorMessage);
         }
       });
   }
@@ -93,7 +93,7 @@ export class AuthService {
           const errorMessage =
             this.errorMessages.get(response.status) ||
             "Ismeretlen hiba történt";
-            this.notificationService.alertError(errorMessage);
+          this.notificationService.alertError(errorMessage);
         }
       });
   }

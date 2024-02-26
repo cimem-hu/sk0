@@ -4,7 +4,7 @@ import {
   FormsModule,
   FormControl,
   FormGroup,
-  ReactiveFormsModule,
+  ReactiveFormsModule
 } from "@angular/forms";
 import { IonicModule, NavController } from "@ionic/angular";
 import { AuthService } from "../auth.service";
@@ -40,7 +40,9 @@ export class LoginPage {
     const password = this.loginForm.get("password")!.value as string;
 
     if (!email || !password) {
-      await this.notificationService.alertError("Kérlek tölts ki minden mezőt!");
+      await this.notificationService.alertError(
+        "Kérlek tölts ki minden mezőt!"
+      );
       return;
     }
 
