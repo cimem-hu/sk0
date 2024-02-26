@@ -5,10 +5,7 @@ type NodeEnv = "test" | "development" | "production";
 export type DbConfigOptions = {
   NODE_ENV: NodeEnv;
   DATABASE: string;
-  HOST: string;
-  PORT: number;
-  USER: string;
-  PASSWORD?: string;
+  DATABASE_URL: string;
 };
 
 export function dataSourceOptionFactory(
@@ -37,11 +34,7 @@ export function dataSourceOptionFactory(
       "production",
       {
         type: "postgres",
-        host: dbConfig.HOST,
-        port: dbConfig.PORT,
-        database: dbConfig.DATABASE,
-        username: dbConfig.USER,
-        password: dbConfig.PASSWORD,
+        url: dbConfig.DATABASE_URL,
         entities: ["dist/**/*.entity.js"],
         synchronize: false,
         migrations: [__dirname + "/migrations/*.{ts,js}"]
