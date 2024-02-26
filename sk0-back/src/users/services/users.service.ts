@@ -27,11 +27,11 @@ export class UsersService {
   }
 
   async findOneById(id: number): Promise<User> {
-    return this.usersRepository.findOneBy({ id });
+    return this.usersRepository.findOne({ where: { id } });
   }
 
   async findOneByEmail(email: string): Promise<User> {
-    return this.usersRepository.findOneBy({ email });
+    return this.usersRepository.findOne({ where: { email } });
   }
 
   async findAll(): Promise<User[]> {
