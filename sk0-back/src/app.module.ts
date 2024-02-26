@@ -4,9 +4,9 @@ import { UsersModule } from "./users/users.module";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { AuthModule } from "./auth/auth.module";
 import { TokenService } from "./auth/token.service";
-import configuration from "./config/configuration";
+import configuration, { DbConfigOptions } from "./config/configuration";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { DbConfigOptions, dataSourceOptionFactory } from "./ormconfig";
+import { dataSourceOptionFactory } from "./ormconfig";
 
 @Module({
   imports: [

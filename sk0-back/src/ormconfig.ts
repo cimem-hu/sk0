@@ -34,6 +34,5 @@ export function dataSourceOptionFactory(
       }
     ]
   ]);
-  console.log("hello");
   return dataSourceMap.get(dbConfig.NODE_ENV);
 }
