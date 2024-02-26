@@ -9,9 +9,20 @@ services:
       - "4200:4200"
     depends_on:
       - backend
+    develop:
+      watch:
+        - action: sync
+          path: ./sk0-front
+          target: /app
+          ignore:
+            - node_modules/
+            - .angular/
+            - www/
+        - action: rebuild
+          path: package.json
 
   backend:
-    build: 
+    build:
       context: ./sk0-back
       dockerfile: Dockerfile.development
     ports:
