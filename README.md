@@ -109,6 +109,11 @@ You can run the following command to start the application in different modes.
 docker compose -f docker-compose.dev.yml watch
 ```
 
+In development mode you can access the application on the following ports:
+
+1. [http://localhost:4200](http://localhost:4200) for the frontend
+2. [http://localhost:3000](http://localhost:3000) for the backend
+
 **Production mode:**
 
 ```bash
