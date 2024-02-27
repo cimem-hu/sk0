@@ -10,8 +10,6 @@ PORT=3001 npm run start
 
 or setup the `.env` file in the root directory.
 
-
-
 # Running the application
 
 ## With source code
@@ -20,27 +18,27 @@ or setup the `.env` file in the root directory.
 > The following description presumes that everyone is using the same node and npm version. If you want to run it with docker look at the [run with docker](#with-docker) section.
 
 Go to the
+
 1. sk0-front
 2. sk0-back
 
 folders and issue the following commands:
 
-
 ### Install
+
 ```bash
 npm i # to install the dependencies
 
-#or 
+#or
 
 npm ci #to install the necessary dependencies to run the application
 ```
 
-### Build 
+### Build
 
 ```bash
 npm run build # to build the applications
 ```
-
 
 ### Run
 
@@ -53,22 +51,21 @@ In the `sk0-front` folder
 > You can use the global installation of the angular cli [here](https://angular.io/cli#installing-angular-cli), after that there is no need for the `npx` prefix.
 
 ```bash
-npx ng serve 
+npx ng serve
 
 #or
 
 npx ng serve -o # for opening the angular app
 ```
 
-
 In the `sk0-back` folder
 
 ```bash
 npm run start
 
-# or 
+# or
 
-npm run build && node dist/main.js 
+npm run build && node dist/main.js
 ```
 
 ## With docker
@@ -79,13 +76,19 @@ A [docker](https://www.docker.com/) engine and the [docker compose](https://docs
 
 ### Manually
 
-Run the following docker commands in the 
+Run the following docker commands in the
+
 1. sk0-front
 2. sk0-back
-fodlers.
+
+folders.
 
 ```bash
 docker build -t {{tagname}} .
+
+# or in development mode
+
+docker build -t {{tagname}} . -f Dockerfile.development
 ```
 
 Run the docker images based on the containers, that you created.
@@ -96,6 +99,17 @@ Run the following in the root of the folder.
 
 > [!NOTE]  
 > On docker versions, different architectures and operating systems the docker compose subcommand might be `docker compose` or `docker-compose`.
+> To start the application in development mode, the minimum docker version requirement is 2.22.
+
+You can run the following command to start the application in different modes.
+
+**Development mode:**
+
+```bash
+docker compose -f docker-compose.dev.yml watch
+```
+
+**Production mode:**
 
 ```bash
 docker compose up
