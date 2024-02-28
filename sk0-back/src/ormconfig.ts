@@ -1,42 +1,38 @@
-import { DataSource, DataSourceOptions } from "typeorm";
+import { DataSourceOptions } from "typeorm";
+import { DbConfigOptions, NodeEnv } from "./config/configuration";
 
-const { NODE_ENV, DB_NAME } = process.env;
-
-let dataSourceOptions: DataSourceOptions;
-
-switch (NODE_ENV) {
-  case "test":
-    dataSourceOptions = {
-      type: "sqlite",
-      database: ":memory:",
-      entities: ["src/**/*.entity.ts"],
-      synchronize: true
-    };
-    break;
-  case "development":
-    dataSourceOptions = {
-      type: "sqlite",
-      database: "dev.sqlite",
-      entities: ["dist/**/*.entity.js"],
-      synchronize: true
-    };
-    break;
-  case "production":
-    dataSourceOptions = {
-      type: "sqlite",
-      database: "db.sqlite",
-      entities: ["dist/**/*.entity.js"],
-      synchronize: false,
-      migrations: [__dirname + "/migrations/*.{ts,js}"]
-    };
-    break;
-  default:
-    dataSourceOptions = {
-      type: "sqlite",
-      database: DB_NAME || "sample.sqlite",
-      entities: ["dist/**/*.entity.js"],
-      synchronize: true
-    };
+export function dataSourceOptionFactory(
+  dbConfig: DbConfigOptions
+): DataSourceOptions {
+  const dataSourceMap = new Map<NodeEnv, DataSourceOptions>([
+    [
+      "test",
+      {
+        type: "sqlite",
+        database: ":memory:",
+        entities: ["src/**/*.entity.ts"],
+        synchronize: true
+      }
+    ],
+    [
+      "development",
+      {
+        type: "sqlite",
+        database: dbConfig.DATABASE || "dev.sqlite",
+        entities: ["dist/**/*.entity.js"],
+        synchronize: true
+      }
+    ],
+    [
+      "production",
+      {
+        type: "postgres",
+        url: dbConfig.DATABASE_URL,
+        entities: ["dist/**/*.entity.js"],
+        synchronize: false,
+        migrations: [__dirname + "/migrations/*.{ts,js}"]
+      }
+    ]
+  ]);
+  return dataSourceMap.get(dbConfig.NODE_ENV);
 }
-
-export const dataSource: DataSource = new DataSource(dataSourceOptions);
