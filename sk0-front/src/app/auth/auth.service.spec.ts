@@ -1,22 +1,25 @@
 import { TestBed } from "@angular/core/testing";
-import { AuthService } from "./auth.service";
-import { HttpClient } from "@angular/common/http";
+import {
+  HttpClientTestingModule,
+  HttpTestingController
+} from "@angular/common/http/testing";
 
-class HttpClientMock extends HttpClient {}
+import { AuthService, LoginResponse } from "./auth.service";
+import { AlertController } from "@ionic/angular";
+import { expect, jest } from "@jest/globals";
 
 describe("AuthService", () => {
   let service: AuthService;
+  let mockHttpController: HttpTestingController;
+  let alertController: AlertController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        {
-          provide: HttpClient,
-          useValue: HttpClientMock
-        }
-      ]
+      imports: [HttpClientTestingModule]
     });
     service = TestBed.inject(AuthService);
+    alertController = TestBed.inject(AlertController);
+    mockHttpController = TestBed.inject(HttpTestingController);
   });
 
   it("AuthService should be created", () => {
@@ -37,5 +40,61 @@ describe("AuthService", () => {
       expect(userName).toBe(null);
       done();
     });
+  });
+
+  it("should set userId to a value, when http client sends back a valid object with id", (done) => {
+    const loginFields = {
+      email: "valid@amail.com",
+      password: "ValidPassword2"
+    };
+
+    const userID: number = 1;
+
+    const loginResponse: LoginResponse = {
+      email: loginFields.email,
+      id: userID,
+      name: "A registered name"
+    };
+    service.login(loginFields);
+
+    service.userId.subscribe((id) => {
+      expect(id).toBe(userID);
+      done();
+    });
+
+    mockHttpController
+      .expectOne({
+        method: "POST"
+      })
+      .flush(loginResponse);
+    mockHttpController.verify();
+  });
+
+  it("should set userId to a value, when http client sends back a valid object with id", (done) => {
+    const loginFields = {
+      email: "valid@amail.com",
+      password: "ValidPassword2"
+    };
+
+    const userID: number = 1;
+
+    const loginResponse: LoginResponse = {
+      email: loginFields.email,
+      id: userID,
+      name: "A registered name"
+    };
+    service.login(loginFields);
+
+    service.userId.subscribe((id) => {
+      expect(id).toBe(userID);
+      done();
+    });
+
+    mockHttpController
+      .expectOne({
+        method: "POST"
+      })
+      .flush(loginResponse);
+    mockHttpController.verify();
   });
 });
