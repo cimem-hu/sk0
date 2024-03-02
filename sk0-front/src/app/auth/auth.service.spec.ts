@@ -6,7 +6,7 @@ import {
 
 import { AuthService, LoginResponse } from "./auth.service";
 import { AlertController } from "@ionic/angular";
-import { expect, jest } from "@jest/globals";
+import { expect } from "@jest/globals";
 
 describe("AuthService", () => {
   let service: AuthService;
