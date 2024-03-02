@@ -11,14 +11,12 @@ import { expect } from "@jest/globals";
 describe("AuthService", () => {
   let service: AuthService;
   let mockHttpController: HttpTestingController;
-  let alertController: AlertController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule]
     });
     service = TestBed.inject(AuthService);
-    alertController = TestBed.inject(AlertController);
     mockHttpController = TestBed.inject(HttpTestingController);
   });
 
