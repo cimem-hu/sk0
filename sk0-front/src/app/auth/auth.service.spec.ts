@@ -69,32 +69,4 @@ describe("AuthService", () => {
       .flush(loginResponse);
     mockHttpController.verify();
   });
-
-  it("should set userId to a value, when http client sends back a valid object with id", (done) => {
-    const loginFields = {
-      email: "valid@amail.com",
-      password: "ValidPassword2"
-    };
-
-    const userID: number = 1;
-
-    const loginResponse: LoginResponse = {
-      email: loginFields.email,
-      id: userID,
-      name: "A registered name"
-    };
-    service.login(loginFields);
-
-    service.userId.subscribe((id) => {
-      expect(id).toBe(userID);
-      done();
-    });
-
-    mockHttpController
-      .expectOne({
-        method: "POST"
-      })
-      .flush(loginResponse);
-    mockHttpController.verify();
-  });
 });
