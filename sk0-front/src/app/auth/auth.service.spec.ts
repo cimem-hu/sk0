@@ -5,7 +5,6 @@ import {
 } from "@angular/common/http/testing";
 
 import { AuthService, LoginResponse } from "./auth.service";
-import { AlertController } from "@ionic/angular";
 import { expect } from "@jest/globals";
 
 describe("AuthService", () => {
