@@ -101,6 +101,8 @@ export class AuthService {
   async logout() {
     this._isUserLoggedIn.next(false);
     this._userName.next(null);
+    this._userId.next(null);
+    this.navCtrl.navigateBack("/login");
   }
 
   private async showError(errorMessage: string) {
