@@ -59,6 +59,11 @@ export class ProfilePage {
   onUpdate() {
     const { name, email, password } = this.profileForm.value;
 
+    if (password && !this.strongPasswordValidator.test(password)) {
+      this.notifyWith.toastMessage("A jelszó nem elég erős", "top");
+      return;
+    }
+
     this.http
       .patch(`${environment.baseUrl}/users/${this.userId$.value}`, {
         name,
