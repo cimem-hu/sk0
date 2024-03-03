@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
   FormControl,
@@ -28,7 +28,7 @@ const userUpdated = "Az adatok frissítve";
     RouterModule
   ]
 })
-export class ProfilePage implements OnInit {
+export class ProfilePage {
   private readonly strongPasswordValidator =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
 
@@ -45,10 +45,8 @@ export class ProfilePage implements OnInit {
     private http: HttpClient,
     private navCtl: NavController,
     private notifyWith: NotificationService
-  ) {}
-
-  async ngOnInit() {
-    await this.http
+  ) {
+    this.http
       .get<LoginResponse>(`${environment.baseUrl}/users/${this.userId$.value}`)
       .subscribe({
         next: async (response) => {
@@ -79,7 +77,6 @@ export class ProfilePage implements OnInit {
         },
         error: async (err: Error) => {
           await this.notifyWith.toastMessage(err.message, "top");
-          return;
         }
       });
   }
