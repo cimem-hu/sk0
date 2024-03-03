@@ -28,7 +28,7 @@ const userUpdated = "Az adatok frissítve";
     RouterModule
   ]
 })
-export class ProfilePage {
+export class ProfilePage implements OnInit {
   private readonly strongPasswordValidator =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
 
@@ -45,8 +45,10 @@ export class ProfilePage {
     private http: HttpClient,
     private navCtl: NavController,
     private notifyWith: NotificationService
-  ) {
-    this.http
+  ) {}
+
+  async ngOnInit() {
+    await this.http
       .get<LoginResponse>(`${environment.baseUrl}/users/${this.userId$.value}`)
       .subscribe({
         next: async (response) => {
@@ -56,11 +58,11 @@ export class ProfilePage {
       });
   }
 
-  onUpdate() {
+  async onUpdate() {
     const { name, email, password } = this.profileForm.value;
 
     if (password && !this.strongPasswordValidator.test(password)) {
-      this.notifyWith.toastMessage("A jelszó nem elég erős", "top");
+      await this.notifyWith.toastMessage("A jelszó nem elég erős", "top");
       return;
     }
 
@@ -71,18 +73,18 @@ export class ProfilePage {
         password
       })
       .subscribe({
-        next: () => {
-          this.notifyWith.toastMessage(userUpdated, "top");
-          this.navCtl.navigateForward("/home");
+        next: async () => {
+          await this.notifyWith.toastMessage(userUpdated, "top");
+          await this.navCtl.navigateForward("/home");
         },
-        error: (err: Error) => {
-          this.notifyWith.toastMessage(err.message, "top");
+        error: async (err: Error) => {
+          await this.notifyWith.toastMessage(err.message, "top");
           return;
         }
       });
   }
 
-  onCancel() {
-    this.navCtl.navigateBack("/home");
+  async onCancel() {
+    await this.navCtl.navigateBack("/home");
   }
 }
