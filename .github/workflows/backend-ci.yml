@@ -26,7 +26,7 @@ jobs:
         run: npm run test -- --coverage
       - name: Build
         run: npm run build
-      - name: Code Quiality Checks
+      - name: Code Quality Checks
         run: npm run check
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
