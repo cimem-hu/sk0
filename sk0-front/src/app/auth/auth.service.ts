@@ -1,9 +1,8 @@
 import { Injectable } from "@angular/core";
-import { AlertController } from "@ionic/angular";
+import { AlertController, NavController } from "@ionic/angular";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { environment } from "../../environments/environment";
 import { BehaviorSubject } from "rxjs";
-import { NavController } from "@ionic/angular";
 
 export interface LoginResponse {
   name: string;
@@ -44,7 +43,7 @@ export class AuthService {
     private alertController: AlertController,
     private http: HttpClient,
     private navCtrl: NavController
-  ) {}
+  ) { }
 
   async login(loginFormData: { email: string; password: string }) {
     const { email, password } = loginFormData;
