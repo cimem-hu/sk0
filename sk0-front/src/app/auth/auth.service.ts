@@ -58,13 +58,13 @@ export class AuthService {
           this._userName.next(user.name);
           this._userId.next(user.id);
           this._isUserLoggedIn.next(true);
-          this.navCtrl.navigateForward("/home");
+          await this.navCtrl.navigateForward("/home");
         },
-        error: (response: HttpErrorResponse) => {
+        error: async (response: HttpErrorResponse) => {
           const errorMessage =
             this.errorMessages.get(response.status) ??
             "Ismeretlen hiba történt";
-          this.showError(errorMessage);
+          await this.showError(errorMessage);
         }
       });
   }
@@ -86,13 +86,13 @@ export class AuthService {
         next: async () => {
           this._userName.next(name);
           await this.showSuccess("Sikeres regisztráció");
-          this.navCtrl.navigateBack("/login");
+          await this.navCtrl.navigateBack("/login");
         },
-        error: (response: HttpErrorResponse) => {
+        error: async (response: HttpErrorResponse) => {
           const errorMessage =
             this.errorMessages.get(response.status) ??
             "Ismeretlen hiba történt";
-          this.showError(errorMessage);
+          await this.showError(errorMessage);
         }
       });
   }
