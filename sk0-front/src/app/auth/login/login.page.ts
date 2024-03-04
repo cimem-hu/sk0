@@ -13,7 +13,6 @@ import { RouterModule } from "@angular/router";
 @Component({
   selector: "app-login",
   templateUrl: "./login.page.html",
-  styleUrls: ["./login.page.scss"],
   standalone: true,
   imports: [
     IonicModule,

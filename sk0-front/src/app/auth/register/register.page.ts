@@ -15,7 +15,6 @@ import { HttpClientModule } from "@angular/common/http";
 @Component({
   selector: "app-register",
   templateUrl: "./register.page.html",
-  styleUrls: ["./register.page.scss"],
   standalone: true,
   imports: [
     IonicModule,
@@ -41,7 +40,7 @@ export class RegisterPage {
   constructor(
     private navCtrl: NavController,
     private authService: AuthService
-  ) { }
+  ) {}
 
   async onRegister() {
     const email = this.registerForm.get("email")?.value;

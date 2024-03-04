@@ -18,7 +18,6 @@ const userUpdated = "Az adatok frissítve";
 @Component({
   selector: "app-profile",
   templateUrl: "./profile.page.html",
-  styleUrls: ["./profile.page.scss"],
   standalone: true,
   imports: [
     IonicModule,

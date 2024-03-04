@@ -43,7 +43,7 @@ export class AuthService {
     private alertController: AlertController,
     private http: HttpClient,
     private navCtrl: NavController
-  ) { }
+  ) {}
 
   async login(loginFormData: { email: string; password: string }) {
     const { email, password } = loginFormData;
