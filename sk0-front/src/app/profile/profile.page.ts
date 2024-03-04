@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
   FormControl,
@@ -71,7 +71,6 @@ export class ProfilePage {
         },
         error: (err: Error) => {
           this.notifyWith.toastMessage(err.message, "top");
-          return;
         }
       });
   }
