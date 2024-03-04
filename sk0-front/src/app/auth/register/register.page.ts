@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
   FormControl,
@@ -8,7 +8,6 @@ import {
   Validators
 } from "@angular/forms";
 import { IonicModule, NavController } from "@ionic/angular";
-import { AlertController } from "@ionic/angular";
 import { RouterModule } from "@angular/router";
 import { AuthService } from "../auth.service";
 import { HttpClientModule } from "@angular/common/http";
@@ -42,7 +41,7 @@ export class RegisterPage {
   constructor(
     private navCtrl: NavController,
     private authService: AuthService
-  ) {}
+  ) { }
 
   async onRegister() {
     const email = this.registerForm.get("email")?.value;
