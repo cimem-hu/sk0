@@ -47,7 +47,6 @@ export class AuthService {
 
   async login(loginFormData: { email: string; password: string }) {
     const { email, password } = loginFormData;
-
     this.http
       .post<LoginResponse>(`${environment.baseUrl}/users/login`, {
         email,
