@@ -62,7 +62,7 @@ export class AuthService {
         },
         error: (response: HttpErrorResponse) => {
           const errorMessage =
-            this.errorMessages.get(response.status) ||
+            this.errorMessages.get(response.status) ??
             "Ismeretlen hiba történt";
           this.showError(errorMessage);
         }
@@ -90,7 +90,7 @@ export class AuthService {
         },
         error: (response: HttpErrorResponse) => {
           const errorMessage =
-            this.errorMessages.get(response.status) ||
+            this.errorMessages.get(response.status) ??
             "Ismeretlen hiba történt";
           this.showError(errorMessage);
         }
