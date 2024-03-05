@@ -9,6 +9,7 @@ import {
 import { IonicModule, NavController } from "@ionic/angular";
 import { AuthService } from "../auth.service";
 import { RouterModule } from "@angular/router";
+import { NotificationService } from "../../global-services/notification.service";
 
 @Component({
   selector: "app-login",
@@ -31,12 +32,19 @@ export class LoginPage {
 
   constructor(
     private authService: AuthService,
-    private navCtrl: NavController
+    private notificationService: NotificationService
   ) {}
 
   async onLogin() {
     const email = this.loginForm.get("email")!.value as string;
     const password = this.loginForm.get("password")!.value as string;
+
+    if (!email || !password) {
+      await this.notificationService.alertError(
+        "Kérlek tölts ki minden mezőt!"
+      );
+      return;
+    }
 
     await this.authService.login({ email, password });
   }

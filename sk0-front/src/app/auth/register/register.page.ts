@@ -8,10 +8,10 @@ import {
   Validators
 } from "@angular/forms";
 import { IonicModule, NavController } from "@ionic/angular";
-import { AlertController } from "@ionic/angular";
 import { RouterModule } from "@angular/router";
 import { AuthService } from "../auth.service";
 import { HttpClientModule } from "@angular/common/http";
+import { NotificationService } from "../../global-services/notification.service";
 
 @Component({
   selector: "app-register",
@@ -41,7 +41,8 @@ export class RegisterPage {
   });
   constructor(
     private navCtrl: NavController,
-    private authService: AuthService
+    private authService: AuthService,
+    private notificationService: NotificationService
   ) {}
 
   async onRegister() {
@@ -50,6 +51,9 @@ export class RegisterPage {
     const name = this.registerForm.get("name")?.value;
 
     if (!email || !password || !name) {
+      await this.notificationService.alertError(
+        "Kérlek tölts ki minden mezőt!"
+      );
       return;
     }
 

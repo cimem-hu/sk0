@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
-import { AlertController } from "@ionic/angular";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { environment } from "../../environments/environment";
 import { BehaviorSubject } from "rxjs";
 import { NavController } from "@ionic/angular";
+import { NotificationService } from "../global-services/notification.service";
 
 export interface LoginResponse {
   name: string;
@@ -41,9 +41,9 @@ export class AuthService {
   ]);
 
   constructor(
-    private alertController: AlertController,
     private http: HttpClient,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private notificationService: NotificationService
   ) {}
 
   async login(loginFormData: { email: string; password: string }) {
@@ -65,7 +65,7 @@ export class AuthService {
           const errorMessage =
             this.errorMessages.get(response.status) ||
             "Ismeretlen hiba történt";
-          this.showError(errorMessage);
+          this.notificationService.alertError(errorMessage);
         }
       });
   }
@@ -86,14 +86,14 @@ export class AuthService {
       .subscribe({
         next: async () => {
           this._userName.next(name);
-          await this.showSuccess("Sikeres regisztráció");
+          await this.notificationService.alertSuccess("Sikeres regisztráció");
           this.navCtrl.navigateBack("/login");
         },
         error: (response: HttpErrorResponse) => {
           const errorMessage =
             this.errorMessages.get(response.status) ||
             "Ismeretlen hiba történt";
-          this.showError(errorMessage);
+          this.notificationService.alertError(errorMessage);
         }
       });
   }
@@ -101,22 +101,5 @@ export class AuthService {
   async logout() {
     this._isUserLoggedIn.next(false);
     this._userName.next(null);
-  }
-
-  private async showError(errorMessage: string) {
-    const alert = await this.alertController.create({
-      header: "Hiba",
-      message: errorMessage,
-      buttons: ["OK"]
-    });
-    await alert.present();
-  }
-
-  private async showSuccess(message: string) {
-    const alert = await this.alertController.create({
-      message: message,
-      buttons: ["OK"]
-    });
-    await alert.present();
   }
 }
