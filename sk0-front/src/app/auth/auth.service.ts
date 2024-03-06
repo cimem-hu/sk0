@@ -1,14 +1,17 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { environment } from "../../environments/environment";
 import { BehaviorSubject } from "rxjs";
 import { NavController } from "@ionic/angular";
+
+import { environment } from "../../environments/environment";
 import { NotificationService } from "../global-services/notification.service";
+import { LocalStoreService } from "../global-services/localstore.service";
 
 export interface LoginResponse {
   name: string;
   email: string;
   id: number;
+  token: string;
 }
 
 @Injectable({
@@ -43,7 +46,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private navCtrl: NavController,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private localStore: LocalStoreService
   ) {}
 
   async login(loginFormData: { email: string; password: string }) {
@@ -58,6 +62,8 @@ export class AuthService {
           this._userName.next(user.name);
           this._userId.next(user.id);
           this._isUserLoggedIn.next(true);
+          //TODO: better handling if token is null?
+          this.localStore.saveToken(user.token);
           this.navCtrl.navigateForward("/home");
         },
         error: (response: HttpErrorResponse) => {
