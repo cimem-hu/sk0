@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
   FormControl,
@@ -56,8 +56,13 @@ export class ProfilePage {
       });
   }
 
-  onUpdate() {
+  async onUpdate() {
     const { name, email, password } = this.profileForm.value;
+
+    if (password && !this.strongPasswordValidator.test(password)) {
+      await this.notifyWith.toastMessage("A jelszó nem elég erős", "top");
+      return;
+    }
 
     this.http
       .patch(`${environment.baseUrl}/users/${this.userId$.value}`, {
@@ -66,18 +71,17 @@ export class ProfilePage {
         password
       })
       .subscribe({
-        next: () => {
-          this.notifyWith.toastMessage(userUpdated, "top");
-          this.navCtl.navigateForward("/home");
+        next: async () => {
+          await this.notifyWith.toastMessage(userUpdated, "top");
+          await this.navCtl.navigateForward("/home");
         },
-        error: (err: Error) => {
-          this.notifyWith.toastMessage(err.message, "top");
-          return;
+        error: async (err: Error) => {
+          await this.notifyWith.toastMessage(err.message, "top");
         }
       });
   }
 
-  onCancel() {
-    this.navCtl.navigateBack("/home");
+  async onCancel() {
+    await this.navCtl.navigateBack("/home");
   }
 }
