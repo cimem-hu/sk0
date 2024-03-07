@@ -1,5 +1,7 @@
 import {
   IsEmail,
+  IsNumber,
+  IsOptional,
   IsString,
   IsStrongPassword,
   IsStrongPasswordOptions,
@@ -24,4 +26,8 @@ export class CreateUserDto {
   @IsString()
   @MinLength(3)
   name: string;
+
+  @IsOptional()
+  @IsNumber()
+  role?: number = 0;
 }
