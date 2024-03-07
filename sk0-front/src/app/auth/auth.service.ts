@@ -71,6 +71,7 @@ export class AuthService {
             this._isUserLoggedIn.next(true);
             this.navCtrl.navigateForward("/home");
           } else {
+            this.localStore.removeToken();
             this.notificationService.toastMessage("Token lejárt");
           }
         },
