@@ -15,7 +15,6 @@ export class JwtHandlerService {
   isExpired(): boolean {
     return this.jwtHelper.isTokenExpired(this.localStore.getToken());
   }
-  //TODO: create these methods
   getName() {
     const token = this.localStore.getToken();
     if (token) {
@@ -28,5 +27,10 @@ export class JwtHandlerService {
       return this.jwtHelper.decodeToken(token).id;
     }
   }
-  getRole() {}
+  getRole() {
+    const token = this.localStore.getToken();
+    if (token) {
+      return this.jwtHelper.decodeToken(token).role;
+    }
+  }
 }
