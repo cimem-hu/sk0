@@ -174,7 +174,9 @@ describe("AuthService", () => {
 
       mockUsersService.findOneByEmail = jest.fn().mockResolvedValue(null);
 
-      await  expect(authService.validateUser(email)).rejects.toThrow(NotFoundException);
+      await expect(authService.validateUser(email)).rejects.toThrow(
+        NotFoundException
+      );
     });
   });
 });
