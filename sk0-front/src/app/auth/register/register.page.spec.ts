@@ -2,8 +2,9 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { RegisterPage } from "./register.page";
 import { JWT_OPTIONS, JwtHelperService } from "@auth0/angular-jwt";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { provideStore } from "@ngrx/store";
+import { authStore } from "../store/auth.reducer";
 
-class HttpClientMock {}
 
 describe("RegisterPage", () => {
   let component: RegisterPage;
@@ -14,7 +15,15 @@ describe("RegisterPage", () => {
       providers: [
         JwtHelperService,
         { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-        { provide: HttpClientMock, useClass: HttpClientMock }
+        provideStore(
+          { auth: authStore },
+          {
+            runtimeChecks: {
+              strictStateImmutability: true,
+              strictActionImmutability: true
+            }
+          }
+        )
       ]
     }).compileComponents();
   });

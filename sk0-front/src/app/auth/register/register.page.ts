@@ -9,9 +9,13 @@ import {
 } from "@angular/forms";
 import { IonicModule, NavController } from "@ionic/angular";
 import { RouterModule } from "@angular/router";
-import { AuthService } from "../auth.service";
+import { Store } from "@ngrx/store";
 import { HttpClientModule } from "@angular/common/http";
+
+import { AuthService } from "../auth.service";
 import { NotificationService } from "../../global-services/notification.service";
+import { AppStore } from "../../app.store";
+import { registerStarted } from "../store/auth.actions";
 
 @Component({
   selector: "app-register",
@@ -41,8 +45,8 @@ export class RegisterPage {
   });
   constructor(
     private navCtrl: NavController,
-    private authService: AuthService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private store: Store<AppStore>
   ) {}
 
   async onRegister() {
@@ -56,12 +60,7 @@ export class RegisterPage {
       );
       return;
     }
-
-    await this.authService.register({ email, password, name });
-
-    if (!this.authService.isUserLoggedIn.value) {
-      return;
-    }
+    this.store.dispatch(registerStarted({ email, password, name }));
   }
 
   onRouteToLogin(): void {

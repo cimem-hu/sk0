@@ -1,7 +1,12 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { LoginRequest, LoginResponse } from "./store/auth.actions";
 import { environment } from "../../environments/environment";
+import type {
+  LoginRequest,
+  LoginResponse,
+  RegisterRequest,
+  RegisterResponse
+} from "./store/auth.actions";
 
 @Injectable({
   providedIn: "root"
@@ -16,4 +21,12 @@ export class AuthService {
       loginDto
     );
   }
+
+  register(registerDto: RegisterRequest) {
+    return this.http.post<RegisterResponse>(
+      `${environment.baseUrl}/users/register`,
+      registerDto
+    );
+  }
+
 }
