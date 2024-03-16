@@ -8,56 +8,93 @@ import {
   registerStarted,
   registerSuccess
 } from "./auth.actions";
+import {
+  profileUpdateStarted,
+  profileUpdateFailure,
+  profileUpdateSuccess
+} from "src/app/profile/store/profile.actions";
 
 export type AuthState = {
-  loggedIn: boolean;
-  user: {
-    name: string | null;
-    email: string | null;
-    id: number | null;
-  } | null;
+  token: string | null;
   isLoading: boolean;
   error: string | null;
 };
 
 export const initialAuthState: AuthState = {
-  loggedIn: false,
-  user: null,
+  token: null,
   isLoading: false,
   error: null
 };
 
 const authStore = createReducer(
   initialAuthState,
-  on(loginStarted, (state) => ({ ...state, isLoading: true, error: null })),
-  on(loginSuccess, (state, action) => ({
-    ...state,
-    loggedIn: true,
-    user: action,
-    isLoading: false,
-    error: null
-  })),
-  on(loginFailure, (state, action) => ({
-    ...state,
-    loggedIn: false,
-    isLoading: false,
-    error: action.message
-  })),
-  on(registerStarted, (state) => ({ ...state, isLoading: true, error: null })),
-  on(registerSuccess, (state, action) => ({
-    ...state,
-    loggedIn: false,
-    user: null,
-    isLoading: false,
-    error: null
-  })),
-  on(registerFailure, (state, action) => ({
-    ...state,
-    loggedIn: false,
-    isLoading: false,
-    error: action.message
-  })),
-  on(logoutAction, (_state) => initialAuthState)
+  on(
+    loginStarted,
+    (state): AuthState => ({ ...state, isLoading: true, error: null })
+  ),
+  on(
+    loginSuccess,
+    (state, action): AuthState => ({
+      ...state,
+      token: "asdasd",
+      isLoading: false,
+      error: null
+    })
+  ),
+  on(
+    loginFailure,
+    (state, action): AuthState => ({
+      ...state,
+      token: null,
+      isLoading: false,
+      error: action.message
+    })
+  ),
+  on(
+    registerStarted,
+    (state): AuthState => ({ ...state, isLoading: true, error: null })
+  ),
+  on(
+    registerSuccess,
+    (state, action): AuthState => ({
+      ...state,
+      isLoading: false,
+      error: null
+    })
+  ),
+  on(
+    registerFailure,
+    (state, action): AuthState => ({
+      ...state,
+      isLoading: false,
+      error: action.message
+    })
+  ),
+  on(
+    profileUpdateStarted,
+    (state): AuthState => ({
+      ...state,
+      isLoading: true,
+      error: null
+    })
+  ),
+  on(
+    registerSuccess,
+    (state, action): AuthState => ({
+      ...state,
+      isLoading: false,
+      error: null
+    })
+  ),
+  on(
+    registerFailure,
+    (state, action): AuthState => ({
+      ...state,
+      isLoading: false,
+      error: action.message
+    })
+  ),
+  on(logoutAction, (_state): AuthState => initialAuthState)
 );
 
 export { authStore };

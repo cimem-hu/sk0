@@ -12,6 +12,7 @@ import { provideServiceWorker } from "@angular/service-worker";
 import { provideEffects } from "@ngrx/effects";
 import { authStore } from "./app/auth/store/auth.reducer";
 import { AuthEffects } from "./app/auth/store/auth.effects";
+import { profileStore } from "./app/profile/store/profile.reducer";
 
 if (environment.production) {
   enableProdMode();
@@ -28,7 +29,7 @@ bootstrapApplication(AppComponent, {
       registrationStrategy: "registerWhenStable:30000"
     }),
     provideStore(
-      { auth: authStore },
+      { auth: authStore, profile: profileStore },
       {
         runtimeChecks: {
           strictStateImmutability: true,

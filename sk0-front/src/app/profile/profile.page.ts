@@ -58,21 +58,21 @@ export class ProfilePage {
       return;
     }
 
-    this.http
-      .patch(`${environment.baseUrl}/users/${this.userId$.value}`, {
-        name,
-        email,
-        password
-      })
-      .subscribe({
-        next: async () => {
-          await this.notifyWith.toastMessage(userUpdated, "top");
-          await this.navCtl.navigateForward("/home");
-        },
-        error: async (err: Error) => {
-          await this.notifyWith.toastMessage(err.message, "top");
-        }
-      });
+    // this.http
+    //   .patch(`${environment.baseUrl}/users/${this.userId$.value}`, {
+    //     name,
+    //     email,
+    //     password
+    //   })
+    //   .subscribe({
+    //     next: async () => {
+    //       await this.notifyWith.toastMessage(userUpdated, "top");
+    //       await this.navCtl.navigateForward("/home");
+    //     },
+    //     error: async (err: Error) => {
+    //       await this.notifyWith.toastMessage(err.message, "top");
+    //     }
+    //   });
   }
 
   onCancel() {
