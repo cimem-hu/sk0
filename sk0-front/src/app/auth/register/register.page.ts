@@ -12,10 +12,9 @@ import { RouterModule } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { HttpClientModule } from "@angular/common/http";
 
-import { AuthService } from "../auth.service";
 import { NotificationService } from "../../global-services/notification.service";
 import { AppStore } from "../../app.store";
-import { registerStarted } from "../store/auth.actions";
+import { navigateToLoginAction, registerStarted } from "../store/auth.actions";
 
 @Component({
   selector: "app-register",
@@ -64,6 +63,6 @@ export class RegisterPage {
   }
 
   onRouteToLogin(): void {
-    this.navCtrl.navigateBack("/login");
+    this.store.dispatch(navigateToLoginAction());
   }
 }

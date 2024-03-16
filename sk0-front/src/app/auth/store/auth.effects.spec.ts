@@ -8,7 +8,11 @@ import {
   loginSuccess,
   registerStarted,
   registerSuccess,
-  registerFailure
+  registerFailure,
+  logoutAction,
+  navigateToLoginAction,
+  navigateToRegisterAction,
+  navigateBackToHome
 } from "./auth.actions";
 import { of, take, throwError } from "rxjs";
 import { NavController } from "@ionic/angular";
@@ -19,6 +23,10 @@ describe("AuthEffects", () => {
   let authEffects: AuthEffects;
   let navCtl: jest.Mocked<NavController>;
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe("Login", () => {
     beforeEach(() => {
       authService = {
@@ -26,7 +34,8 @@ describe("AuthEffects", () => {
       } as unknown as jest.Mocked<AuthService>;
 
       navCtl = {
-        navigateForward: jest.fn()
+        navigateForward: jest.fn(),
+        navigateBack: jest.fn()
       } as unknown as jest.Mocked<NavController>;
       const user = { email: "test@test.com", password: "Pasword123" };
       actions$ = new Actions(of(loginStarted(user)));
@@ -118,6 +127,70 @@ describe("AuthEffects", () => {
       const action = authEffects.handleRegisterEffects$;
       action.pipe(take(1)).subscribe((recievedAction) => {
         expect(recievedAction).toEqual(expectedAction);
+        done();
+      });
+    });
+  });
+
+  describe("Logout", () => {
+    it('should call navCtl.navigateBack("/login") when logoutAction is dispatched', (done) => {
+      const navigationSpy = jest.spyOn(navCtl, "navigateBack");
+
+      actions$ = of(logoutAction());
+      authEffects = new AuthEffects(actions$, authService, navCtl);
+      const action = authEffects.handleNavigateToLoginEffects$;
+
+      action.pipe(take(1)).subscribe((_action) => {
+        expect(navigationSpy).toHaveBeenCalledTimes(1);
+        expect(navigationSpy).toHaveBeenCalledWith("/login");
+        done();
+      });
+    });
+  });
+
+  describe("NavigateToLogin", () => {
+    it('should call navCtl.navigateBack("/login") when navigateToLogin is dispatched', (done) => {
+      const navigationSpy = jest.spyOn(navCtl, "navigateBack");
+
+      actions$ = of(navigateToLoginAction());
+      authEffects = new AuthEffects(actions$, authService, navCtl);
+      const action = authEffects.handleNavigateToLoginEffects$;
+
+      action.pipe(take(1)).subscribe((_action) => {
+        expect(navigationSpy).toHaveBeenCalledTimes(1);
+        expect(navigationSpy).toHaveBeenCalledWith("/login");
+        done();
+      });
+    });
+  });
+
+  describe("NavigateToRegister", () => {
+    it('should call navCtl.navigateBack("/login") when navigateToLogin is dispatched', (done) => {
+      const navigationSpy = jest.spyOn(navCtl, "navigateForward");
+
+      actions$ = of(navigateToRegisterAction());
+      authEffects = new AuthEffects(actions$, authService, navCtl);
+      const action = authEffects.handleNavigateToRegisterEffects$;
+
+      action.pipe(take(1)).subscribe((_action) => {
+        expect(navigationSpy).toHaveBeenCalledTimes(1);
+        expect(navigationSpy).toHaveBeenCalledWith("/register");
+        done();
+      });
+    });
+  });
+
+  describe("NavigateBakcToHome", () => {
+    it('should call navCtl.navigateBack("/home") when navigateBackToHome is dispatched', (done) => {
+      const navigationSpy = jest.spyOn(navCtl, "navigateBack");
+
+      actions$ = of(navigateBackToHome());
+      authEffects = new AuthEffects(actions$, authService, navCtl);
+      const action = authEffects.handleNavigateToHomeEffects$;
+
+      action.pipe(take(1)).subscribe((_action) => {
+        expect(navigationSpy).toHaveBeenCalledTimes(1);
+        expect(navigationSpy).toHaveBeenCalledWith("/home");
         done();
       });
     });

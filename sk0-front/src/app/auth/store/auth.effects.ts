@@ -10,7 +10,11 @@ import {
   loginFailure,
   registerStarted,
   registerFailure,
-  registerSuccess
+  registerSuccess,
+  logoutAction,
+  navigateToLoginAction,
+  navigateToRegisterAction,
+  navigateBackToHome
 } from "./auth.actions";
 
 @Injectable()
@@ -50,6 +54,39 @@ export class AuthEffects {
         ofType(loginSuccess),
         tap((_action) => {
           return this.navCtl.navigateForward("/home");
+        })
+      ),
+    { dispatch: false }
+  );
+
+  handleNavigateToLoginEffects$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(logoutAction, navigateToLoginAction, registerSuccess),
+        tap((_action) => {
+          this.navCtl.navigateBack("/login");
+        })
+      ),
+    { dispatch: false }
+  );
+
+  handleNavigateToRegisterEffects$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(navigateToRegisterAction),
+        tap((_action) => {
+          this.navCtl.navigateForward("/register");
+        })
+      ),
+    { dispatch: false }
+  );
+
+  handleNavigateToHomeEffects$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(navigateBackToHome),
+        tap((_action) => {
+          this.navCtl.navigateBack("/home");
         })
       ),
     { dispatch: false }
