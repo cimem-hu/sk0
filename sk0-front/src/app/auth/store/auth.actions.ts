@@ -17,4 +17,33 @@ const loginFailure = createAction(
   props<LoginFailure>()
 );
 
-export { loginStarted, loginSuccess, loginFailure };
+export type RegisterRequest = { email: string; password: string; name: string };
+export type RegisterResponse = {
+  id: number;
+  email: string;
+  password: string;
+  name: string;
+};
+export type RegisterFailure = { message: string };
+
+const registerStarted = createAction(
+  "[Auth] Register Started",
+  props<RegisterRequest>()
+);
+const registerSuccess = createAction(
+  "[Auth] Register Success",
+  props<RegisterResponse>()
+);
+const registerFailure = createAction(
+  "[Auth] Register Failure",
+  props<RegisterFailure>()
+);
+
+export {
+  loginStarted,
+  loginSuccess,
+  loginFailure,
+  registerStarted,
+  registerSuccess,
+  registerFailure
+};
