@@ -1,7 +1,9 @@
 import { Injectable } from "@angular/core";
+import { NavController } from "@ionic/angular";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { catchError, map, mergeMap, of, tap } from "rxjs";
+
 import { AuthService } from "../auth.service";
-import { catchError, map, mergeMap, of } from "rxjs";
 import {
   loginStarted,
   loginSuccess,
@@ -15,7 +17,8 @@ import {
 export class AuthEffects {
   constructor(
     private readonly actions$: Actions,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly navCtl: NavController
   ) {}
 
   handleLoginEffects$ = createEffect(() =>
@@ -39,5 +42,16 @@ export class AuthEffects {
         )
       )
     )
+  );
+
+  handleLoginSuccessSideEfects$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(loginSuccess),
+        tap((_action) => {
+          return this.navCtl.navigateForward("/home");
+        })
+      ),
+    { dispatch: false }
   );
 }

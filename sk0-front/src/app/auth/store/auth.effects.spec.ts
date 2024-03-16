@@ -11,11 +11,13 @@ import {
   registerFailure
 } from "./auth.actions";
 import { of, take, throwError } from "rxjs";
+import { NavController } from "@ionic/angular";
 
 describe("AuthEffects", () => {
   let authService: jest.Mocked<AuthService>;
   let actions$: Actions;
   let authEffects: AuthEffects;
+  let navCtl: jest.Mocked<NavController>;
 
   describe("Login", () => {
     beforeEach(() => {
@@ -23,9 +25,12 @@ describe("AuthEffects", () => {
         login: jest.fn()
       } as unknown as jest.Mocked<AuthService>;
 
+      navCtl = {
+        navigateForward: jest.fn()
+      } as unknown as jest.Mocked<NavController>;
       const user = { email: "test@test.com", password: "Pasword123" };
       actions$ = new Actions(of(loginStarted(user)));
-      authEffects = new AuthEffects(actions$, authService);
+      authEffects = new AuthEffects(actions$, authService, navCtl);
     });
 
     it("should dispatch loginSuccess when authService.login is successful", (done) => {
@@ -37,6 +42,21 @@ describe("AuthEffects", () => {
       const action = authEffects.handleLoginEffects$;
       action.pipe(take(1)).subscribe((recievedAction) => {
         expect(recievedAction).toEqual(expectedAction);
+        done();
+      });
+    });
+
+    it('should call navCtl.navigateForward("/home") when loginSuccess is dispatched', (done) => {
+      const navigationSpy = jest.spyOn(navCtl, "navigateForward");
+      const userData = { name: "Test User", email: "test@test.com", id: 1 };
+
+      actions$ = of(loginSuccess(userData));
+      authEffects = new AuthEffects(actions$, authService, navCtl);
+      const action = authEffects.handleLoginSuccessSideEfects$;
+
+      action.pipe(take(1)).subscribe((_action) => {
+        expect(navigationSpy).toHaveBeenCalledTimes(1);
+        expect(navigationSpy).toHaveBeenCalledWith("/home");
         done();
       });
     });
@@ -67,7 +87,7 @@ describe("AuthEffects", () => {
         name: "John Doe"
       };
       actions$ = new Actions(of(registerStarted(user)));
-      authEffects = new AuthEffects(actions$, authService);
+      authEffects = new AuthEffects(actions$, authService, navCtl);
     });
 
     it("should dispatch registerSuccess when authService.register is successful", (done) => {

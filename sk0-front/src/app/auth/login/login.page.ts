@@ -7,9 +7,12 @@ import {
   ReactiveFormsModule
 } from "@angular/forms";
 import { IonicModule } from "@ionic/angular";
-import { AuthService } from "../auth.service";
 import { RouterModule } from "@angular/router";
+import { Store } from "@ngrx/store";
+
 import { NotificationService } from "../../global-services/notification.service";
+import { AppStore } from "../../app.store";
+import { loginStarted } from "../store/auth.actions";
 
 @Component({
   selector: "app-login",
@@ -31,9 +34,9 @@ export class LoginPage {
   });
 
   constructor(
-    private authService: AuthService,
-    private notificationService: NotificationService
-  ) {}
+    private notificationService: NotificationService,
+    private store: Store<AppStore>
+  ) { }
 
   async onLogin() {
     const email = this.loginForm.get("email")!.value as string;
@@ -46,7 +49,7 @@ export class LoginPage {
       return;
     }
 
-    await this.authService.login({ email, password });
+    this.store.dispatch(loginStarted({ email, password }));
   }
 
   ionViewDidLeave() {
