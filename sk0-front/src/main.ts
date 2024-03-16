@@ -14,6 +14,7 @@ import { JWT_OPTIONS } from "@auth0/angular-jwt";
 import { provideEffects } from "@ngrx/effects";
 import { authStore } from "./app/auth/store/auth.reducer";
 import { AuthEffects } from "./app/auth/store/auth.effects";
+import { profileStore } from "./app/profile/store/profile.reducer";
 
 if (environment.production) {
   enableProdMode();
@@ -32,7 +33,7 @@ bootstrapApplication(AppComponent, {
     JwtHelperService,
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     provideStore(
-      { auth: authStore },
+      { auth: authStore, profile: profileStore },
       {
         runtimeChecks: {
           strictStateImmutability: true,

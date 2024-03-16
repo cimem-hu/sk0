@@ -55,7 +55,22 @@ export class ProfilePage {
       await this.notifyWith.toastMessage("A jelszó nem elég erős", "top");
       return;
     }
-    // this.store.dispatch(())
+
+    // this.http
+    //   .patch(`${environment.baseUrl}/users/${this.userId$.value}`, {
+    //     name,
+    //     email,
+    //     password
+    //   })
+    //   .subscribe({
+    //     next: async () => {
+    //       await this.notifyWith.toastMessage(userUpdated, "top");
+    //       await this.navCtl.navigateForward("/home");
+    //     },
+    //     error: async (err: Error) => {
+    //       await this.notifyWith.toastMessage(err.message, "top");
+    //     }
+    //   });
   }
 
   onCancel() {
