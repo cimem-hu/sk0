@@ -49,7 +49,7 @@ export class ProfilePage {
     this.http
       .get<LoginResponse>(`${environment.baseUrl}/users/${this.userId$.value}`)
       .subscribe({
-        next: async (response) => {
+        next: (response) => {
           this.profileForm.get("name")?.setValue(response.name);
           this.profileForm.get("email")?.setValue(response.email);
         }
@@ -71,12 +71,12 @@ export class ProfilePage {
         password
       })
       .subscribe({
-        next: async () => {
-          await this.notifyWith.toastMessage(userUpdated, "top");
-          await this.navCtl.navigateForward("/home");
+        next: () => {
+          this.notifyWith.toastMessage(userUpdated, "top");
+          this.navCtl.navigateForward("/home");
         },
-        error: async (err: Error) => {
-          await this.notifyWith.toastMessage(err.message, "top");
+        error: (err: Error) => {
+          this.notifyWith.toastMessage(err.message, "top");
         }
       });
   }

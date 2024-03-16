@@ -6,7 +6,7 @@ import {
   FormGroup,
   ReactiveFormsModule
 } from "@angular/forms";
-import { IonicModule, NavController } from "@ionic/angular";
+import { IonicModule } from "@ionic/angular";
 import { AuthService } from "../auth.service";
 import { RouterModule } from "@angular/router";
 import { NotificationService } from "../../global-services/notification.service";
