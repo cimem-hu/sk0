@@ -1,8 +1,11 @@
 import { Component } from "@angular/core";
 
-import { IonicModule, NavController } from "@ionic/angular";
-import { AuthService } from "../auth/auth.service";
+import { IonicModule } from "@ionic/angular";
 import { CommonModule } from "@angular/common";
+import { AppStore } from "../app.store";
+import { Store } from "@ngrx/store";
+import { getUserName } from "../auth/store/auth.selectors";
+import { logoutAction } from "../auth/store/auth.actions";
 
 @Component({
   selector: "app-home",
@@ -12,16 +15,12 @@ import { CommonModule } from "@angular/common";
   imports: [IonicModule, CommonModule]
 })
 export class HomePage {
-  userName$ = this.authService.userName;
+  userName$ = this.store.select(getUserName);
   logoutLabel = "Kijelentkezés";
 
-  constructor(
-    private authService: AuthService,
-    private navCtrl: NavController
-  ) {}
+  constructor(private store: Store<AppStore>) {}
 
   onLogout() {
-    this.authService.logout();
-    this.navCtrl.navigateBack("/login");
+    this.store.dispatch(logoutAction());
   }
 }

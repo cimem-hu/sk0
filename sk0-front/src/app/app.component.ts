@@ -1,7 +1,10 @@
 import { Component } from "@angular/core";
 import { IonicModule, NavController } from "@ionic/angular";
-import { AuthService } from "./auth/auth.service";
+import { getUserName } from "./auth/store/auth.selectors";
 import { CommonModule } from "@angular/common";
+import { Store } from "@ngrx/store";
+import { AppStore } from "./app.store";
+import { logoutAction } from "./auth/store/auth.actions";
 
 @Component({
   selector: "app-root",
@@ -11,15 +14,15 @@ import { CommonModule } from "@angular/common";
   imports: [IonicModule, CommonModule]
 })
 export class AppComponent {
-  userName$ = this.authService.userName;
+  userName$ = this.store.select(getUserName);
 
   constructor(
-    private authService: AuthService,
+    private store: Store<AppStore>,
     private navCtrl: NavController
   ) {}
 
   logout() {
-    this.authService.logout();
+    this.store.dispatch(logoutAction());
   }
 
   navigateToUserEdit() {

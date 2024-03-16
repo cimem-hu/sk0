@@ -8,10 +8,13 @@ import {
 } from "@angular/forms";
 import { IonicModule, NavController } from "@ionic/angular";
 import { RouterModule } from "@angular/router";
-import { AuthService, LoginResponse } from "../auth/auth.service";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../../environments/environment";
 import { NotificationService } from "../global-services/notification.service";
+import { Store } from "@ngrx/store";
+import { AppStore } from "../app.store";
+import { getUser } from "../auth/store/auth.selectors";
+import { navigateBackToHome } from "../auth/store/auth.actions";
 
 const userUpdated = "Az adatok frissítve";
 
@@ -38,23 +41,14 @@ export class ProfilePage {
     password: new FormControl("")
   });
 
-  userId$ = this.authService.userId;
+  user$ = this.store.select(getUser);
 
   constructor(
-    private authService: AuthService,
     private http: HttpClient,
     private navCtl: NavController,
-    private notifyWith: NotificationService
-  ) {
-    this.http
-      .get<LoginResponse>(`${environment.baseUrl}/users/${this.userId$.value}`)
-      .subscribe({
-        next: async (response) => {
-          this.profileForm.get("name")?.setValue(response.name);
-          this.profileForm.get("email")?.setValue(response.email);
-        }
-      });
-  }
+    private notifyWith: NotificationService,
+    private store: Store<AppStore>
+  ) {}
 
   async onUpdate() {
     const { name, email, password } = this.profileForm.value;
@@ -81,7 +75,7 @@ export class ProfilePage {
       });
   }
 
-  async onCancel() {
-    await this.navCtl.navigateBack("/home");
+  onCancel() {
+    this.store.dispatch(navigateBackToHome());
   }
 }

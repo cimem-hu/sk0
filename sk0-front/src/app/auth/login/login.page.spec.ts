@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { LoginPage } from "./login.page";
 import { ActivatedRoute } from "@angular/router";
-import { HttpClient, HttpHandler } from "@angular/common/http";
-import { AuthService } from "../auth.service";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { provideStore } from "@ngrx/store";
+import { authStore } from "../store/auth.reducer";
 
 @Injectable()
 class HttpClientMock extends HttpClient {}
@@ -18,8 +19,15 @@ describe("LoginPage", () => {
       providers: [
         { provide: ActivatedRoute, useValue: {} },
         { provide: HttpClient, useClass: HttpClientMock },
-        AuthService,
-        { provide: HttpHandler, useValue: {} }
+        provideStore(
+          { auth: authStore },
+          {
+            runtimeChecks: {
+              strictStateImmutability: true,
+              strictActionImmutability: true
+            }
+          }
+        )
       ]
     });
 

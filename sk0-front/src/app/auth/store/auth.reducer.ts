@@ -3,6 +3,7 @@ import {
   loginFailure,
   loginStarted,
   loginSuccess,
+  logoutAction,
   registerFailure,
   registerStarted,
   registerSuccess
@@ -55,7 +56,8 @@ const authStore = createReducer(
     loggedIn: false,
     isLoading: false,
     error: action.message
-  }))
+  })),
+  on(logoutAction, (_state) => initialAuthState)
 );
 
 export { authStore };

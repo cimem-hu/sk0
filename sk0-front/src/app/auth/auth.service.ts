@@ -36,39 +36,4 @@ export class AuthService {
       registerDto
     );
   }
-
-  // async register(registerFormData: {
-  //   name: string;
-  //   email: string;
-  //   password: string;
-  // }) {
-  //   const { name, email, password } = registerFormData;
-
-  //   this.http
-  //     .post(`${environment.baseUrl}/users/register`, {
-  //       name,
-  //       email,
-  //       password
-  //     })
-  //     .subscribe({
-  //       next: () => {
-  //         this._userName.next(name);
-  //         this.notificationService.alertSuccess("Sikeres regisztráció");
-  //         this.navCtrl.navigateBack("/login");
-  //       },
-  //       error: (response: HttpErrorResponse) => {
-  //         const errorMessage =
-  //           this.errorMessages.get(response.status) ??
-  //           "Ismeretlen hiba történt";
-  //         this.notificationService.alertError(errorMessage);
-  //       }
-  //     });
-  // }
-
-  // async logout() {
-  //   this._isUserLoggedIn.next(false);
-  //   this._userName.next(null);
-  //   this._userId.next(null);
-  //   this.navCtrl.navigateBack("/login");
-  // }
 }
