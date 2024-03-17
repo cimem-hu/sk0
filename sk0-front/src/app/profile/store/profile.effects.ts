@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
-import { Observable, catchError, map, of, switchMap } from "rxjs";
+import { catchError, map, of, switchMap } from "rxjs";
 
 import { ProfileService } from "../profile.service";
 import {
@@ -23,11 +23,9 @@ export class ProfileEffects {
   handleUpdateProfileEffects$ = createEffect(() =>
     this.actions$.pipe(
       ofType(profileUpdateStarted),
-      concatLatestFrom(
-        () => this.store.select(getUserId) as Observable<number>
-      ),
+      concatLatestFrom(() => this.store.select(getUserId)),
       switchMap(([action, id]) => {
-        if (id === null) {
+        if (id === null || id === undefined) {
           return of(profileUpdateFailure({ message: "Invalid user id" }));
         }
         return this.profileService.update(id, action).pipe(

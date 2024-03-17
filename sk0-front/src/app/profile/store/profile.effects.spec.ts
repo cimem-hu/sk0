@@ -66,6 +66,23 @@ describe("ProfileEffects", () => {
       });
     });
 
+    it("should dispatch profileUpdateFailure with undefined id is presented", (done) => {
+      const mockState: AppStore = {
+        ...initialState,
+        profile: { ...initialState.profile, user: null }
+      };
+      store.setState(mockState);
+      const error = new Error("Invalid user id");
+      const expectedAction = profileUpdateFailure({ message: error.message });
+
+      const action = profileEffects.handleUpdateProfileEffects$;
+
+      action.pipe(take(1)).subscribe((recievedAction) => {
+        expect(recievedAction).toStrictEqual(expectedAction);
+        done();
+      });
+    });
+
     it("should dispatch profileUpdateFailure when profileService.update throws error", (done) => {
       const mockUser = { id: 1, name: "Name", email: "original@email.com" };
       const mockState: AppStore = {
