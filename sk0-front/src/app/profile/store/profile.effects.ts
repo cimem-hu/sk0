@@ -1,7 +1,15 @@
 import { Injectable } from "@angular/core";
 import { NavController } from "@ionic/angular";
 import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
-import { catchError, map, mergeMap, of, tap, withLatestFrom } from "rxjs";
+import {
+  catchError,
+  map,
+  mergeMap,
+  of,
+  switchMap,
+  tap,
+  withLatestFrom
+} from "rxjs";
 
 import { ProfileService } from "../profile.service";
 import {
@@ -27,16 +35,18 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(profileUpdateStarted),
       concatLatestFrom(() => this.store.select(getUserId)),
-      map(([action, id]) =>
-        mergeMap((action) =>
-          this.profileService.update(id, action).pipe(
+      switchMap(([action, id]) => {
+        if (id !== null && id !== undefined) {
+          return this.profileService.update(id, action).pipe(
             map((response) => profileUpdateSuccess(response)),
             catchError((error) =>
               of(profileUpdateFailure({ message: error.message }))
             )
-          )
-        )
-      )
+          );
+        } else {
+          return of(profileUpdateFailure({ message: "Invalid user id" }));
+        }
+      })
     )
   );
 }
