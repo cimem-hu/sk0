@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { NavController } from "@ionic/angular";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { tap } from "rxjs";
+import { map, tap } from "rxjs";
 
 import {
   loginSuccess,
