@@ -1,4 +1,6 @@
 import { Actions } from "@ngrx/effects";
+import { of, take, throwError } from "rxjs";
+
 import { AuthService } from "../auth.service";
 import { AuthEffects } from "./auth.effects";
 import type { RegisterRequest, RegisterResponse } from "./auth.actions";
@@ -10,7 +12,6 @@ import {
   registerSuccess,
   registerFailure
 } from "./auth.actions";
-import { of, take, throwError } from "rxjs";
 
 describe("AuthEffects", () => {
   let authService: jest.Mocked<AuthService>;

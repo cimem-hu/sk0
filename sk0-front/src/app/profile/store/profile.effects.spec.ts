@@ -1,4 +1,8 @@
 import { Actions } from "@ngrx/effects";
+import { of, take, throwError } from "rxjs";
+import { provideMockStore, MockStore } from "@ngrx/store/testing";
+import { TestBed } from "@angular/core/testing";
+
 import { ProfileService } from "../profile.service";
 import { ProfileEffects } from "./profile.effects";
 import {
@@ -7,10 +11,7 @@ import {
   profileUpdateStarted,
   profileUpdateSuccess
 } from "./profile.actions";
-import { of, take, throwError } from "rxjs";
-import { provideMockStore, MockStore } from "@ngrx/store/testing";
 import { AppStore } from "../../app.store";
-import { TestBed } from "@angular/core/testing";
 
 describe("ProfileEffects", () => {
   let profileService: jest.Mocked<ProfileService>;

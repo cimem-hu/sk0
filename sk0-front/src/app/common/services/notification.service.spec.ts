@@ -1,7 +1,7 @@
 import { TestBed } from "@angular/core/testing";
+import { expect, jest } from "@jest/globals";
 
 import { NotificationService } from "./notification.service";
-import { expect, jest } from "@jest/globals";
 
 describe("NotificationService", () => {
   let notificationService: NotificationService;

@@ -1,8 +1,9 @@
 import { TestBed } from "@angular/core/testing";
 import { provideRouter } from "@angular/router";
-import { AppComponent } from "./app.component";
 import { HttpClientModule } from "@angular/common/http";
 import { provideStore } from "@ngrx/store";
+
+import { AppComponent } from "./app.component";
 import { authStore } from "./auth/store/auth.reducer";
 import { profileStore } from "./profile/store/profile.reducer";
 

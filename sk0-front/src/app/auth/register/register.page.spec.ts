@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { RegisterPage } from "./register.page";
 import { HttpClient } from "@angular/common/http";
 import { provideStore } from "@ngrx/store";
+
+import { RegisterPage } from "./register.page";
 import { authStore } from "../store/auth.reducer";
 
 class HttpClientMock extends HttpClient {}

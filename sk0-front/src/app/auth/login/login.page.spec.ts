@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { LoginPage } from "./login.page";
 import { ActivatedRoute } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { provideStore } from "@ngrx/store";
+
+import { LoginPage } from "./login.page";
 import { authStore } from "../store/auth.reducer";
 
 @Injectable()

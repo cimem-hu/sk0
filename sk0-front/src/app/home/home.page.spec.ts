@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { HomePage } from "./home.page";
 import { HttpClient } from "@angular/common/http";
 import { provideStore } from "@ngrx/store";
+
+import { HomePage } from "./home.page";
 import { authStore } from "../auth/store/auth.reducer";
 import { profileStore } from "../profile/store/profile.reducer";
 

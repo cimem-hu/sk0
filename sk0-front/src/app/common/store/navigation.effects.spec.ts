@@ -1,6 +1,7 @@
 import { Actions } from "@ngrx/effects";
 import { NavController } from "@ionic/angular";
 import { of, take } from "rxjs";
+
 import { loginSuccess, logoutAction } from "../../auth/store/auth.actions";
 import { NavigationEffects } from "./navigation.effects";
 import {

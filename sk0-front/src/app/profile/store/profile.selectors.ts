@@ -1,4 +1,4 @@
-import { AppStore } from "src/app/app.store";
+import { AppStore } from "../../app.store";
 
 export const getUser = (state: AppStore) => state.profile?.user;
 export const getUserName = (state: AppStore) => state.profile.user?.name;

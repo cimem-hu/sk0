@@ -7,9 +7,9 @@ import {
   ReactiveFormsModule
 } from "@angular/forms";
 import { IonicModule } from "@ionic/angular";
-import { RouterModule } from "@angular/router";
-import { NotificationService } from "../common/services/notification.service";
 import { Store } from "@ngrx/store";
+
+import { NotificationService } from "../common/services/notification.service";
 import { AppStore } from "../app.store";
 import { getUser } from "../profile/store/profile.selectors";
 import {
@@ -25,13 +25,7 @@ const userUpdated = "Az adatok frissítve";
   templateUrl: "./profile.page.html",
   styleUrls: ["./profile.page.scss"],
   standalone: true,
-  imports: [
-    IonicModule,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule
-  ]
+  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule]
 })
 export class ProfilePage {
   private readonly strongPasswordValidator =
@@ -52,14 +46,17 @@ export class ProfilePage {
 
   async onUpdate() {
     const updatedUser = this.profileForm.value;
-
-    if (
+    const isUpdatedPasswordValid =
       updatedUser.password &&
-      !this.strongPasswordValidator.test(updatedUser.password)
-    ) {
-      await this.notifyWith.toastMessage("A jelszó nem elég erős", "top");
-      return;
+      !this.strongPasswordValidator.test(updatedUser.password);
+
+    if (isUpdatedPasswordValid) {
+      return await this.notifyWith.toastMessage(
+        "A jelszó nem elég erős",
+        "top"
+      );
     }
+
     this.store.dispatch(
       profileUpdateStarted(updatedUser as ProfileUpdateRequest)
     );
