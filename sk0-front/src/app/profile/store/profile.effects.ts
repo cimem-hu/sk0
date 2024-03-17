@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
-import { catchError, map, of, switchMap } from "rxjs";
+import { Observable, catchError, map, of, switchMap } from "rxjs";
 
 import { ProfileService } from "../profile.service";
 import {
@@ -9,11 +9,11 @@ import {
   profileUpdateSuccess
 } from "./profile.actions";
 import { Store } from "@ngrx/store";
-import { AppStore } from "src/app/app.store";
-import { getUserId } from "src/app/auth/store/auth.selectors";
+import { AppStore } from "../../app.store";
+import { getUserId } from "./profile.selectors";
 
 @Injectable()
-export class AuthEffects {
+export class ProfileEffects {
   constructor(
     private readonly actions$: Actions,
     private readonly profileService: ProfileService,
@@ -23,9 +23,11 @@ export class AuthEffects {
   handleUpdateProfileEffects$ = createEffect(() =>
     this.actions$.pipe(
       ofType(profileUpdateStarted),
-      concatLatestFrom(() => this.store.select(getUserId)),
+      concatLatestFrom(
+        () => this.store.select(getUserId) as Observable<number>
+      ),
       switchMap(([action, id]) => {
-        if (id === null || id === undefined) {
+        if (id === null) {
           return of(profileUpdateFailure({ message: "Invalid user id" }));
         }
         return this.profileService.update(id, action).pipe(
