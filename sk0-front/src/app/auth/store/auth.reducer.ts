@@ -32,7 +32,7 @@ const authStore = createReducer(
     loginSuccess,
     (state, action): AuthState => ({
       ...state,
-      token: "asdasd",
+      token: action.token,
       isLoading: false,
       error: null
     })

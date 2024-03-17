@@ -24,7 +24,11 @@ export class AuthEffects {
       ofType(loginStarted),
       mergeMap((action) =>
         this.authService.login(action).pipe(
-          map((response) => loginSuccess(response)),
+          map((response) => {
+            //TODO: Implement token handling
+            localStorage.setItem("token", response.token);
+            return loginSuccess(response);
+          }),
           catchError((error) => of(loginFailure({ message: error.message })))
         )
       )

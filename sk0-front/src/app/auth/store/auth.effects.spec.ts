@@ -34,7 +34,12 @@ describe("AuthEffects", () => {
     });
 
     it("should dispatch loginSuccess when authService.login is successful", (done) => {
-      const userData = { name: "Test User", email: "test@test.com", id: 1 };
+      const userData = {
+        name: "Test User",
+        email: "test@test.com",
+        id: 1,
+        token: "asdfg"
+      };
       const expectedAction = loginSuccess(userData);
 
       authService.login.mockReturnValue(of(userData));
