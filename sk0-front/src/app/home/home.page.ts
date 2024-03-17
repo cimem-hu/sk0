@@ -4,8 +4,8 @@ import { IonicModule } from "@ionic/angular";
 import { CommonModule } from "@angular/common";
 import { AppStore } from "../app.store";
 import { Store } from "@ngrx/store";
-import { getUserName } from "../auth/store/auth.selectors";
 import { logoutAction } from "../auth/store/auth.actions";
+import { getUserName } from "../profile/store/profile.selectors";
 
 @Component({
   selector: "app-home",

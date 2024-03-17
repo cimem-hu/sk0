@@ -12,9 +12,10 @@ import { RouterModule } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { HttpClientModule } from "@angular/common/http";
 
-import { NotificationService } from "../../global-services/notification.service";
+import { NotificationService } from "../../common/services/notification.service";
 import { AppStore } from "../../app.store";
-import { navigateToLoginAction, registerStarted } from "../store/auth.actions";
+import { registerStarted } from "../store/auth.actions";
+import { navigateToLoginAction } from "../../common/store/navigation.actions";
 
 @Component({
   selector: "app-register",

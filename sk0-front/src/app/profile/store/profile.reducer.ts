@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { loginSuccess } from "src/app/auth/store/auth.actions";
+import { loginSuccess } from "../../auth/store/auth.actions";
 import {
   profileUpdateStarted,
   profileUpdateSuccess,

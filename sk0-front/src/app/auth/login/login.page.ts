@@ -10,7 +10,7 @@ import { IonicModule } from "@ionic/angular";
 import { RouterModule } from "@angular/router";
 import { Store } from "@ngrx/store";
 
-import { NotificationService } from "../../global-services/notification.service";
+import { NotificationService } from "../../common/services/notification.service";
 import { AppStore } from "../../app.store";
 import { loginStarted } from "../store/auth.actions";
 
@@ -43,10 +43,9 @@ export class LoginPage {
     const password = this.loginForm.get("password")!.value as string;
 
     if (!email || !password) {
-      await this.notificationService.alertError(
+      return await this.notificationService.alertError(
         "Kérlek tölts ki minden mezőt!"
       );
-      return;
     }
 
     this.store.dispatch(loginStarted({ email, password }));

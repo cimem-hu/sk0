@@ -6,15 +6,17 @@ import {
   FormsModule,
   ReactiveFormsModule
 } from "@angular/forms";
-import { IonicModule, NavController } from "@ionic/angular";
+import { IonicModule } from "@ionic/angular";
 import { RouterModule } from "@angular/router";
-import { HttpClient } from "@angular/common/http";
-import { environment } from "../../environments/environment";
-import { NotificationService } from "../global-services/notification.service";
+import { NotificationService } from "../common/services/notification.service";
 import { Store } from "@ngrx/store";
 import { AppStore } from "../app.store";
-import { getUser } from "../auth/store/auth.selectors";
-import { navigateBackToHome } from "../auth/store/auth.actions";
+import { getUser } from "../profile/store/profile.selectors";
+import {
+  ProfileUpdateRequest,
+  profileUpdateStarted
+} from "./store/profile.actions";
+import { navigateBackToHome } from "../common/store/navigation.actions";
 
 const userUpdated = "Az adatok frissítve";
 
@@ -44,35 +46,23 @@ export class ProfilePage {
   user$ = this.store.select(getUser);
 
   constructor(
-    private http: HttpClient,
-    private navCtl: NavController,
     private notifyWith: NotificationService,
     private store: Store<AppStore>
   ) {}
 
   async onUpdate() {
-    const { name, email, password } = this.profileForm.value;
+    const updatedUser = this.profileForm.value;
 
-    if (password && !this.strongPasswordValidator.test(password)) {
+    if (
+      updatedUser.password &&
+      !this.strongPasswordValidator.test(updatedUser.password)
+    ) {
       await this.notifyWith.toastMessage("A jelszó nem elég erős", "top");
       return;
     }
-
-    // this.http
-    //   .patch(`${environment.baseUrl}/users/${this.userId$.value}`, {
-    //     name,
-    //     email,
-    //     password
-    //   })
-    //   .subscribe({
-    //     next: async () => {
-    //       await this.notifyWith.toastMessage(userUpdated, "top");
-    //       await this.navCtl.navigateForward("/home");
-    //     },
-    //     error: async (err: Error) => {
-    //       await this.notifyWith.toastMessage(err.message, "top");
-    //     }
-    //   });
+    this.store.dispatch(
+      profileUpdateStarted(updatedUser as ProfileUpdateRequest)
+    );
   }
 
   onCancel() {
