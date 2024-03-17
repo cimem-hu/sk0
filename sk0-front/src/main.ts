@@ -13,6 +13,7 @@ import { provideEffects } from "@ngrx/effects";
 import { authStore } from "./app/auth/store/auth.reducer";
 import { AuthEffects } from "./app/auth/store/auth.effects";
 import { profileStore } from "./app/profile/store/profile.reducer";
+import { ProfileEffects } from "./app/profile/store/profile.effects";
 
 if (environment.production) {
   enableProdMode();
@@ -37,6 +38,6 @@ bootstrapApplication(AppComponent, {
         }
       }
     ),
-    provideEffects(AuthEffects)
+    provideEffects(AuthEffects, ProfileEffects)
   ]
 });
