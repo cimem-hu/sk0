@@ -45,9 +45,7 @@ export class ProfilePage {
   constructor(
     private notifyWith: NotificationService,
     private store: Store<AppStore>
-  ) {
-    console.log(lastValueFrom(this.name$), lastValueFrom(this.email$));
-  }
+  ) {}
 
   async onUpdate() {
     const updatedUser = this.profileForm.value;

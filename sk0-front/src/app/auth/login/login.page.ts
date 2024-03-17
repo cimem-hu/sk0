@@ -13,7 +13,7 @@ import { Store } from "@ngrx/store";
 import { NotificationService } from "../../common/services/notification.service";
 import { AppStore } from "../../app.store";
 import { loginStarted } from "../store/auth.actions";
-import { navigateToRegisterAction } from "src/app/common/store/navigation.actions";
+import { navigateToRegisterAction } from "../../common/store/navigation.actions";
 
 @Component({
   selector: "app-login",

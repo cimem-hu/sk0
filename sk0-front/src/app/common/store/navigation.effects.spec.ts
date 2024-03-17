@@ -28,7 +28,12 @@ describe("NavigationEffects", () => {
 
   it('should call navCtl.navigateForward("/home") when loginSuccess is dispatched', (done) => {
     const navigationSpy = jest.spyOn(navCtl, "navigateForward");
-    const userData = { name: "Test User", email: "test@test.com", id: 1 };
+    const userData = {
+      name: "Test User",
+      email: "test@test.com",
+      id: 1,
+      token: "asdfg"
+    };
 
     actions$ = of(loginSuccess(userData));
     navigationEffects = new NavigationEffects(actions$, navCtl);
