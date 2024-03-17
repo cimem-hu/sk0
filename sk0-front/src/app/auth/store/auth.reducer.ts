@@ -8,6 +8,9 @@ import {
   registerStarted,
   registerSuccess
 } from "./auth.actions";
+import {
+  profileUpdateStarted,
+} from "../../profile/store/profile.actions";
 
 export type AuthState = {
   token: string | null;
@@ -63,6 +66,14 @@ const authStore = createReducer(
       ...state,
       isLoading: false,
       error: action.message
+    })
+  ),
+  on(
+    profileUpdateStarted,
+    (state): AuthState => ({
+      ...state,
+      isLoading: true,
+      error: null
     })
   ),
   on(
