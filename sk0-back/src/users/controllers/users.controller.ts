@@ -60,7 +60,7 @@ export class UsersController {
   @UsePipes(ValidationPipe)
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     try {
-      return this.authService.createUser(createUserDto);
+      return await this.authService.createUser(createUserDto);
     } catch (err) {
       if (err instanceof UserExistException) {
         throw new ConflictException();
@@ -78,7 +78,7 @@ export class UsersController {
 
   @Patch(":id")
   @UsePipes(ValidationPipe)
-  async updateUserbyId(
+  async updateUserById(
     @Param("id") id: string,
     @Body() userData: Partial<CreateUserDto>
   ): Promise<User> {
@@ -87,7 +87,7 @@ export class UsersController {
       throw new BadRequestException();
     }
     try {
-      return this.usersService.update(userId, userData);
+      return await this.usersService.update(userId, userData);
     } catch (err) {
       if (err instanceof UserExistException) {
         throw new ConflictException();
