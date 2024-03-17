@@ -14,6 +14,7 @@ import { authStore } from "./app/auth/store/auth.reducer";
 import { AuthEffects } from "./app/auth/store/auth.effects";
 import { profileStore } from "./app/profile/store/profile.reducer";
 import { ProfileEffects } from "./app/profile/store/profile.effects";
+import { NavigationEffects } from "./app/common/store/navigation.effects";
 
 if (environment.production) {
   enableProdMode();
@@ -38,6 +39,6 @@ bootstrapApplication(AppComponent, {
         }
       }
     ),
-    provideEffects(AuthEffects, ProfileEffects)
+    provideEffects(AuthEffects, ProfileEffects, NavigationEffects)
   ]
 });
