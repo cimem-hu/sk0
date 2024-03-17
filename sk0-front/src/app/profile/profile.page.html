@@ -33,7 +33,7 @@
                   label="Név"
                   labelPlacement="floating"
                   [clearInput]="true"
-                  value="{{user$.name | async}}"
+                  value="{{userName$ | async}}"
                 ></ion-input>
               </ion-item>
               <ion-item>
@@ -50,7 +50,7 @@
                   label="Email"
                   labelPlacement="floating"
                   [clearInput]="true"
-                  value="{{user$.email | async}}"
+                  value="{{userEmail$ | async}}"
                 ></ion-input>
               </ion-item>
               <ion-item>

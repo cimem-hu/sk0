@@ -11,7 +11,7 @@ import { Store } from "@ngrx/store";
 
 import { NotificationService } from "../common/services/notification.service";
 import { AppStore } from "../app.store";
-import { getUser } from "../profile/store/profile.selectors";
+import { getUserEmail, getUserName } from "../profile/store/profile.selectors";
 import {
   ProfileUpdateRequest,
   profileUpdateStarted
@@ -37,7 +37,8 @@ export class ProfilePage {
     password: new FormControl("")
   });
 
-  user$ = this.store.select(getUser);
+  userName$ = this.store.select(getUserName);
+  userEmail$ = this.store.select(getUserEmail);
 
   constructor(
     private notifyWith: NotificationService,
