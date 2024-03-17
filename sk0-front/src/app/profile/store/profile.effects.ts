@@ -4,7 +4,11 @@ import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
 import { catchError, map, mergeMap, of, tap, withLatestFrom } from "rxjs";
 
 import { ProfileService } from "../profile.service";
-import { profileUpdateStarted } from "./profile.actions";
+import {
+  profileUpdateFailure,
+  profileUpdateStarted,
+  profileUpdateSuccess
+} from "./profile.actions";
 import { Store } from "@ngrx/store";
 import { AppStore } from "src/app/app.store";
 import { getUserId } from "src/app/auth/store/auth.selectors";
@@ -22,16 +26,17 @@ export class AuthEffects {
   handleUpdateProfileEffects$ = createEffect(() =>
     this.actions$.pipe(
       ofType(profileUpdateStarted),
-      concatLatestFrom((action) => this.store.select(getUserId)),
-      tap([a, b] => {})
-      // tap(([action, id]) =>
-      //   mergeMap((action) =>
-      //     this.profileService.update(id, action).pipe(
-      //       map((response) => loginSuccess(response)),
-      //       catchError((error) => of(loginFailure({ message: error.message })))
-      //     )
-      //   )
-      // )
+      concatLatestFrom(() => this.store.select(getUserId)),
+      map(([action, id]) =>
+        mergeMap((action) =>
+          this.profileService.update(id, action).pipe(
+            map((response) => profileUpdateSuccess(response)),
+            catchError((error) =>
+              of(profileUpdateFailure({ message: error.message }))
+            )
+          )
+        )
+      )
     )
   );
 }
