@@ -17,6 +17,7 @@ import {
   profileUpdateStarted
 } from "./store/profile.actions";
 import { navigateBackToHome } from "../common/store/navigation.actions";
+import { lastValueFrom, map, of } from "rxjs";
 
 const userUpdated = "Az adatok frissítve";
 
@@ -37,13 +38,16 @@ export class ProfilePage {
     password: new FormControl("")
   });
 
-  userName$ = this.store.select(getUserName);
-  userEmail$ = this.store.select(getUserEmail);
+  //TODO: User data display
+  name$ = this.store.select(getUserName); // ! FIX get user name
+  email$ = this.store.select(getUserEmail); // ! FIX get user email
 
   constructor(
     private notifyWith: NotificationService,
     private store: Store<AppStore>
-  ) {}
+  ) {
+    console.log(lastValueFrom(this.name$), lastValueFrom(this.email$));
+  }
 
   async onUpdate() {
     const updatedUser = this.profileForm.value;
