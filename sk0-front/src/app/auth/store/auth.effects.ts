@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
-import { NavController } from "@ionic/angular";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, map, mergeMap, of, tap } from "rxjs";
+import { catchError, map, mergeMap, of } from "rxjs";
 
 import { AuthService } from "../auth.service";
 import {
@@ -10,19 +9,14 @@ import {
   loginFailure,
   registerStarted,
   registerFailure,
-  registerSuccess,
-  logoutAction,
-  navigateToLoginAction,
-  navigateToRegisterAction,
-  navigateBackToHome
+  registerSuccess
 } from "./auth.actions";
 
 @Injectable()
 export class AuthEffects {
   constructor(
     private readonly actions$: Actions,
-    private readonly authService: AuthService,
-    private readonly navCtl: NavController
+    private readonly authService: AuthService
   ) {}
 
   handleLoginEffects$ = createEffect(() =>
@@ -46,49 +40,5 @@ export class AuthEffects {
         )
       )
     )
-  );
-
-  handleLoginSuccessSideEfects$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(loginSuccess),
-        tap((_action) => {
-          return this.navCtl.navigateForward("/home");
-        })
-      ),
-    { dispatch: false }
-  );
-
-  handleNavigateToLoginEffects$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(logoutAction, navigateToLoginAction, registerSuccess),
-        tap((_action) => {
-          this.navCtl.navigateBack("/login");
-        })
-      ),
-    { dispatch: false }
-  );
-
-  handleNavigateToRegisterEffects$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(navigateToRegisterAction),
-        tap((_action) => {
-          this.navCtl.navigateForward("/register");
-        })
-      ),
-    { dispatch: false }
-  );
-
-  handleNavigateToHomeEffects$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(navigateBackToHome),
-        tap((_action) => {
-          this.navCtl.navigateBack("/home");
-        })
-      ),
-    { dispatch: false }
   );
 }

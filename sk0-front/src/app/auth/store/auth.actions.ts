@@ -41,10 +41,6 @@ const registerFailure = createAction(
 
 const logoutAction = createAction("[Auth] Logout");
 
-const navigateToLoginAction = createAction("[Auth] Navigate to Login");
-const navigateToRegisterAction = createAction("[Auth] Navigate to Register");
-const navigateBackToHome = createAction("[Auth] Navigate to Home");
-
 export {
   loginStarted,
   loginSuccess,
@@ -52,8 +48,5 @@ export {
   registerStarted,
   registerSuccess,
   registerFailure,
-  logoutAction,
-  navigateToLoginAction,
-  navigateToRegisterAction,
-  navigateBackToHome
+  logoutAction
 };
