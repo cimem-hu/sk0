@@ -3,7 +3,7 @@ import { inject } from "@angular/core";
 import { Store } from "@ngrx/store";
 
 import { AppStore } from "../app.store";
-import { navigateToLoginAction } from "../common/store/navigation.actions";
+import { navigateBackToLoginAction } from "../common/store/navigation.actions";
 
 export const authGuard: CanActivateFn = async () => {
   const store = inject(Store<AppStore>);
@@ -12,7 +12,7 @@ export const authGuard: CanActivateFn = async () => {
   const token = localStorage.getItem("token");
 
   if (!token) {
-    store.dispatch(navigateToLoginAction());
+    store.dispatch(navigateBackToLoginAction());
     return false;
   }
   return true;
