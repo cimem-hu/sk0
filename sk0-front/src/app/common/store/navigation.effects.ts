@@ -14,6 +14,7 @@ import {
   navigateToProfile,
   navigateToRegisterAction
 } from "./navigation.actions";
+import { profileUpdateSuccess } from "../../profile/store/profile.actions";
 
 @Injectable()
 export class NavigationEffects {
@@ -58,7 +59,7 @@ export class NavigationEffects {
   handleNavigateToHomeEffects$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(loginSuccess),
+        ofType(loginSuccess, profileUpdateSuccess),
         tap((_action) => {
           this.navCtl.navigateForward("/home");
         })

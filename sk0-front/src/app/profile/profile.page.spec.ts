@@ -7,6 +7,7 @@ import {
 } from "./store/profile.actions";
 import { navigateBackToHome } from "../common/store/navigation.actions";
 import { AppStore } from "../app.store";
+import { of } from "rxjs";
 
 describe("ProfilePage", () => {
   let component: ProfilePage;
@@ -67,5 +68,26 @@ describe("ProfilePage", () => {
     component.onCancel();
 
     expect(dispatchSpy).toHaveBeenCalledWith(navigateBackToHome());
+  });
+
+  it("should patch profileForm with user data on ngOnInit", () => {
+    const user = {
+      name: "John Doe",
+      email: "johndoe@example.com"
+    };
+    store.select = jest.fn().mockReturnValue(of(user));
+    const profileFormPatchValueSpy = jest.spyOn(
+      component.profileForm,
+      "patchValue"
+    );
+    const user$ = of(user);
+    jest.spyOn(store, "select").mockReturnValue(user$);
+
+    component.ngOnInit();
+
+    expect(profileFormPatchValueSpy).toHaveBeenCalledWith({
+      name: user?.name,
+      email: user?.email
+    });
   });
 });

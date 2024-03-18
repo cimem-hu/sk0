@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
   FormControl,
@@ -11,7 +11,7 @@ import { Store } from "@ngrx/store";
 
 import { NotificationService } from "../common/services/notification.service";
 import { AppStore } from "../app.store";
-import { getUserEmail, getUserName } from "../profile/store/profile.selectors";
+import { getUser } from "../profile/store/profile.selectors";
 import {
   ProfileUpdateRequest,
   profileUpdateStarted
@@ -27,7 +27,7 @@ const userUpdated = "Az adatok frissítve";
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule]
 })
-export class ProfilePage {
+export class ProfilePage implements OnInit {
   private readonly strongPasswordValidator =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
 
@@ -37,14 +37,20 @@ export class ProfilePage {
     password: new FormControl("")
   });
 
-  //TODO: User data display
-  name$ = this.store.select(getUserName); // ! FIX get user name
-  email$ = this.store.select(getUserEmail); // ! FIX get user email
-
   constructor(
     private notifyWith: NotificationService,
     private store: Store<AppStore>
   ) {}
+
+  ngOnInit() {
+    const user$ = this.store.select(getUser);
+    user$.subscribe((user) => {
+      this.profileForm.patchValue({
+        name: user?.name,
+        email: user?.email
+      });
+    });
+  }
 
   async onUpdate() {
     const updatedUser = this.profileForm.value;
