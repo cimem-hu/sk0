@@ -10,22 +10,8 @@
     <ion-content class="ion-padding">
       <ion-list lines="none">
         <ion-menu-toggle auto-hide="auto-hide">
-          <ion-item>
-            <ion-button
-              style="text-transform: none"
-              (click)="navigateToProfile()"
-              button-type="string"
-              >Szerkesztés</ion-button
-            >
-          </ion-item>
-          <ion-item>
-            <ion-button
-              style="text-transform: none"
-              (click)="onLogout()"
-              button-type="string"
-              >Kilépés</ion-button
-            >
-          </ion-item>
+          <ion-item button (click)="navigateToProfile()">Szerkesztés </ion-item>
+          <ion-item button (click)="onLogout()">Kilépés </ion-item>
         </ion-menu-toggle>
       </ion-list>
     </ion-content>
