@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { NavController } from "@ionic/angular";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { map, tap } from "rxjs";
+import { tap } from "rxjs";
 
 import {
   loginSuccess,
@@ -10,7 +10,8 @@ import {
 } from "../../auth/store/auth.actions";
 import {
   navigateBackToHome,
-  navigateToLoginAction,
+  navigateBackToLoginAction,
+  navigateToProfile,
   navigateToRegisterAction
 } from "./navigation.actions";
 
@@ -21,10 +22,10 @@ export class NavigationEffects {
     private readonly navCtl: NavController
   ) {}
 
-  handleNavigateToLoginEffects$ = createEffect(
+  handleNavigateBackToLoginEffects$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(logoutAction, navigateToLoginAction, registerSuccess),
+        ofType(logoutAction, navigateBackToLoginAction, registerSuccess),
         tap((_action) => {
           this.navCtl.navigateBack("/login");
         })
@@ -60,6 +61,17 @@ export class NavigationEffects {
         ofType(loginSuccess),
         tap((_action) => {
           this.navCtl.navigateForward("/home");
+        })
+      ),
+    { dispatch: false }
+  );
+
+  handleNavigateToProfileEffects$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(navigateToProfile),
+        tap((_action) => {
+          this.navCtl.navigateForward("/profile");
         })
       ),
     { dispatch: false }

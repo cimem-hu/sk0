@@ -1,7 +1,12 @@
 import { createAction } from "@ngrx/store";
 
-const navigateToLoginAction = createAction("[Auth] Navigate to Login");
-const navigateToRegisterAction = createAction("[Auth] Navigate to Register");
-const navigateBackToHome = createAction("[Auth] Navigate to Home");
-
-export { navigateBackToHome, navigateToLoginAction, navigateToRegisterAction };
+const navigateBackToLoginAction = createAction("[Navigate] Back to Login");
+const navigateToRegisterAction = createAction("[Navigate] Forward to Register");
+const navigateBackToHome = createAction("[Navigate] Back to Home");
+const navigateToProfile = createAction("[Navigate] Forward to Profile");
+export {
+  navigateBackToHome,
+  navigateBackToLoginAction,
+  navigateToRegisterAction,
+  navigateToProfile
+};

@@ -6,7 +6,8 @@ import { loginSuccess, logoutAction } from "../../auth/store/auth.actions";
 import { NavigationEffects } from "./navigation.effects";
 import {
   navigateBackToHome,
-  navigateToLoginAction,
+  navigateBackToLoginAction,
+  navigateToProfile,
   navigateToRegisterAction
 } from "./navigation.actions";
 
@@ -52,7 +53,7 @@ describe("NavigationEffects", () => {
 
       actions$ = of(logoutAction());
       navigationEffects = new NavigationEffects(actions$, navCtl);
-      const action = navigationEffects.handleNavigateToLoginEffects$;
+      const action = navigationEffects.handleNavigateBackToLoginEffects$;
 
       action.pipe(take(1)).subscribe((_action) => {
         expect(navigationSpy).toHaveBeenCalledTimes(1);
@@ -62,13 +63,13 @@ describe("NavigationEffects", () => {
     });
   });
 
-  describe("NavigateToLogin", () => {
-    it('should call navCtl.navigateBack("/login") when navigateToLogin is dispatched', (done) => {
+  describe("NavigateBackToLogin", () => {
+    it('should call navCtl.navigateBack("/login") when navigateBackToLogin is dispatched', (done) => {
       const navigationSpy = jest.spyOn(navCtl, "navigateBack");
 
-      actions$ = of(navigateToLoginAction());
+      actions$ = of(navigateBackToLoginAction());
       navigationEffects = new NavigationEffects(actions$, navCtl);
-      const action = navigationEffects.handleNavigateToLoginEffects$;
+      const action = navigationEffects.handleNavigateBackToLoginEffects$;
 
       action.pipe(take(1)).subscribe((_action) => {
         expect(navigationSpy).toHaveBeenCalledTimes(1);
@@ -79,7 +80,7 @@ describe("NavigationEffects", () => {
   });
 
   describe("NavigateToRegister", () => {
-    it('should call navCtl.navigateBack("/login") when navigateToLogin is dispatched', (done) => {
+    it('should call navCtl.navigateForward("/register") when navigateToRegister is dispatched', (done) => {
       const navigationSpy = jest.spyOn(navCtl, "navigateForward");
 
       actions$ = of(navigateToRegisterAction());
@@ -89,6 +90,22 @@ describe("NavigationEffects", () => {
       action.pipe(take(1)).subscribe((_action) => {
         expect(navigationSpy).toHaveBeenCalledTimes(1);
         expect(navigationSpy).toHaveBeenCalledWith("/register");
+        done();
+      });
+    });
+  });
+
+  describe("NavigateToProfile", () => {
+    it('should call navCtl.navigateForward("/profile") when navigateBackToLogin is dispatched', (done) => {
+      const navigationSpy = jest.spyOn(navCtl, "navigateForward");
+
+      actions$ = of(navigateToProfile());
+      navigationEffects = new NavigationEffects(actions$, navCtl);
+      const action = navigationEffects.handleNavigateToProfileEffects$;
+
+      action.pipe(take(1)).subscribe((_action) => {
+        expect(navigationSpy).toHaveBeenCalledTimes(1);
+        expect(navigationSpy).toHaveBeenCalledWith("/profile");
         done();
       });
     });
