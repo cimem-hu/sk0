@@ -20,11 +20,11 @@ export class AppComponent {
 
   constructor(private store: Store<AppStore>) {}
 
-  logout() {
+  onLogout() {
     this.store.dispatch(logoutAction());
   }
 
-  navigateToUserEdit() {
+  navigateToProfile() {
     this.store.dispatch(navigateToProfile());
   }
 }

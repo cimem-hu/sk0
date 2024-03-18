@@ -17,7 +17,6 @@ import {
   profileUpdateStarted
 } from "./store/profile.actions";
 import { navigateBackToHome } from "../common/store/navigation.actions";
-import { lastValueFrom, map, of } from "rxjs";
 
 const userUpdated = "Az adatok frissítve";
 

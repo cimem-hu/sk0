@@ -1,26 +1,39 @@
-import { TestBed } from "@angular/core/testing";
-import { provideRouter } from "@angular/router";
-import { HttpClientModule } from "@angular/common/http";
-import { provideStore } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 
 import { AppComponent } from "./app.component";
-import { authStore } from "./auth/store/auth.reducer";
-import { profileStore } from "./profile/store/profile.reducer";
+import { AppStore } from "./app.store";
+import { navigateToProfile } from "./common/store/navigation.actions";
+import { logoutAction } from "./auth/store/auth.actions";
 
 describe("AppComponent", () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AppComponent, HttpClientModule],
-      providers: [
-        provideRouter([]),
-        provideStore({ auth: authStore, profile: profileStore })
-      ]
-    }).compileComponents();
+  let component: AppComponent;
+  let store: jest.Mocked<Store<AppStore>>;
+
+  beforeEach(() => {
+    store = {
+      dispatch: jest.fn(),
+      select: jest.fn()
+    } as unknown as jest.Mocked<Store<AppStore>>;
+    component = new AppComponent(store);
   });
 
-  it("should create the app", () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+  it("should create", () => {
+    expect(component).toBeTruthy();
+  });
+
+  it("should dispatch logoutAction action when onLogout is called", () => {
+    const dispatchSpy = jest.spyOn(store, "dispatch");
+
+    component.onLogout();
+
+    expect(dispatchSpy).toHaveBeenCalledWith(logoutAction());
+  });
+
+  it("should dispatch navigateToProfile action when navigateToProfile is called", () => {
+    const dispatchSpy = jest.spyOn(store, "dispatch");
+
+    component.navigateToProfile();
+
+    expect(dispatchSpy).toHaveBeenCalledWith(navigateToProfile());
   });
 });
