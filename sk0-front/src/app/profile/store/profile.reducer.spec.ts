@@ -11,18 +11,18 @@ import {
 import { ProfileState, profileStore } from "./profile.reducer";
 
 describe("Profile Reducers", () => {
-  const mockInitialProfileState: ProfileState = {
+  const initialProfileState: ProfileState = {
     error: null,
     user: null,
     isLoading: false
   } as const;
 
-  const mockUserLoginRequest: LoginRequest = {
+  const loginRequest: LoginRequest = {
     email: "user@email.com",
     password: "MockPassword123"
   } as const;
 
-  const mockUserLoginResponse: LoginResponse = {
+  const loginResponse: LoginResponse = {
     id: 1,
     name: "User",
     email: "user@email.com",
@@ -30,39 +30,39 @@ describe("Profile Reducers", () => {
   } as const;
 
   it("should handle loginSuccess action", () => {
-    const action = loginSuccess(mockUserLoginResponse);
+    const action = loginSuccess(loginResponse);
 
-    const updatedState = profileStore(mockInitialProfileState, action);
+    const updatedState = profileStore(initialProfileState, action);
 
     expect(updatedState).toStrictEqual({
-      ...mockInitialProfileState,
+      ...initialProfileState,
       user: {
-        ...mockUserLoginResponse,
+        ...loginResponse,
         type: loginSuccess.type
       }
     });
   });
 
   it("should handle profileUpdateStarted action", () => {
-    const action = profileUpdateStarted(mockUserLoginRequest);
+    const action = profileUpdateStarted(loginRequest);
 
-    const updatedState = profileStore(mockInitialProfileState, action);
+    const updatedState = profileStore(initialProfileState, action);
 
     expect(updatedState).toStrictEqual({
-      ...mockInitialProfileState,
+      ...initialProfileState,
       isLoading: true
     });
   });
 
   it("should handle profileUpdateSuccess action", () => {
-    const action = profileUpdateSuccess(mockUserLoginResponse);
+    const action = profileUpdateSuccess(loginResponse);
 
-    const updatedState = profileStore(mockInitialProfileState, action);
+    const updatedState = profileStore(initialProfileState, action);
 
     expect(updatedState).toStrictEqual({
-      ...mockInitialProfileState,
+      ...initialProfileState,
       user: {
-        ...mockUserLoginResponse,
+        ...loginResponse,
         type: profileUpdateSuccess.type
       }
     });
@@ -72,10 +72,10 @@ describe("Profile Reducers", () => {
     const error = { message: "Test Error" } as const;
     const action = profileUpdateFailure(error);
 
-    const updatedState = profileStore(mockInitialProfileState, action);
+    const updatedState = profileStore(initialProfileState, action);
 
     expect(updatedState).toStrictEqual({
-      ...mockInitialProfileState,
+      ...initialProfileState,
       error: error.message
     });
   });

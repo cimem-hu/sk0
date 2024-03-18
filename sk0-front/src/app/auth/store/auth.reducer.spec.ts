@@ -14,31 +14,31 @@ import {
 import { AuthState, authStore } from "./auth.reducer";
 
 describe("Auth Reducers", () => {
-  const mockInitialAuthState: AuthState = {
+  const initialAuthState: AuthState = {
     isLoading: false,
     token: null,
     error: null
   } as const;
 
-  const mockLoginRequest: LoginRequest = {
+  const loginRequest: LoginRequest = {
     email: "test@email.com",
     password: "MockPassword123"
   } as const;
 
-  const mockUserLoginResponse: LoginResponse = {
+  const loginResponse: LoginResponse = {
     id: 1,
     name: "User",
     email: "user@email.com",
     token: "SomeValidToken"
   } as const;
 
-  const mockRegisterRequest: RegisterRequest = {
+  const registerRequest: RegisterRequest = {
     name: "User",
     email: "test@email.com",
     password: "MockPassword123"
   } as const;
 
-  const mockRegisterResponse: RegisterResponse = {
+  const registerResponse: RegisterResponse = {
     id: 1,
     name: "User",
     email: "user@email.com",
@@ -48,23 +48,23 @@ describe("Auth Reducers", () => {
   const error = { message: "Test Error" } as const;
 
   it("should handle loginStarted action", () => {
-    const action = loginStarted(mockLoginRequest);
+    const action = loginStarted(loginRequest);
 
-    const updatedState = authStore(mockInitialAuthState, action);
+    const updatedState = authStore(initialAuthState, action);
 
     expect(updatedState).toStrictEqual({
-      ...mockInitialAuthState,
+      ...initialAuthState,
       isLoading: true
     });
   });
 
   it("should handle loginSuccess action", () => {
-    const action = loginSuccess(mockUserLoginResponse);
+    const action = loginSuccess(loginResponse);
 
-    const updatedState = authStore(mockInitialAuthState, action);
+    const updatedState = authStore(initialAuthState, action);
 
     expect(updatedState).toStrictEqual({
-      ...mockInitialAuthState,
+      ...initialAuthState,
       token: action.token
     });
   });
@@ -72,55 +72,55 @@ describe("Auth Reducers", () => {
   it("should handle loginFailure action", () => {
     const action = loginFailure(error);
 
-    const updatedState = authStore(mockInitialAuthState, action);
+    const updatedState = authStore(initialAuthState, action);
 
     expect(updatedState).toStrictEqual({
-      ...mockInitialAuthState,
+      ...initialAuthState,
       error: error.message
     });
   });
 
   it("should handle registerStarted action", () => {
-    const action = registerStarted(mockRegisterRequest);
+    const action = registerStarted(registerRequest);
 
-    const updatedState = authStore(mockInitialAuthState, action);
+    const updatedState = authStore(initialAuthState, action);
 
     expect(updatedState).toStrictEqual({
-      ...mockInitialAuthState,
+      ...initialAuthState,
       isLoading: true
     });
   });
 
   it("should handle registerSucces action", () => {
-    const action = registerSuccess(mockRegisterResponse);
+    const action = registerSuccess(registerResponse);
 
-    const updatedState = authStore(mockInitialAuthState, action);
+    const updatedState = authStore(initialAuthState, action);
 
-    expect(updatedState).toStrictEqual({ ...mockInitialAuthState });
+    expect(updatedState).toStrictEqual({ ...initialAuthState });
   });
 
   it("should handle registerFailure action", () => {
     const error = { message: "Test Error" } as const;
     const action = registerFailure(error);
 
-    const updatedState = authStore(mockInitialAuthState, action);
+    const updatedState = authStore(initialAuthState, action);
 
     expect(updatedState).toStrictEqual({
-      ...mockInitialAuthState,
+      ...initialAuthState,
       error: error.message
     });
   });
 
   it("should handle logout action", () => {
-    const mockStartingState: AuthState = {
+    const startingState: AuthState = {
       isLoading: false,
       error: null,
       token: "SomeToken"
-    };
+    } as const;
     const action = logoutAction();
 
-    const updatedState = authStore(mockStartingState, action);
+    const updatedState = authStore(startingState, action);
 
-    expect(updatedState).toStrictEqual(mockInitialAuthState);
+    expect(updatedState).toStrictEqual(initialAuthState);
   });
 });
