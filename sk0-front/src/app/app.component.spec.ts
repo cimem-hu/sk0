@@ -8,7 +8,11 @@ describe("AppComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent, HttpClientModule],
-      providers: [provideRouter([]), JwtHelperService, {provide: JWT_OPTIONS, useValue: JWT_OPTIONS}]
+      providers: [
+        provideRouter([]),
+        JwtHelperService,
+        { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }
+      ]
     }).compileComponents();
   });
 

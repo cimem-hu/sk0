@@ -33,7 +33,11 @@ describe("JwtStrategy", () => {
 
   it("should validate and return the user if the user exists", async () => {
     const user = new User();
-    const tokenPayload: TokenPayload = { id: 1, email: "test@test.com", name:"John Doe" };
+    const tokenPayload: TokenPayload = {
+      id: 1,
+      email: "test@test.com",
+      name: "John Doe"
+    };
     (mockAuthService.validateUser as jest.Mock).mockResolvedValue(user);
 
     const result = await jwtStrategy.validate(tokenPayload);
@@ -44,7 +48,11 @@ describe("JwtStrategy", () => {
 
   it("should throw an UnauthorizedException if the user does not exist", async () => {
     (mockAuthService.validateUser as jest.Mock).mockResolvedValue(null);
-    const tokenPayload: TokenPayload = { id: 1, email: "test@test.com", name:"John Dont" };
+    const tokenPayload: TokenPayload = {
+      id: 1,
+      email: "test@test.com",
+      name: "John Dont"
+    };
 
     await expect(jwtStrategy.validate(tokenPayload)).rejects.toThrow(
       UnauthorizedException

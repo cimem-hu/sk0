@@ -31,7 +31,7 @@ export class JwtHandlerService {
   getName(): string | undefined {
     return this.getField("name");
   }
-  
+
   getId() {
     return this.getField("id");
   }

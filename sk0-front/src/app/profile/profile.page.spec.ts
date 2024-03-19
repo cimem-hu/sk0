@@ -11,7 +11,9 @@ describe("ProfilePage", () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      providers: [AuthService, JwtHelperService,
+      providers: [
+        AuthService,
+        JwtHelperService,
         { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }
       ],
       imports: [HttpClientModule]

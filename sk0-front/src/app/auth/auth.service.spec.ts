@@ -16,13 +16,14 @@ describe("AuthService", () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [JwtHelperService,
+      providers: [
+        JwtHelperService,
         { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }
       ]
     });
     service = TestBed.inject(AuthService);
     mockHttpController = TestBed.inject(HttpTestingController);
-    jwtHelper= TestBed.inject(JwtHelperService);
+    jwtHelper = TestBed.inject(JwtHelperService);
   });
 
   it("AuthService should be created", () => {
@@ -57,7 +58,7 @@ describe("AuthService", () => {
       email: loginFields.email,
       id: userID,
       name: "A registered name",
-      token:""
+      token: ""
     };
     service.login(loginFields);
 
