@@ -1,7 +1,5 @@
 import {
   IsEmail,
-  IsNumber,
-  IsOptional,
   IsString,
   IsStrongPassword,
   IsStrongPasswordOptions,
