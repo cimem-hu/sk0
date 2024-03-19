@@ -60,7 +60,7 @@ export class AuthService {
         password
       })
       .subscribe({
-        next: async (user: LoginResponse) => {
+        next: (user: LoginResponse) => {
           this._userName.next(user.name);
           this._userId.next(user.id);
           //TODO: better handling if token is null/empty?
@@ -77,7 +77,7 @@ export class AuthService {
         },
         error: (response: HttpErrorResponse) => {
           const errorMessage =
-            this.errorMessages.get(response.status) ||
+            this.errorMessages.get(response.status) ??
             "Ismeretlen hiba történt";
           this.notificationService.alertError(errorMessage);
         }
@@ -98,14 +98,14 @@ export class AuthService {
         password
       })
       .subscribe({
-        next: async () => {
+        next: () => {
           this._userName.next(name);
-          await this.notificationService.alertSuccess("Sikeres regisztráció");
+          this.notificationService.alertSuccess("Sikeres regisztráció");
           this.navCtrl.navigateBack("/login");
         },
         error: (response: HttpErrorResponse) => {
           const errorMessage =
-            this.errorMessages.get(response.status) ||
+            this.errorMessages.get(response.status) ??
             "Ismeretlen hiba történt";
           this.notificationService.alertError(errorMessage);
         }
