@@ -6,17 +6,23 @@ import {
 
 import { AuthService, LoginResponse } from "./auth.service";
 import { expect } from "@jest/globals";
+import { JWT_OPTIONS, JwtHelperService } from "@auth0/angular-jwt";
 
 describe("AuthService", () => {
   let service: AuthService;
   let mockHttpController: HttpTestingController;
+  let jwtHelper: JwtHelperService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
+      imports: [HttpClientTestingModule],
+      providers: [JwtHelperService,
+        { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }
+      ]
     });
     service = TestBed.inject(AuthService);
     mockHttpController = TestBed.inject(HttpTestingController);
+    jwtHelper= TestBed.inject(JwtHelperService);
   });
 
   it("AuthService should be created", () => {
@@ -50,7 +56,8 @@ describe("AuthService", () => {
     const loginResponse: LoginResponse = {
       email: loginFields.email,
       id: userID,
-      name: "A registered name"
+      name: "A registered name",
+      token:""
     };
     service.login(loginFields);
 
