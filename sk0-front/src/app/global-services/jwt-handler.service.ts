@@ -12,19 +12,27 @@ export class JwtHandlerService {
     private localStore: LocalStoreService
   ) {}
 
+  private getToken(): string | null {
+    return this.localStore.getToken();
+  }
+
+  private getField(field: string): string | undefined {
+    const token = this.getToken();
+    if (token) {
+      return this.jwtHelper.decodeToken(token)[field];
+    }
+    return undefined;
+  }
+
   isExpired(): boolean {
-    return this.jwtHelper.isTokenExpired(this.localStore.getToken());
+    return this.jwtHelper.isTokenExpired(this.getToken());
   }
-  getName() {
-    const token = this.localStore.getToken();
-    if (token) {
-      return this.jwtHelper.decodeToken(token).name;
-    }
+
+  getName(): string | undefined {
+    return this.getField("name");
   }
+  
   getId() {
-    const token = this.localStore.getToken();
-    if (token) {
-      return this.jwtHelper.decodeToken(token).id;
-    }
+    return this.getField("id");
   }
 }
