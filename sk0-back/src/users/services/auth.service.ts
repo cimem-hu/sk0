@@ -55,7 +55,6 @@ export class AuthService {
       email: foundUser.email,
       id: foundUser.id,
       name: foundUser.name,
-      role: foundUser.role
     });
     return { ...foundUser, token } as LoginResult;
   }

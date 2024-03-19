@@ -27,10 +27,4 @@ export class JwtHandlerService {
       return this.jwtHelper.decodeToken(token).id;
     }
   }
-  getRole() {
-    const token = this.localStore.getToken();
-    if (token) {
-      return this.jwtHelper.decodeToken(token).role;
-    }
-  }
 }

@@ -13,8 +13,4 @@ export class User {
 
   @Column()
   name: string;
-
-  //role = 0 : user, role = 1 : admin.
-  @Column({ default: 0 })
-  role: number;
 }
