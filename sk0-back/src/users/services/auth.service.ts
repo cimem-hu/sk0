@@ -9,14 +9,7 @@ import { CreateUserDto } from "../dtos/create-user.dto";
 import { User } from "../user.entity";
 import { TokenService } from "../../auth/token.service";
 import { PasswordService } from "./password.service";
-
-export type LoginResult = {
-  id: number;
-  email: string;
-  password: string;
-  name: string;
-  token: string;
-};
+import { LoginResultDto } from "../dtos/login-response.dto";
 
 @Injectable()
 export class AuthService {
@@ -34,7 +27,7 @@ export class AuthService {
     return createdUser;
   }
 
-  async loginUser(loginUser: LoginUserDto): Promise<LoginResult> {
+  async loginUser(loginUser: LoginUserDto): Promise<LoginResultDto> {
     const { email, password } = loginUser;
     const foundUser = await this.usersService.findOneByEmail(email);
 
@@ -56,7 +49,7 @@ export class AuthService {
       id: foundUser.id,
       name: foundUser.name
     });
-    return { ...foundUser, token } as LoginResult;
+    return { ...foundUser, token } as LoginResultDto;
   }
 
   async validateUser(email: string) {

@@ -4,6 +4,7 @@ import { User } from "../user.entity";
 import { CreateUserDto } from "../dtos/create-user.dto";
 import { PasswordService } from "./password.service";
 import { InjectRepository } from "@nestjs/typeorm";
+import { UpdateUserDto } from "../dtos/update-user.dto";
 
 export class UserNotFoundException extends HttpException {}
 export class UserExistException extends HttpException {}
@@ -38,7 +39,7 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  async update(id: number, attributes: Partial<User>): Promise<User> {
+  async update(id: number, attributes: Partial<User>): Promise<UpdateUserDto> {
     const user = await this.findOneById(id);
     if (!user) {
       throw new UserNotFoundException("Not found", 400);
@@ -55,8 +56,8 @@ export class UsersService {
     if (userByEmail && userByEmail.id !== id) {
       throw new UserExistException("Exists", 400);
     }
-
-    return this.usersRepository.save(user);
+    //TODO: use object mapper
+    return (await this.usersRepository.save(user)) as unknown as UpdateUserDto;
   }
 
   async remove(id: number): Promise<User> {
