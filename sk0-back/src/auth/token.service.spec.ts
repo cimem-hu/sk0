@@ -33,7 +33,8 @@ describe("TokenService", () => {
   it("should call the sign with the parameters", () => {
     const payload = {
       email: "test@test.com",
-      id: 1
+      id: 1,
+      name: "John Doe"
     };
 
     mockJwtService.sign = jest.fn().mockReturnValue("returnjwt");

@@ -1,14 +1,18 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { environment } from "../../environments/environment";
 import { BehaviorSubject } from "rxjs";
 import { NavController } from "@ionic/angular";
+
+import { environment } from "../../environments/environment";
 import { NotificationService } from "../global-services/notification.service";
+import { LocalStoreService } from "../global-services/localstore.service";
+import { JwtHandlerService } from "../global-services/jwt-handler.service";
 
 export interface LoginResponse {
   name: string;
   email: string;
   id: number;
+  token: string;
 }
 
 @Injectable({
@@ -43,7 +47,9 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private navCtrl: NavController,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private localStore: LocalStoreService,
+    private jwtHandler: JwtHandlerService
   ) {}
 
   async login(loginFormData: { email: string; password: string }) {
@@ -57,8 +63,17 @@ export class AuthService {
         next: (user: LoginResponse) => {
           this._userName.next(user.name);
           this._userId.next(user.id);
-          this._isUserLoggedIn.next(true);
-          this.navCtrl.navigateForward("/home");
+          //TODO: better handling if token is null/empty?
+          if (user.token) {
+            this.localStore.saveToken(user.token);
+          }
+          if (!this.jwtHandler.isExpired()) {
+            this._isUserLoggedIn.next(true);
+            this.navCtrl.navigateForward("/home");
+          } else {
+            this.localStore.removeToken();
+            this.notificationService.toastMessage("Token lejárt");
+          }
         },
         error: (response: HttpErrorResponse) => {
           const errorMessage =
@@ -101,6 +116,7 @@ export class AuthService {
     this._isUserLoggedIn.next(false);
     this._userName.next(null);
     this._userId.next(null);
+    this.localStore.removeToken();
     this.navCtrl.navigateBack("/login");
   }
 }

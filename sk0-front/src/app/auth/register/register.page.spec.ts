@@ -1,21 +1,25 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { RegisterPage } from "./register.page";
-import { HttpClient } from "@angular/common/http";
+import { JWT_OPTIONS, JwtHelperService } from "@auth0/angular-jwt";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 
-class HttpClientMock extends HttpClient {}
+class HttpClientMock {}
 
 describe("RegisterPage", () => {
   let component: RegisterPage;
   let fixture: ComponentFixture<RegisterPage>;
-  beforeEach(() => {
-    fixture = TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       providers: [
-        {
-          provide: HttpClient,
-          useValue: HttpClientMock
-        }
+        JwtHelperService,
+        { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+        { provide: HttpClientMock, useClass: HttpClientMock }
       ]
-    }).createComponent(RegisterPage);
+    }).compileComponents();
+  });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(RegisterPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
