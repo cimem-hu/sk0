@@ -1,3 +1,11 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Profil</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 <ion-content [fullscreen]="true" scrollY="false" color="primary">
   <ion-grid>
     <ion-row style="height: 100dvh" class="ion-align-items-center">
@@ -33,7 +41,6 @@
                   label="Név"
                   labelPlacement="floating"
                   [clearInput]="true"
-                  value="{{user$.name | async}}"
                 ></ion-input>
               </ion-item>
               <ion-item>
@@ -50,7 +57,6 @@
                   label="Email"
                   labelPlacement="floating"
                   [clearInput]="true"
-                  value="{{user$.email | async}}"
                 ></ion-input>
               </ion-item>
               <ion-item>

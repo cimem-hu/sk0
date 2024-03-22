@@ -7,14 +7,15 @@ import {
   ReactiveFormsModule,
   Validators
 } from "@angular/forms";
-import { IonicModule, NavController } from "@ionic/angular";
+import { IonicModule } from "@ionic/angular";
 import { RouterModule } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { HttpClientModule } from "@angular/common/http";
 
-import { NotificationService } from "../../global-services/notification.service";
+import { NotificationService } from "../../common/services/notification.service";
 import { AppStore } from "../../app.store";
-import { navigateToLoginAction, registerStarted } from "../store/auth.actions";
+import { registerStarted } from "../store/auth.actions";
+import { navigateBackToLoginAction } from "../../common/store/navigation.actions";
 
 @Component({
   selector: "app-register",
@@ -43,7 +44,6 @@ export class RegisterPage {
     ])
   });
   constructor(
-    private navCtrl: NavController,
     private notificationService: NotificationService,
     private store: Store<AppStore>
   ) {}
@@ -63,6 +63,6 @@ export class RegisterPage {
   }
 
   onRouteToLogin(): void {
-    this.store.dispatch(navigateToLoginAction());
+    this.store.dispatch(navigateBackToLoginAction());
   }
 }

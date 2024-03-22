@@ -79,7 +79,8 @@ describe("AuthService", () => {
       expect(result).toStrictEqual(expectedUser);
       expect(mockTokenService.generateToken).toHaveBeenCalledWith({
         email: expectedUser.email,
-        id: expectedUser.id
+        id: expectedUser.id,
+        name: "John Doe"
       });
     });
 
@@ -167,6 +168,16 @@ describe("AuthService", () => {
 
       const result = await authService.validateUser(email);
       expect(result).toEqual(expectedUser);
+    });
+
+    it("should throw NotFoundException when user is not found", async () => {
+      const email = "a@b.cd";
+
+      mockUsersService.findOneByEmail = jest.fn().mockResolvedValue(null);
+
+      await expect(authService.validateUser(email)).rejects.toThrow(
+        NotFoundException
+      );
     });
   });
 });
