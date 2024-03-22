@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: ["dev"]
 
+env:
+  HUSKY: 0
+
 defaults:
   run:
     working-directory: sk0-back
