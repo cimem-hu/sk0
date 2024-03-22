@@ -1,7 +1,16 @@
 import { Injectable } from "@angular/core";
 import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
-import { catchError, map, mergeMap, of, pipe, switchMap, tap, withLatestFrom } from "rxjs";
+import {
+  catchError,
+  map,
+  mergeMap,
+  of,
+  pipe,
+  switchMap,
+  tap,
+  withLatestFrom
+} from "rxjs";
 import { ProfileService } from "../profile.service";
 import {
   profileUpdateFailure,
@@ -11,7 +20,6 @@ import {
 
 import { AppStore } from "../../app.store";
 import { getUserId } from "./profile.selectors";
-
 
 @Injectable()
 export class ProfileEffects {

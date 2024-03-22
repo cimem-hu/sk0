@@ -13,8 +13,7 @@ import { environment } from "../../environments/environment";
   providedIn: "root"
 })
 export class AuthService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   login(loginDto: LoginRequest) {
     return this.http.post<LoginResponse>(
@@ -28,6 +27,5 @@ export class AuthService {
       `${environment.baseUrl}/users/register`,
       registerDto
     );
-
   }
 }

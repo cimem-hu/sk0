@@ -17,6 +17,8 @@ import {
   profileUpdateStarted
 } from "./store/profile.actions";
 import { navigateBackToHome } from "../common/store/navigation.actions";
+import { Observable, of } from "rxjs";
+import { User } from "./store/profile.reducer";
 
 const userUpdated = "Az adatok frissítve";
 
@@ -28,6 +30,7 @@ const userUpdated = "Az adatok frissítve";
   imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule]
 })
 export class ProfilePage implements OnInit {
+  user$: Observable<User | null> = of(null);
   private readonly strongPasswordValidator =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
 
@@ -43,8 +46,8 @@ export class ProfilePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    const user$ = this.store.select(getUser);
-    user$.subscribe((user) => {
+    this.user$ = this.store.select(getUser);
+    this.user$.subscribe((user) => {
       this.profileForm.patchValue({
         name: user?.name,
         email: user?.email
