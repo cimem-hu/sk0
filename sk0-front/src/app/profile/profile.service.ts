@@ -11,7 +11,7 @@ import {
   providedIn: "root"
 })
 export class ProfileService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   update(id: number, profileUpdateDto: ProfileUpdateRequest) {
     return this.http.patch<ProfileUpdateResponse>(
