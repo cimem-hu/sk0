@@ -10,7 +10,7 @@ async function bootstrap() {
   app.enableCors();
   const config = new DocumentBuilder().setTitle("SK0").addBearerAuth().build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("", app, document);
+  SwaggerModule.setup("/api/swagger", app, document);
   const configService = app.get<ConfigService>(ConfigService);
   const port = configService.get<number>("PORT");
   await app.listen(port, () =>
