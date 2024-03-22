@@ -1,18 +1,20 @@
 import { createReducer, on } from "@ngrx/store";
-import { loginSuccess } from "src/app/auth/store/auth.actions";
+import { loginSuccess } from "../../auth/store/auth.actions";
+
 import {
   profileUpdateStarted,
   profileUpdateSuccess,
   profileUpdateFailure
 } from "./profile.actions";
 
+export type User = {
+  name: string | null;
+  email: string | null;
+  id: number | null;
+};
 export type ProfileState = {
   isLoading: boolean;
-  user: {
-    name: string | null;
-    email: string | null;
-    id: number | null;
-  } | null;
+  user: User | null;
   error: string | null;
 };
 

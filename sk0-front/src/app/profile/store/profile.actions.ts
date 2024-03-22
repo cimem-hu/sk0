@@ -10,15 +10,15 @@ export type ProfileUpdateResponse = { name: string; email: string; id: number };
 export type ProfileUpdateFailure = { message: string };
 
 const profileUpdateStarted = createAction(
-  "[Profile] Login Started",
+  "[Profile] Update Started",
   props<ProfileUpdateRequest>()
 );
 const profileUpdateSuccess = createAction(
-  "[Profile] Login Success",
+  "[Profile] Update Success",
   props<ProfileUpdateResponse>()
 );
 const profileUpdateFailure = createAction(
-  "[Profile] Login Failure",
+  "[Profile] Update Failure",
   props<ProfileUpdateFailure>()
 );
 
