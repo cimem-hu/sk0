@@ -7,13 +7,14 @@ import {
   profileUpdateFailure
 } from "./profile.actions";
 
+export type User = {
+  name: string | null;
+  email: string | null;
+  id: number | null;
+};
 export type ProfileState = {
   isLoading: boolean;
-  user: {
-    name: string | null;
-    email: string | null;
-    id: number | null;
-  } | null;
+  user: User | null;
   error: string | null;
 };
 

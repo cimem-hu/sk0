@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { JwtHelperService } from "@auth0/angular-jwt";
 
-import { LocalStoreService } from "./localstore.service";
+import { StorageService } from "./storage.service";
+import { User } from "../../../app/profile/store/profile.reducer";
 
 @Injectable({
   providedIn: "root"
@@ -9,30 +10,18 @@ import { LocalStoreService } from "./localstore.service";
 export class JwtHandlerService {
   constructor(
     private jwtHelper: JwtHelperService,
-    private localStore: LocalStoreService
+    private store: StorageService
   ) {}
 
-  private getToken(): string | null {
-    return this.localStore.getToken();
-  }
-
-  private getField(field: string): string | undefined {
-    const token = this.getToken();
+  async getUser(): Promise<User | null> {
+    const token = await this.store.tokenGetter();
     if (token) {
-      return this.jwtHelper.decodeToken(token)[field];
+      return (await this.jwtHelper.decodeToken(token)) as User;
     }
-    return undefined;
+    return null;
   }
 
-  isExpired(): boolean {
-    return this.jwtHelper.isTokenExpired(this.getToken());
-  }
-
-  getName(): string | undefined {
-    return this.getField("name");
-  }
-
-  getId() {
-    return this.getField("id");
+  async isExpired(): Promise<boolean> {
+    return await this.jwtHelper.isTokenExpired(this.store.tokenGetter());
   }
 }

@@ -1,10 +1,9 @@
 import { RegisterPage } from "./register.page";
-<<<<<<< HEAD
 import { Store } from "@ngrx/store";
 import { NotificationService } from "../../common/services/notification.service";
 import { registerStarted } from "../store/auth.actions";
 import { navigateBackToLoginAction } from "../../common/store/navigation.actions";
-import { AppStore } from "src/app/app.store";
+import { AppStore } from "../../../app/app.store";
 
 describe("RegisterPage", () => {
   let component: RegisterPage;
@@ -17,30 +16,6 @@ describe("RegisterPage", () => {
       alertError: jest.fn()
     } as unknown as jest.Mocked<NotificationService>;
     component = new RegisterPage(notificationService, store);
-=======
-import { JWT_OPTIONS, JwtHelperService } from "@auth0/angular-jwt";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-
-class HttpClientMock {}
-
-describe("RegisterPage", () => {
-  let component: RegisterPage;
-  let fixture: ComponentFixture<RegisterPage>;
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [
-        JwtHelperService,
-        { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-        { provide: HttpClientMock, useClass: HttpClientMock }
-      ]
-    }).compileComponents();
-  });
-  beforeEach(() => {
-    fixture = TestBed.createComponent(RegisterPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
->>>>>>> origin
   });
 
   it("should create the component", () => {

@@ -1,20 +1,9 @@
 import { Store } from "@ngrx/store";
 import { LoginPage } from "./login.page";
-<<<<<<< HEAD
 import { AppStore } from "../../app.store";
 import { NotificationService } from "../../common/services/notification.service";
 import { loginStarted } from "../store/auth.actions";
 import { navigateToRegisterAction } from "../../common/store/navigation.actions";
-=======
-import { ActivatedRoute } from "@angular/router";
-import { HttpClient, HttpHandler } from "@angular/common/http";
-import { AuthService } from "../auth.service";
-import { Injectable } from "@angular/core";
-import { JWT_OPTIONS, JwtHelperService } from "@auth0/angular-jwt";
-
-@Injectable()
-class HttpClientMock extends HttpClient {}
->>>>>>> origin
 
 describe("LoginPage", () => {
   let component: LoginPage;
@@ -22,29 +11,11 @@ describe("LoginPage", () => {
   let notificationService: jest.Mocked<NotificationService>;
 
   beforeEach(() => {
-<<<<<<< HEAD
     store = { dispatch: jest.fn() } as unknown as jest.Mocked<Store<AppStore>>;
     notificationService = {
       alertError: jest.fn()
     } as unknown as jest.Mocked<NotificationService>;
     component = new LoginPage(notificationService, store);
-=======
-    TestBed.configureTestingModule({
-      imports: [LoginPage],
-      providers: [
-        JwtHelperService,
-        { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-        { provide: ActivatedRoute, useValue: {} },
-        { provide: HttpClient, useClass: HttpClientMock },
-        AuthService,
-        { provide: HttpHandler, useValue: {} }
-      ]
-    });
-
-    fixture = TestBed.createComponent(LoginPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
->>>>>>> origin
   });
 
   it("should create the component", () => {

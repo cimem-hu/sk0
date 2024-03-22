@@ -18,7 +18,7 @@ import { AuthEffects } from "./app/auth/store/auth.effects";
 import { profileStore } from "./app/profile/store/profile.reducer";
 import { ProfileEffects } from "./app/profile/store/profile.effects";
 import { NavigationEffects } from "./app/common/store/navigation.effects";
-import { StoreService } from "./app/common/services/localstore.service";
+import { StorageService } from "./app/common/services/storage.service";
 
 if (environment.production) {
   enableProdMode();
@@ -34,8 +34,8 @@ bootstrapApplication(AppComponent, {
       JwtModule.forRoot({
         jwtOptionsProvider: {
           provide: JWT_OPTIONS,
-          useFactory: (service: StoreService) => service,
-          deps: [StoreService]
+          useFactory: (service: StorageService) => service,
+          deps: [StorageService]
         }
       })
     ]),

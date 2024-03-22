@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, map, mergeMap, of } from "rxjs";
+import { catchError, exhaustMap, lastValueFrom, map, mergeMap, of } from "rxjs";
 
 import { AuthService } from "../auth.service";
 import {
@@ -11,12 +11,16 @@ import {
   registerFailure,
   registerSuccess
 } from "./auth.actions";
+import { StorageService } from "../../common/services/storage.service";
+import { JwtHandlerService } from "../../common/services/jwt-handler.service";
 
 @Injectable()
 export class AuthEffects {
   constructor(
     private readonly actions$: Actions,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly storage: StorageService,
+    private readonly jwtHandler: JwtHandlerService
   ) {}
 
   handleLoginEffects$ = createEffect(() =>
@@ -24,9 +28,12 @@ export class AuthEffects {
       ofType(loginStarted),
       mergeMap((action) =>
         this.authService.login(action).pipe(
-          map((response) => {
-            //TODO: Implement token handling
-            localStorage.setItem("token", response.token);
+          exhaustMap(async (response) => {
+            this.storage.saveToken(response.token);
+            const userData = await this.jwtHandler.getUser();
+            if (!userData) {
+              return loginFailure({ message: "Something went wrong" });
+            }
             return loginSuccess(response);
           }),
           catchError((error) => of(loginFailure({ message: error.message })))

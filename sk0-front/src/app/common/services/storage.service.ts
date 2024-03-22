@@ -4,7 +4,7 @@ import { Storage } from "@ionic/storage-angular";
 @Injectable({
   providedIn: "root"
 })
-export class StoreService {
+export class StorageService {
   private readonly key = "token";
   constructor(private readonly storage: Storage) {}
 
