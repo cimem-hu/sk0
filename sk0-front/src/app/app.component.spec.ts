@@ -1,6 +1,7 @@
 import { Store } from "@ngrx/store";
 
 import { AppComponent } from "./app.component";
+<<<<<<< HEAD
 import { AppStore } from "./app.store";
 import { navigateToProfile } from "./common/store/navigation.actions";
 import { logoutAction } from "./auth/store/auth.actions";
@@ -15,6 +16,21 @@ describe("AppComponent", () => {
       select: jest.fn()
     } as unknown as jest.Mocked<Store<AppStore>>;
     component = new AppComponent(store);
+=======
+import { HttpClientModule } from "@angular/common/http";
+import { JWT_OPTIONS, JwtHelperService } from "@auth0/angular-jwt";
+
+describe("AppComponent", () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [AppComponent, HttpClientModule],
+      providers: [
+        provideRouter([]),
+        JwtHelperService,
+        { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }
+      ]
+    }).compileComponents();
+>>>>>>> origin
   });
 
   it("should create", () => {

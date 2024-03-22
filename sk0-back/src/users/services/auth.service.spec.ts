@@ -79,7 +79,8 @@ describe("AuthService", () => {
       expect(result).toStrictEqual(expectedUser);
       expect(mockTokenService.generateToken).toHaveBeenCalledWith({
         email: expectedUser.email,
-        id: expectedUser.id
+        id: expectedUser.id,
+        name: "John Doe"
       });
     });
 

@@ -53,7 +53,8 @@ export class AuthService {
 
     const token = this.tokenService.generateToken({
       email: foundUser.email,
-      id: foundUser.id
+      id: foundUser.id,
+      name: foundUser.name
     });
     return { ...foundUser, token } as LoginResult;
   }
