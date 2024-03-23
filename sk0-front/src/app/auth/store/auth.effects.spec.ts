@@ -10,7 +10,8 @@ import {
   loginSuccess,
   registerStarted,
   registerSuccess,
-  registerFailure
+  registerFailure,
+  logoutAction
 } from "./auth.actions";
 import { StorageService } from "../../common/services/storage.service";
 import { JwtHandlerService } from "../../common/services/jwt-handler.service";
@@ -32,7 +33,8 @@ describe("AuthEffects", () => {
         login: jest.fn()
       } as unknown as jest.Mocked<AuthService>;
       storage = {
-        saveToken: jest.fn()
+        saveToken: jest.fn(),
+        removeToken: jest.fn()
       } as unknown as jest.Mocked<StorageService>;
       jwtHandler = {
         getUser: jest.fn()
@@ -138,6 +140,20 @@ describe("AuthEffects", () => {
       const action = authEffects.handleRegisterEffects$;
       action.pipe(take(1)).subscribe((recievedAction) => {
         expect(recievedAction).toEqual(expectedAction);
+        done();
+      });
+    });
+  });
+  describe("Logout", () => {
+    beforeEach(() => {
+      actions$ = new Actions(of(logoutAction()));
+      authEffects = new AuthEffects(actions$, authService, storage, jwtHandler);
+    });
+
+    it("should call storage.removeToken when logoutAction is dispatched", (done) => {
+      const action = authEffects.handleLogoutEffects$;
+      action.pipe(take(1)).subscribe(() => {
+        expect(storage.removeToken).toHaveBeenCalledTimes(1);
         done();
       });
     });

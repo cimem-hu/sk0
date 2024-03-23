@@ -1,7 +1,8 @@
 import {
   LoginRequest,
   LoginResponse,
-  loginSuccess
+  loginSuccess,
+  logoutAction
 } from "../../auth/store/auth.actions";
 import {
   profileUpdateFailure,
@@ -78,5 +79,17 @@ describe("Profile Reducers", () => {
       ...initialProfileState,
       error: error.message
     });
+  });
+
+  it("should handle logoutAction action", () => {
+    const action = logoutAction();
+    const profileState = {
+      ...initialProfileState,
+      user: loginResponse
+    };
+
+    const updatedState = profileStore(profileState, action);
+
+    expect(updatedState).toStrictEqual(initialProfileState);
   });
 });

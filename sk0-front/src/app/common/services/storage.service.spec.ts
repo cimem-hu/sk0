@@ -1,20 +1,3 @@
-// import { TestBed } from "@angular/core/testing";
-
-// import { StoreService } from "./localstore.service";
-
-// describe("StoreService", () => {
-//   let service: StoreService;
-
-//   beforeEach(() => {
-//     TestBed.configureTestingModule({});
-//     service = TestBed.inject(StoreService);
-//   });
-
-//   it("should be created", () => {
-//     expect(service).toBeTruthy();
-//   });
-
-// });
 import { TestBed } from "@angular/core/testing";
 import { StorageService } from "./storage.service";
 import { Storage } from "@ionic/storage-angular";
@@ -24,7 +7,8 @@ describe("StoreService", () => {
   let mockStorage = {
     get: jest.fn(),
     set: jest.fn(),
-    remove: jest.fn()
+    remove: jest.fn(),
+    create: jest.fn()
   } as unknown as jest.Mocked<Storage>;
 
   beforeEach(() => {
