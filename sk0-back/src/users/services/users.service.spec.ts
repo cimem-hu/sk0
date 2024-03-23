@@ -100,7 +100,11 @@ describe("UsersService", () => {
 
   describe("update", () => {
     it("should update a user", async () => {
-      const mockUpdatedUser = { ...mockResult, email: "aaa@bc.de" };
+      const mockUpdatedUser = {
+        ...mockResult,
+        email: "aaa@bc.de",
+        password: "updatedPassword"
+      };
 
       mockRepo.findOne = jest.fn().mockResolvedValue(mockResult);
       mockRepo.save = jest.fn().mockResolvedValue(mockResult);
@@ -108,7 +112,10 @@ describe("UsersService", () => {
         .fn()
         .mockResolvedValue(mockUpdatedUser.password);
 
-      const result = await usersService.update(1, { email: "aaa@bc.de" });
+      const result = await usersService.update(1, {
+        email: "aaa@bc.de",
+        password: "updatedPassword"
+      });
 
       expect(result).toEqual(mockUpdatedUser);
       expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
@@ -123,6 +130,30 @@ describe("UsersService", () => {
       const result = await usersService.update(1, { password: "" });
 
       expect(result).toEqual(mockResult);
+      expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
+      expect(mockRepo.save).toHaveBeenCalledWith(mockResult);
+    });
+
+    it("should not update password if password is null", async () => {
+      mockRepo.findOne = jest.fn().mockResolvedValue(mockResult);
+      mockRepo.save = jest.fn().mockResolvedValue(mockResult);
+      mockPasswordService.hash = jest.fn().mockResolvedValue("passwordhashed");
+
+      const result = await usersService.update(1, { password: null });
+
+      expect(result).toStrictEqual(mockResult);
+      expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
+      expect(mockRepo.save).toHaveBeenCalledWith(mockResult);
+    });
+
+    it("should not update password if password is undefined", async () => {
+      mockRepo.findOne = jest.fn().mockResolvedValue(mockResult);
+      mockRepo.save = jest.fn().mockResolvedValue(mockResult);
+      mockPasswordService.hash = jest.fn().mockResolvedValue("passwordhashed");
+
+      const result = await usersService.update(1, { password: undefined });
+
+      expect(result).toStrictEqual(mockResult);
       expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
       expect(mockRepo.save).toHaveBeenCalledWith(mockResult);
     });

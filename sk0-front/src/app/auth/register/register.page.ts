@@ -7,11 +7,15 @@ import {
   ReactiveFormsModule,
   Validators
 } from "@angular/forms";
-import { IonicModule, NavController } from "@ionic/angular";
+import { IonicModule } from "@ionic/angular";
 import { RouterModule } from "@angular/router";
-import { AuthService } from "../auth.service";
+import { Store } from "@ngrx/store";
 import { HttpClientModule } from "@angular/common/http";
-import { NotificationService } from "../../global-services/notification.service";
+
+import { NotificationService } from "../../common/services/notification.service";
+import { AppStore } from "../../app.store";
+import { registerStarted } from "../store/auth.actions";
+import { navigateBackToLoginAction } from "../../common/store/navigation.actions";
 
 @Component({
   selector: "app-register",
@@ -40,9 +44,8 @@ export class RegisterPage {
     ])
   });
   constructor(
-    private navCtrl: NavController,
-    private authService: AuthService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private store: Store<AppStore>
   ) {}
 
   async onRegister() {
@@ -56,15 +59,10 @@ export class RegisterPage {
       );
       return;
     }
-
-    await this.authService.register({ email, password, name });
-
-    if (!this.authService.isUserLoggedIn.value) {
-      return;
-    }
+    this.store.dispatch(registerStarted({ email, password, name }));
   }
 
   onRouteToLogin(): void {
-    this.navCtrl.navigateBack("/login");
+    this.store.dispatch(navigateBackToLoginAction());
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
   FormControl,
@@ -6,12 +6,19 @@ import {
   FormsModule,
   ReactiveFormsModule
 } from "@angular/forms";
-import { IonicModule, NavController } from "@ionic/angular";
-import { RouterModule } from "@angular/router";
-import { AuthService, LoginResponse } from "../auth/auth.service";
-import { HttpClient } from "@angular/common/http";
-import { environment } from "../../environments/environment";
-import { NotificationService } from "../global-services/notification.service";
+import { IonicModule } from "@ionic/angular";
+import { Store } from "@ngrx/store";
+
+import { NotificationService } from "../common/services/notification.service";
+import { AppStore } from "../app.store";
+import { getUser } from "../profile/store/profile.selectors";
+import {
+  ProfileUpdateRequest,
+  profileUpdateStarted
+} from "./store/profile.actions";
+import { navigateBackToHome } from "../common/store/navigation.actions";
+import { Observable, of } from "rxjs";
+import { User } from "./store/profile.reducer";
 
 const userUpdated = "Az adatok frissítve";
 
@@ -20,15 +27,10 @@ const userUpdated = "Az adatok frissítve";
   templateUrl: "./profile.page.html",
   styleUrls: ["./profile.page.scss"],
   standalone: true,
-  imports: [
-    IonicModule,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule
-  ]
+  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule]
 })
-export class ProfilePage {
+export class ProfilePage implements OnInit {
+  user$: Observable<User | null> = of(null);
   private readonly strongPasswordValidator =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
 
@@ -38,50 +40,40 @@ export class ProfilePage {
     password: new FormControl("")
   });
 
-  userId$ = this.authService.userId;
-
   constructor(
-    private authService: AuthService,
-    private http: HttpClient,
-    private navCtl: NavController,
-    private notifyWith: NotificationService
-  ) {
-    this.http
-      .get<LoginResponse>(`${environment.baseUrl}/users/${this.userId$.value}`)
-      .subscribe({
-        next: (response) => {
-          this.profileForm.get("name")?.setValue(response.name);
-          this.profileForm.get("email")?.setValue(response.email);
-        }
+    private notifyWith: NotificationService,
+    private store: Store<AppStore>
+  ) {}
+
+  ngOnInit() {
+    this.user$ = this.store.select(getUser);
+    this.user$.subscribe((user) => {
+      this.profileForm.patchValue({
+        name: user?.name,
+        email: user?.email
       });
+    });
   }
 
   async onUpdate() {
-    const { name, email, password } = this.profileForm.value;
+    const updatedUser = this.profileForm.value;
+    const isUpdatedPasswordValid =
+      updatedUser.password &&
+      !this.strongPasswordValidator.test(updatedUser.password);
 
-    if (password && !this.strongPasswordValidator.test(password)) {
-      await this.notifyWith.toastMessage("A jelszó nem elég erős", "top");
-      return;
+    if (isUpdatedPasswordValid) {
+      return await this.notifyWith.toastMessage(
+        "A jelszó nem elég erős",
+        "top"
+      );
     }
 
-    this.http
-      .patch(`${environment.baseUrl}/users/${this.userId$.value}`, {
-        name,
-        email,
-        password
-      })
-      .subscribe({
-        next: () => {
-          this.notifyWith.toastMessage(userUpdated, "top");
-          this.navCtl.navigateForward("/home");
-        },
-        error: (err: Error) => {
-          this.notifyWith.toastMessage(err.message, "top");
-        }
-      });
+    this.store.dispatch(
+      profileUpdateStarted(updatedUser as ProfileUpdateRequest)
+    );
   }
 
-  async onCancel() {
-    await this.navCtl.navigateBack("/home");
+  onCancel() {
+    this.store.dispatch(navigateBackToHome());
   }
 }

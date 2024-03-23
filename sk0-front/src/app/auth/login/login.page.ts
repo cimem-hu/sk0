@@ -7,9 +7,13 @@ import {
   ReactiveFormsModule
 } from "@angular/forms";
 import { IonicModule } from "@ionic/angular";
-import { AuthService } from "../auth.service";
 import { RouterModule } from "@angular/router";
-import { NotificationService } from "../../global-services/notification.service";
+import { Store } from "@ngrx/store";
+
+import { NotificationService } from "../../common/services/notification.service";
+import { AppStore } from "../../app.store";
+import { loginStarted } from "../store/auth.actions";
+import { navigateToRegisterAction } from "../../common/store/navigation.actions";
 
 @Component({
   selector: "app-login",
@@ -31,8 +35,8 @@ export class LoginPage {
   });
 
   constructor(
-    private authService: AuthService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private store: Store<AppStore>
   ) {}
 
   async onLogin() {
@@ -40,13 +44,16 @@ export class LoginPage {
     const password = this.loginForm.get("password")!.value as string;
 
     if (!email || !password) {
-      await this.notificationService.alertError(
+      return await this.notificationService.alertError(
         "Kérlek tölts ki minden mezőt!"
       );
-      return;
     }
 
-    await this.authService.login({ email, password });
+    this.store.dispatch(loginStarted({ email, password }));
+  }
+
+  onRegistration() {
+    this.store.dispatch(navigateToRegisterAction());
   }
 
   ionViewDidLeave() {

@@ -45,7 +45,12 @@ export class UsersService {
     if (!user) {
       throw new UserNotFoundException("Not found", 400);
     }
-    if (attributes.password != "") {
+
+    if (attributes.password === "" || attributes.password === null) {
+      delete attributes.password;
+    }
+
+    if (attributes.password != undefined) {
       attributes.password = await this.passwordService.hash(
         attributes.password
       );

@@ -1,12 +1,19 @@
-import { CanActivateFn, Router } from "@angular/router";
-import { AuthService } from "../auth/auth.service";
+import { CanActivateFn } from "@angular/router";
 import { inject } from "@angular/core";
+import { Store } from "@ngrx/store";
 
-export const authGuard: CanActivateFn = () => {
-  const router = inject(Router);
-  const userStatus = inject(AuthService).isUserLoggedIn;
-  if (userStatus.value) {
-    return true;
+import { AppStore } from "../app.store";
+import { navigateBackToLoginAction } from "../common/store/navigation.actions";
+
+export const authGuard: CanActivateFn = async () => {
+  const store = inject(Store<AppStore>);
+
+  // TODO: Implement token handling service
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    store.dispatch(navigateBackToLoginAction());
+    return false;
   }
-  return router.navigate(["login"]);
+  return true;
 };
