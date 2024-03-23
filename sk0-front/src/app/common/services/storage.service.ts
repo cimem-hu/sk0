@@ -6,14 +6,16 @@ import { Storage } from "@ionic/storage-angular";
 })
 export class StorageService {
   private readonly key = "token";
-  constructor(private readonly storage: Storage) {}
+  constructor(private readonly storage: Storage) {
+    this.storage.create();
+  }
 
   async saveToken(token: string) {
     await this.storage.set(this.key, token);
   }
 
-  async tokenGetter() {
-    return await this.storage.get(this.key);
+  tokenGetter() {
+    return this.storage.get(this.key);
   }
 
   async removeToken() {
