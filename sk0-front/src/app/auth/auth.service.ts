@@ -50,7 +50,7 @@ export class AuthService {
     private notificationService: NotificationService,
     private localStore: LocalStoreService,
     private jwtHandler: JwtHandlerService
-  ) {}
+  ) { }
 
   async login(loginFormData: { email: string; password: string }) {
     const { email, password } = loginFormData;

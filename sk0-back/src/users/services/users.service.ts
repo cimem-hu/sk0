@@ -5,6 +5,7 @@ import { CreateUserDto } from "../dtos/create-user.dto";
 import { PasswordService } from "./password.service";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UpdateUserDto } from "../dtos/update-user.dto";
+import { plainToClass } from "class-transformer";
 
 export class UserNotFoundException extends HttpException {}
 export class UserExistException extends HttpException {}
@@ -56,8 +57,8 @@ export class UsersService {
     if (userByEmail && userByEmail.id !== id) {
       throw new UserExistException("Exists", 400);
     }
-    //TODO: use object mapper
-    return (await this.usersRepository.save(user)) as unknown as UpdateUserDto;
+    const savedUser = await this.usersRepository.save(user);
+    return plainToClass(UpdateUserDto, savedUser);
   }
 
   async remove(id: number): Promise<User> {
