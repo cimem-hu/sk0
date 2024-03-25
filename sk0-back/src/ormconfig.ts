@@ -1,4 +1,4 @@
-import { DataSourceOptions } from "typeorm";
+import { DataSource, DataSourceOptions } from "typeorm";
 import { DbConfigOptions, NodeEnv } from "./config/configuration";
 
 export function dataSourceOptionFactory(
@@ -20,7 +20,7 @@ export function dataSourceOptionFactory(
         type: "sqlite",
         database: dbConfig.DATABASE || "dev.sqlite",
         entities: ["dist/**/*.entity.js"],
-        synchronize: true
+        synchronize: false
       }
     ],
     [
@@ -36,3 +36,11 @@ export function dataSourceOptionFactory(
   ]);
   return dataSourceMap.get(dbConfig.NODE_ENV);
 }
+
+export const dataSource = new DataSource({
+  type: "sqlite",
+  database: "development.sqlite",
+  entities: ["dist/**/*.entity.js"],
+  synchronize: true,
+  migrations: [__dirname + "/migrations/*.{ts,js}"]
+});
