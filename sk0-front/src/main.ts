@@ -56,6 +56,6 @@ bootstrapApplication(AppComponent, {
     ),
     provideEffects(AuthEffects, ProfileEffects, NavigationEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true, deps: [StorageService] },
   ]
 });
