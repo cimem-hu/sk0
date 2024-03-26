@@ -123,3 +123,13 @@ docker compose up
 
 docker compose up -d
 ```
+
+
+## Development
+
+1. Clone the repository.
+2. Install the dependencies in the main and subfolders.
+3. Create a feture-branch.
+4. Add the changes you want.
+5. Commit the changes ([husky](https://typicode.github.io/husky/) will automaticall lint the project).
+6. Create a pullrequest.
