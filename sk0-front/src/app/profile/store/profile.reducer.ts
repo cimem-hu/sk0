@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { loginSuccess } from "../../auth/store/auth.actions";
+import { loginSuccess, logoutAction } from "../../auth/store/auth.actions";
 
 import {
   profileUpdateStarted,
@@ -47,7 +47,8 @@ const profileStore = createReducer(
       isLoading: false,
       error: error.message
     })
-  )
+  ),
+  on(logoutAction, (): ProfileState => initialProfileState)
 );
 
 export { profileStore };
