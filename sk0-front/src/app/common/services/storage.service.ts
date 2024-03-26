@@ -14,8 +14,8 @@ export class StorageService {
     await this.storage.set(this.key, token);
   }
 
-  tokenGetter() {
-    return this.storage.get(this.key);
+  async tokenGetter() {
+    return await this.storage.get(this.key);
   }
 
   async removeToken() {
