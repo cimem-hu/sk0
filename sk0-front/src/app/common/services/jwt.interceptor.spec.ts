@@ -1,4 +1,4 @@
-import { TestBed } from "@angular/core/testing";
+import { TestBed, waitForAsync } from "@angular/core/testing";
 import { HttpClientTestingModule, HttpTestingController } from "@angular/common/http/testing";
 import { HttpClient, HTTP_INTERCEPTORS } from "@angular/common/http";
 
@@ -24,15 +24,15 @@ describe("JwtInterceptor", () => {
     storageServiceMock = TestBed.inject(StorageService);
   });
 
-  it("should add JWT token to request headers", async () => {
+  it("should add JWT token to request headers", waitForAsync(() => {
     const token = "dummy-jwt-token";
     storageServiceMock.tokenGetter = jest.fn().mockResolvedValue(token);
 
-    await httpClient.get("/api/data").toPromise();
-
-    const httpRequest = httpTestingController.expectOne("/api/data");
-    expect(httpRequest.request.headers.has("Authorization")).toEqual(true);
-    expect(httpRequest.request.headers.get("Authorization")).toEqual(`Bearer ${token}`);
-    httpRequest.flush({ data: "test" });
-  });
+    httpClient.get("/api/data").toPromise().then(() => {
+      const httpRequest = httpTestingController.expectOne("/api/data");
+      expect(httpRequest.request.headers.has("Authorization")).toEqual(true);
+      expect(httpRequest.request.headers.get("Authorization")).toEqual(`Bearer ${token}`);
+      httpRequest.flush({ data: "test" });
+    });
+  }));
 });
