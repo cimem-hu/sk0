@@ -2,7 +2,11 @@ import { enableProdMode, importProvidersFrom, isDevMode } from "@angular/core";
 import { bootstrapApplication } from "@angular/platform-browser";
 import { RouteReuseStrategy, provideRouter } from "@angular/router";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptorsFromDi
+} from "@angular/common/http";
 import { provideStore } from "@ngrx/store";
 import { provideStoreDevtools } from "@ngrx/store-devtools";
 import { JWT_OPTIONS, JwtModule } from "@auth0/angular-jwt";
@@ -56,6 +60,11 @@ bootstrapApplication(AppComponent, {
     ),
     provideEffects(AuthEffects, ProfileEffects, NavigationEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true, deps: [StorageService] },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true,
+      deps: [StorageService]
+    }
   ]
 });

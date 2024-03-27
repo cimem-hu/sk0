@@ -1,5 +1,8 @@
 import { TestBed, waitForAsync } from "@angular/core/testing";
-import { HttpClientTestingModule, HttpTestingController } from "@angular/common/http/testing";
+import {
+  HttpClientTestingModule,
+  HttpTestingController
+} from "@angular/common/http/testing";
 import { HttpClient, HTTP_INTERCEPTORS } from "@angular/common/http";
 
 import { JwtInterceptor } from "./jwt.interceptor";
@@ -16,7 +19,7 @@ describe("JwtInterceptor", () => {
       providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: StorageService, useValue: { tokenGetter: jest.fn() } }
-      ],
+      ]
     });
 
     httpClient = TestBed.inject(HttpClient);
@@ -28,11 +31,16 @@ describe("JwtInterceptor", () => {
     const token = "dummy-jwt-token";
     storageServiceMock.tokenGetter = jest.fn().mockResolvedValue(token);
 
-    httpClient.get("/api/data").toPromise().then(() => {
-      const httpRequest = httpTestingController.expectOne("/api/data");
-      expect(httpRequest.request.headers.has("Authorization")).toEqual(true);
-      expect(httpRequest.request.headers.get("Authorization")).toEqual(`Bearer ${token}`);
-      httpRequest.flush({ data: "test" });
-    });
+    httpClient
+      .get("/api/data")
+      .toPromise()
+      .then(() => {
+        const httpRequest = httpTestingController.expectOne("/api/data");
+        expect(httpRequest.request.headers.has("Authorization")).toEqual(true);
+        expect(httpRequest.request.headers.get("Authorization")).toEqual(
+          `Bearer ${token}`
+        );
+        httpRequest.flush({ data: "test" });
+      });
   }));
 });

@@ -16,9 +16,8 @@ export class StorageService {
 
   async tokenGetter() {
     const token = await this.storage.get(this.key);
-    console.log("Token retrieved:", token);
     return token;
-  }  
+  }
 
   async removeToken() {
     this.storage.remove(this.key);
