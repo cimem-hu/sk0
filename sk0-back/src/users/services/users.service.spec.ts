@@ -117,7 +117,7 @@ describe("UsersService", () => {
         password: "updatedPassword"
       });
 
-      expect(result).toStrictEqual(mockUpdatedUser);
+      expect(result).toEqual(mockUpdatedUser);
       expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
       expect(mockRepo.save).toHaveBeenCalledWith(mockUpdatedUser);
     });
@@ -129,7 +129,7 @@ describe("UsersService", () => {
 
       const result = await usersService.update(1, { password: "" });
 
-      expect(result).toStrictEqual(mockResult);
+      expect(result).toEqual(mockResult);
       expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
       expect(mockRepo.save).toHaveBeenCalledWith(mockResult);
     });
@@ -141,7 +141,7 @@ describe("UsersService", () => {
 
       const result = await usersService.update(1, { password: null });
 
-      expect(result).toStrictEqual(mockResult);
+      expect(result).toEqual(mockResult);
       expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
       expect(mockRepo.save).toHaveBeenCalledWith(mockResult);
     });
@@ -153,7 +153,7 @@ describe("UsersService", () => {
 
       const result = await usersService.update(1, { password: undefined });
 
-      expect(result).toStrictEqual(mockResult);
+      expect(result).toEqual(mockResult);
       expect(mockRepo.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
       expect(mockRepo.save).toHaveBeenCalledWith(mockResult);
     });

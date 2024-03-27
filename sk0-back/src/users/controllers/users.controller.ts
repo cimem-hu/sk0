@@ -6,7 +6,6 @@ import {
   ValidationPipe,
   Get,
   HttpCode,
-  UseGuards,
   Param,
   BadRequestException,
   Patch,
@@ -23,7 +22,9 @@ import {
 import { User } from "../user.entity";
 import { AuthService } from "../services/auth.service";
 import { LoginUserDto } from "../dtos/login-user.dto";
-import { AuthGuard } from "@nestjs/passport";
+import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
+import { LoginResultDto } from "../dtos/login-response.dto";
+import { UpdateUserDto } from "../dtos/update-user.dto";
 
 @Controller("users")
 export class UsersController {
@@ -32,18 +33,33 @@ export class UsersController {
     private authService: AuthService
   ) {}
 
-  @UseGuards(AuthGuard("jwt"))
+  @ApiBearerAuth()
   @Get("protected")
+  @ApiResponse({
+    status: 200,
+    description: "The found users",
+    type: Array<User>
+  })
   getUsers() {
     return this.usersService.findAll();
   }
 
   @Get()
+  @ApiResponse({
+    status: 200,
+    description: "The found users",
+    type: Array<User>
+  })
   getAllUsers() {
     return this.usersService.findAll();
   }
 
   @Get(":id")
+  @ApiResponse({
+    status: 200,
+    description: "The found user by id",
+    type: User
+  })
   async getUserById(@Param("id") id: string): Promise<User> {
     const userId = parseInt(id, 10);
     if (isNaN(userId)) {
@@ -57,7 +73,13 @@ export class UsersController {
   }
 
   @Post("register")
+  @HttpCode(201)
   @UsePipes(ValidationPipe)
+  @ApiResponse({
+    status: 201,
+    description: "The found user by id",
+    type: User
+  })
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     try {
       return await this.authService.createUser(createUserDto);
@@ -71,17 +93,29 @@ export class UsersController {
 
   @HttpCode(200)
   @Post("login")
+  @ApiResponse({
+    status: 200,
+    description: "The found user by id",
+    type: LoginResultDto
+  })
   @UsePipes(ValidationPipe)
   async loginUser(@Body() loginUserDto: LoginUserDto) {
     return this.authService.loginUser(loginUserDto);
   }
 
+  @ApiBearerAuth()
   @Patch(":id")
   @UsePipes(ValidationPipe)
+  @HttpCode(200)
+  @ApiResponse({
+    status: 200,
+    description: "The found pathed by id",
+    type: UpdateUserDto
+  })
   async updateUserById(
     @Param("id") id: string,
     @Body() userData: Partial<CreateUserDto>
-  ): Promise<User> {
+  ): Promise<UpdateUserDto> {
     const userId = parseInt(id, 10);
     if (isNaN(userId)) {
       throw new BadRequestException();
