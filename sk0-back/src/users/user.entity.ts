@@ -13,7 +13,4 @@ export class User {
 
   @Column()
   name: string;
-
-  @Column({ default: "user" })
-  role: string;
 }
