@@ -106,7 +106,7 @@ You can run the following command to start the application in different modes.
 **Development mode:**
 
 ```bash
-docker compose -f docker-compose.dev.yml watch
+docker compose -f dev.yml watch
 ```
 
 In development mode you can access the application on the following ports:
