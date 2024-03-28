@@ -22,8 +22,11 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "check": "npm run format && npm run lint",
     "typeorm": "typeorm-ts-node-commonjs",
-    "migration:generate": "nest build && typeorm-ts-node-commonjs migration:generate -d ./src/ormconfig.ts",
-    "migration:run": "typeorm-ts-node-commonjs migration:run -d ./src/ormconfig.ts"
+    "migration:run": "npm run typeorm migration:run -- -d ./db/typeorm.config.ts",
+    "migration:generate": "npm run typeorm -- -d ./db/typeorm.config.ts migration:generate ./db/migrations/$npm_config_name",
+    "migration:create": "npm run typeorm -- migration:create ./db/migrations/$npm_config_name",
+    "migration:revert": "npm run typeorm -- -d ./db/typeorm.config.ts migration:revert",
+    "migration:show": "npm run typeorm -- migration:show -d ./db/typeorm.config.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -38,7 +41,7 @@
     "class-validator": "^0.14.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
-    "pg": "^8.4.0",
+    "pg": "^8.11.3",
     "reflect-metadata": "^0.1.14",
     "rxjs": "^7.8.1",
     "sqlite3": "^5.1.7",
@@ -90,7 +93,10 @@
       "!**/*.module.ts",
       "!**/*.entity.ts",
       "!**/*.dto.ts",
-      "!**/*.mock.ts"
+      "!**/*.mock.ts",
+      "!**/*.interface.ts",
+      "!**/*.config.ts",
+      "!index.ts"
     ]
   }
 }
