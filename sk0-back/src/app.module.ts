@@ -1,26 +1,30 @@
 import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+
 import { AppController } from "./app.controller";
 import { UsersModule } from "./users/users.module";
-import { ConfigModule, ConfigService } from "@nestjs/config";
 import { AuthModule } from "./auth/auth.module";
 import { TokenService } from "./auth/token.service";
-import configuration, { DbConfigOptions } from "./config/configuration";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { dataSourceOptionFactory } from "./ormconfig";
+import { AppConfig, DatabaseConfig } from "./config";
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ load: [configuration] }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      cache: true,
+      load: [AppConfig, DatabaseConfig]
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) =>
-        dataSourceOptionFactory(configService.get<DbConfigOptions>("DB_CONFIG"))
+      useFactory: async (configService: ConfigService) => ({
+        ...(await configService.get("database"))
+      })
     }),
     UsersModule,
     AuthModule
   ],
-
   controllers: [AppController],
   providers: [TokenService]
 })
